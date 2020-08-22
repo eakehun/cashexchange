@@ -12,5 +12,5 @@ import com.hourfun.cashexchange.model.Member;
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
 	
-	
+	Member findById(String id);
 }

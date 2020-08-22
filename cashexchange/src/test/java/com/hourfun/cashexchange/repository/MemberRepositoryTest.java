@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -27,27 +28,33 @@ class MemberRepositoryTest {
 	@Autowired
 	private AgreementRepository agreementRepository;
 	
-//	@Test
+	@Autowired
+	private PasswordEncoder customPasswordEncoder;
+	
+	@Test
 	void save() {
 		Member member = new Member();
 		member.setAccountName("신한");
 		member.setAccountNum("123456789");
 		member.setAccountStatus("가능");
-		member.setAuth("User");
+		member.setAuth("USER");
 		member.setBirth("781211");
 		member.setEmail("zest111@gmail.com");
 		member.setGender("F");
-		member.setId("zest133");
+		member.setId("gnogun");
 		member.setMobileOperator("sk");
 		member.setTel("123456789");
 		member.setTelChkValue("T");
-		member.setPwd("adsgasgasgas");
+		
+		
+		
+		member.setPwd(customPasswordEncoder.encode("qwer"));
 		
 		repository.save(member);
 		
 	}
 
-	@Test
+//	@Test
 	void agreementTest() {
 		Member member =repository.findById(1l).get();
 		Agreement agreement = agreementRepository.getOne(2l);
