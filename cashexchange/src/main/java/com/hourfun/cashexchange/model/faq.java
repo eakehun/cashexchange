@@ -35,6 +35,7 @@ public class faq {
     @PreUpdate
     protected void updateDate() {
         updateDate = new Date();
+        
     }
 
     @PrePersist
