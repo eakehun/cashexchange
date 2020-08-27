@@ -3,41 +3,43 @@ package com.hourfun.cashexchange.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hourfun.cashexchange.model.LoginRequest;
 import com.hourfun.cashexchange.model.Member;
-import com.hourfun.cashexchange.vo.LoginRequest;
+import com.hourfun.cashexchange.model.MemberRequest;
+import com.hourfun.cashexchange.service.MemberService;
 
 @RestController
 public class MemberController {
 	
 	@Autowired
-	private AuthenticationManager authenticationManager;
+	private MemberService service;
 
 	@PostMapping("/login")
-	public Authentication login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+	public String login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        
+		return service.customLogin(loginRequest, session);
+	}
+	
+	@PostMapping("/findid")
+	public @ResponseBody MemberRequest findId(@RequestBody MemberRequest request) {
 		
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getId(), loginRequest.getPassword());
-		
-		Authentication authentication = authenticationManager.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                  SecurityContextHolder.getContext());
-		
-		return authentication;
+		return service.findId(request);
+	}
+	
+	@PostMapping("/findPassword")
+	public @ResponseBody MemberRequest findPassword(@RequestBody MemberRequest request) {
+		return null;
 	}
 	
 	@PostMapping("/signin")
-	public String signin(@RequestBody Member member) {
+	public String signin(@RequestBody MemberRequest request) {
 		
-		return null;
+		return service.signIn(request);
 	}
 }
 

@@ -43,6 +43,10 @@ public class Member {
 	private String accountName;
 	private String accountStatus;
 	private String backCode;
+	
+	private String name;
+	
+	private String ci;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "member_agreements")

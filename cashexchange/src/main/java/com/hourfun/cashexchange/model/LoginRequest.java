@@ -1,4 +1,4 @@
-package com.hourfun.cashexchange.vo;
+package com.hourfun.cashexchange.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
