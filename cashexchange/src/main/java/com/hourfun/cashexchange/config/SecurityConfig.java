@@ -3,6 +3,7 @@ package com.hourfun.cashexchange.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,13 +24,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http
 			.httpBasic()
-			.and()
+				.and()
 			.csrf()
 				.disable() // csrf 값 안 쓰게 테스트용 
 			.authorizeRequests()
-	        	.antMatchers("/user/**").hasRole("USER")
-		        .antMatchers("/admin/**").hasRole("ADMIN")
-		        .antMatchers("/manager/**").hasRole("MANAGER")
+	        	.antMatchers("/user/**").hasAnyRole("USER")
+		        .antMatchers("/admin/**").hasAnyRole("ADMIN")
+		        .antMatchers("/manager/**").hasAnyRole("MANAGER")
 		        .antMatchers("/**").permitAll();
 		    
 	}
@@ -44,8 +45,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		auth.inMemoryAuthentication().withUser("qwer").password("{noop}qwer").roles("USER");
 		
 		auth
-			.userDetailsService(customSecurityService);
-//			.passwordEncoder(customPasswordEncoder());
+			.userDetailsService(customSecurityService)			
+			.passwordEncoder(customPasswordEncoder());
+	}
+	
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		// TODO Auto-generated method stub
+		return super.authenticationManagerBean();
 	}
 
 }

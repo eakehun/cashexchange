@@ -1,5 +1,9 @@
 package com.hourfun.cashexchange.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
 
 	@GetMapping("/")
-	public String main() {
+	public String main(HttpSession session, Authentication auth, HttpServletRequest request) {
 		return "main";
 	}
 	
 	@GetMapping("/user/page")
-	public String user() {
+	public String user(HttpSession session) {
+		
 		return "user";
 	}
 	
