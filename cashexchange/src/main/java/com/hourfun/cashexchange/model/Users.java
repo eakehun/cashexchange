@@ -49,7 +49,7 @@ public class Users {
 	private String ci;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "member_agreements")
+	@JoinTable(name = "user_agreements")
 	private Collection<Agreement> agreements;
 	
 	@Temporal(TemporalType.TIMESTAMP)
