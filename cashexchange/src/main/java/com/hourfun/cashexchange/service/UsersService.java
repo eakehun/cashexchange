@@ -16,15 +16,15 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.model.LoginRequest;
-import com.hourfun.cashexchange.model.Member;
-import com.hourfun.cashexchange.model.MemberRequest;
-import com.hourfun.cashexchange.repository.MemberRepository;
+import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.model.UsersRequest;
+import com.hourfun.cashexchange.repository.UsersRepository;
 
 @Service
-public class MemberService {
+public class UsersService {
 
 	@Autowired
-	private MemberRepository repository;
+	private UsersRepository repository;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -48,9 +48,9 @@ public class MemberService {
 		return "fail";
 	}
 
-	public MemberRequest findId(MemberRequest request) {
+	public UsersRequest findId(UsersRequest request) {
 
-		Member member = repository.findByTel(request.getTel());
+		Users member = repository.findByTel(request.getTel());
 		
 		if(member != null) {
 			String email = member.getId();
@@ -61,13 +61,13 @@ public class MemberService {
 		return request;
 	}
 
-	public MemberRequest findPassword(MemberRequest request) {
+	public UsersRequest findPassword(UsersRequest request) {
 		return null;
 	}
 
-	public String signIn(MemberRequest request) {
+	public String signIn(UsersRequest request) {
 
-		Member member = new Member();
+		Users member = new Users();
 		member.setAccountName(request.getAccountName());
 		member.setAccountNum(request.getAccountNum());
 //		member.setAccountStatus("가능");

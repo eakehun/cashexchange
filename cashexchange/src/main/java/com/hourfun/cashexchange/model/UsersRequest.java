@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberRequest {
+public class UsersRequest {
 	
 	private String id;
 	private String pwd;

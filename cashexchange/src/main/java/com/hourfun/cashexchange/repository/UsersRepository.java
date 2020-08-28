@@ -5,14 +5,14 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.hourfun.cashexchange.model.Member;
+import com.hourfun.cashexchange.model.Users;
 
 @Repository
 @Transactional
-public interface MemberRepository extends JpaRepository<Member, Long>{
+public interface UsersRepository extends JpaRepository<Users, Long>{
 
 	
-	Member findById(String id);
+	Users findById(String id);
 	
-	Member findByTel(String tel);
+	Users findByTel(String tel);
 }

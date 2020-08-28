@@ -13,20 +13,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.hourfun.cashexchange.model.Member;
-import com.hourfun.cashexchange.repository.MemberRepository;
+import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.repository.UsersRepository;
 
 @Service
 public class CustomSecurityService implements UserDetailsService{
 	
 	@Autowired
-	private MemberRepository repository;
+	private UsersRepository repository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		
-		Member member = repository.findById(username);
+		Users member = repository.findById(username);
 		
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		

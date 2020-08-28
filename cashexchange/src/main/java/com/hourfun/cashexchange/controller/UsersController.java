@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hourfun.cashexchange.model.LoginRequest;
-import com.hourfun.cashexchange.model.Member;
-import com.hourfun.cashexchange.model.MemberRequest;
-import com.hourfun.cashexchange.service.MemberService;
+import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.model.UsersRequest;
+import com.hourfun.cashexchange.service.UsersService;
 
 @RestController
-public class MemberController {
+public class UsersController {
 	
 	@Autowired
-	private MemberService service;
+	private UsersService service;
 
 	@PostMapping("/login")
 	public String login(@RequestBody LoginRequest loginRequest, HttpSession session) {
@@ -26,18 +26,18 @@ public class MemberController {
 	}
 	
 	@PostMapping("/findid")
-	public @ResponseBody MemberRequest findId(@RequestBody MemberRequest request) {
+	public @ResponseBody UsersRequest findId(@RequestBody UsersRequest request) {
 		
 		return service.findId(request);
 	}
 	
 	@PostMapping("/findPassword")
-	public @ResponseBody MemberRequest findPassword(@RequestBody MemberRequest request) {
+	public @ResponseBody UsersRequest findPassword(@RequestBody UsersRequest request) {
 		return null;
 	}
 	
 	@PostMapping("/signin")
-	public String signin(@RequestBody MemberRequest request) {
+	public String signin(@RequestBody UsersRequest request) {
 		
 		return service.signIn(request);
 	}

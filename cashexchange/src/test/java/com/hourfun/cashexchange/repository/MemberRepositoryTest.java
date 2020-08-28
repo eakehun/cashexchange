@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hourfun.cashexchange.model.Agreement;
-import com.hourfun.cashexchange.model.Member;
+import com.hourfun.cashexchange.model.Users;
 
 @ActiveProfiles(value = "local")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +24,7 @@ import com.hourfun.cashexchange.model.Member;
 class MemberRepositoryTest {
 
 	@Autowired
-	private MemberRepository repository;
+	private UsersRepository repository;
 	@Autowired
 	private AgreementRepository agreementRepository;
 	
@@ -33,7 +33,7 @@ class MemberRepositoryTest {
 	
 	@Test
 	void save() {
-		Member member = new Member();
+		Users member = new Users();
 		member.setAccountName("신한");
 		member.setAccountNum("123456789");
 		member.setAccountStatus("가능");
@@ -56,7 +56,7 @@ class MemberRepositoryTest {
 
 //	@Test
 	void agreementTest() {
-		Member member =repository.findById(1l).get();
+		Users member =repository.findById(1l).get();
 		Agreement agreement = agreementRepository.getOne(2l);
 		Agreement agreement2 = agreementRepository.getOne(3l);
 		

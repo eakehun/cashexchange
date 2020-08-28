@@ -22,7 +22,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Member {
+public class Users {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
