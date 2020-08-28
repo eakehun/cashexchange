@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import com.hourfun.cashexchange.handler.CustomLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http
 			.httpBasic()
-				.and()
+            .and()
+            .logout()
+            	.logoutUrl("/logout")
+            	.logoutSuccessHandler(logoutSuccessHandler())
+            .and()            
 			.csrf()
 				.disable() // csrf 값 안 쓰게 테스트용 
 			.authorizeRequests()
@@ -39,6 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder customPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	@Bean
+	public LogoutSuccessHandler logoutSuccessHandler() {
+		return new CustomLogoutSuccessHandler(); 
+	}
+	
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

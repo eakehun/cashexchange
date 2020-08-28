@@ -51,12 +51,13 @@ public class MemberService {
 	public MemberRequest findId(MemberRequest request) {
 
 		Member member = repository.findByTel(request.getTel());
-
-		String email = member.getId();
-
-		request.setId(getMaskedEmail(email));
-		request.setCreateDate(member.getCreateDate());
-
+		
+		if(member != null) {
+			String email = member.getId();
+			
+			request.setId(getMaskedEmail(email));
+			request.setCreateDate(member.getCreateDate());
+		}
 		return request;
 	}
 
