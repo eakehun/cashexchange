@@ -21,7 +21,7 @@ import com.hourfun.cashexchange.model.Users;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class MemberRepositoryTest {
+class UserRepositoryTest {
 
 	@Autowired
 	private UsersRepository repository;
