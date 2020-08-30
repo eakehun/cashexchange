@@ -9,10 +9,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,6 +24,7 @@ import lombok.Data;
 
 @Entity
 @Data
+
 public class OneToOneInquiryResponse {
 
 	@Id
@@ -29,7 +32,7 @@ public class OneToOneInquiryResponse {
 	private long idx;
 	
 	@ManyToOne(targetEntity = OneToOneInquiry.class, fetch = FetchType.LAZY, 
-			optional = false,cascade = CascadeType.REMOVE)
+			optional = false)
     @JoinColumn(name = "parentIdx", referencedColumnName = "idx")
     @JsonBackReference
 	private OneToOneInquiry oneToOneInquiry;

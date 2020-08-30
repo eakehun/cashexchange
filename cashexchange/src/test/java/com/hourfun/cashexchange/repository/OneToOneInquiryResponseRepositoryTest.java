@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
+import com.hourfun.cashexchange.model.OneToOneInquiryType;
 
 
 @ActiveProfiles(value = "local")
@@ -40,6 +41,7 @@ class OneToOneInquiryResponseRepositoryTest {
 		//문제가 없다면 1:1 문의에 답변 시간을 update해준다. 
 		if(oneToOneInquiryResponse != null) {
 			oneInquiry.setResponseDate(new Date());
+			oneInquiry.setStatus(OneToOneInquiryType.Response_Complate);
 			oneRepository.save(oneInquiry);
 		}
 		
