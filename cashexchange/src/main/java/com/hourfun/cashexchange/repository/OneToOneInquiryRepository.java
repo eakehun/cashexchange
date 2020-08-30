@@ -27,22 +27,22 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	@Query(value="select * from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like %:title% and status = :status \r\n" + 
+			"and title like '%'||:title||'%' and status = :status \r\n" + 
 			"\n#pageable\n",
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
-					"and title like %:title% and status=:status ",
+					"and title like '%'||:title||'%' and status=:status ",
 			nativeQuery = true)
 	public Page<OneToOneInquiry> findByCreateDateBetweenAndTitleLikeAndStatus(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, @Param("status")OneToOneInquiryType status, Pageable pageable);
 	
 	@Query(value="select * from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like %:title%  \r\n" + 
+			"and title like  '%'||:title||'%'  \r\n" + 
 			"\n#pageable\n",
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
-					"and title like %:title%",
+					"and title like  '%'||:title||'%'",
 			nativeQuery = true)
 	public Page<OneToOneInquiry> findByCreateDateBetweenAndTitleLike(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, Pageable pageable);
