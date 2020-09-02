@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.controller;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,16 @@ public class OneToOneInquiryController {
 		}
 		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> oneToOneInquiryDetail(@PathVariable long parentIdx) {
+		if(parentIdx < 1l) {
+			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
+		}
+		
+        return new ResponseEntity<>(oneToOneInquiryResponseService.oneToOneInquiryDetail(parentIdx), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.POST)

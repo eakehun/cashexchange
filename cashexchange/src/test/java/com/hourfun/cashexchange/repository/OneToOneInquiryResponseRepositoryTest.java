@@ -2,6 +2,7 @@ package com.hourfun.cashexchange.repository;
 
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
+import com.hourfun.cashexchange.util.JsonUtils;
 
 
 @ActiveProfiles(value = "local")
@@ -28,7 +30,7 @@ class OneToOneInquiryResponseRepositoryTest {
 	@Autowired
 	private OneToOneInquiryResponseRepository oneResponseRepository;
 	
-	@Test
+//	@Test
 	void insert() {
 		OneToOneInquiry oneInquiry = oneRepository.findById(1l).get();
 		
@@ -44,8 +46,12 @@ class OneToOneInquiryResponseRepositoryTest {
 			oneInquiry.setStatus(OneToOneInquiryType.Response_Complate);
 			oneRepository.save(oneInquiry);
 		}
-		
-		
+	}
+	
+	@Test
+	public void findByParentIdx() {
+		List<OneToOneInquiryResponse> oneToOneInquiryResponses =  oneResponseRepository.findByParentIdx(1l);
+		System.out.println(JsonUtils.toJson(oneToOneInquiryResponses));
 	}
 
 }
