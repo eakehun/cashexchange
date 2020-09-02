@@ -30,7 +30,7 @@ class OneToOneInquiryResponseRepositoryTest {
 	@Autowired
 	private OneToOneInquiryResponseRepository oneResponseRepository;
 	
-//	@Test
+	@Test
 	void insert() {
 		OneToOneInquiry oneInquiry = oneRepository.findById(1l).get();
 		
@@ -48,7 +48,7 @@ class OneToOneInquiryResponseRepositoryTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void findByParentIdx() {
 		List<OneToOneInquiryResponse> oneToOneInquiryResponses =  oneResponseRepository.findByParentIdx(1l);
 		System.out.println(JsonUtils.toJson(oneToOneInquiryResponses));

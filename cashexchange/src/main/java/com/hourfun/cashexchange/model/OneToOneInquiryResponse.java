@@ -33,6 +33,7 @@ public class OneToOneInquiryResponse {
     @JoinColumn(name = "parentIdx", referencedColumnName = "idx")
     @JsonBackReference
 	private OneToOneInquiry oneToOneInquiry;
+	@Column(columnDefinition = "TEXT")
 	private String content;
 	
 	//admin 계정 

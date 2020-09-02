@@ -33,7 +33,10 @@ public class OneToOneInquiry {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
+	
+	@Column(length = 1024)
 	private String title;
+	@Column(columnDefinition = "TEXT")
 	private String content;
 	
 	private String userId;
