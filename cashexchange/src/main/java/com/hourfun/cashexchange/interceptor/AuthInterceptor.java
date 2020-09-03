@@ -22,8 +22,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 			response.addCookie(cookie);
 		}
 		
-		
-		
 		return true;
 	}
 	

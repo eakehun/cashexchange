@@ -1,20 +1,18 @@
 package com.hourfun.cashexchange.controller;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hourfun.cashexchange.model.LoginRequest;
 import com.hourfun.cashexchange.model.Users;
-import com.hourfun.cashexchange.model.UsersRequest;
 import com.hourfun.cashexchange.service.UsersService;
 
 @RestController
@@ -25,30 +23,23 @@ public class UsersController {
 	private UsersService service;
 
 	@RequestMapping(value ="/login/id/{id}/pwd/{pwd}/", method = RequestMethod.GET)
-	public String login(@PathVariable String id, @PathVariable String pwd, HttpSession session) {
-        
-//		return service.customLogin(loginRequest, session);
-		
-		return "";
+	public ResponseEntity<Users> login(@PathVariable String id, @PathVariable String pwd, HttpSession session) {
+		return new ResponseEntity<Users>(service.customLogin(id, pwd, session), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value ="/findId/{email}/", method = RequestMethod.GET)
-	public @ResponseBody Users findId(@PathVariable String email) {
-		
-//		return service.findId(request);
-		
-		return null;
+	@RequestMapping(value ="/findId/{tel}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findId(@PathVariable String tel) {
+		return new ResponseEntity<Users>(service.findId(tel), HttpStatus.OK);
 	}
 	
-	@PostMapping("/findPassword")
-	public @ResponseBody UsersRequest findPassword(@RequestBody UsersRequest request) {
-		return null;
+	@RequestMapping(value ="/findPassword/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findPassword(@RequestBody Users users) {
+		return new ResponseEntity<Users>(service.findPassword(users), HttpStatus.OK);
 	}
 	
-	@PostMapping("/signin")
-	public String signin(@RequestBody UsersRequest request) {
-		
-		return service.signIn(request);
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Users> signin(@RequestBody Users users) {
+		return new ResponseEntity<Users>(service.signIn(users), HttpStatus.OK);
 	}
 }
 

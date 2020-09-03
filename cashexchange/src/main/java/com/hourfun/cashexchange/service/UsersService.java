@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.model.LoginRequest;
 import com.hourfun.cashexchange.model.Users;
-import com.hourfun.cashexchange.model.UsersRequest;
 import com.hourfun.cashexchange.repository.UsersRepository;
 
 @Service
@@ -32,65 +31,49 @@ public class UsersService {
 	@Autowired
 	private PasswordEncoder customPasswordEncoder;
 
-	public String customLogin(LoginRequest loginRequest, HttpSession session) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getId(),
-				loginRequest.getPassword());
+	public Users customLogin(String id, String pwd, HttpSession session) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id,
+				pwd);
 
 		Authentication authentication = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
 				SecurityContextHolder.getContext());
-
-		if (authentication != null) {
-			return "success";
-		}
-
-		return "fail";
-	}
-
-	public UsersRequest findId(UsersRequest request) {
-
-		Users member = repository.findByTel(request.getTel());
 		
-		if(member != null) {
-			String email = member.getId();
-			
-			request.setId(getMaskedEmail(email));
-			request.setCreateDate(member.getCreateDate());
+		if(authentication != null) {
+			return repository.findById(id);
 		}
-		return request;
-	}
-
-	public UsersRequest findPassword(UsersRequest request) {
+		
 		return null;
+
 	}
 
-	public String signIn(UsersRequest request) {
+	public Users findId(String tel) {
 
-		Users member = new Users();
-		member.setAccountName(request.getAccountName());
-		member.setAccountNum(request.getAccountNum());
-//		member.setAccountStatus("가능");
-		member.setAuth("USER");
-//		member.setBirth("781211");
-//		member.setEmail("zest111@gmail.com");
-//		member.setGender("F");
-
-		member.setName(request.getName());
-		member.setCi(request.getCi());
-
-		member.setId(request.getId());
-		member.setMobileOperator(request.getMobileOperator());
-		member.setTel(request.getTel());
-		member.setTelChkValue("T");
-
-		member.setPwd(customPasswordEncoder.encode(request.getPwd()));
-
-		if (repository.save(member) != null) {
-			return "success";
+		Users selectUser = repository.findByTel(tel);
+		
+		if(selectUser != null) {
+			String maskedEmail = getMaskedEmail(selectUser.getId());
+			
+			selectUser.setId(maskedEmail);
+			selectUser.setEmail(maskedEmail);
 		}
+		
+		return selectUser;
+	}
 
-		return "fail";
+	public Users findPassword(Users users) {
+		return repository.findByIdAndTel(users.getId(), users.getTel());
+	}
+
+	public Users signIn(Users users) {
+
+		users.setAuth("USER");
+		users.setTelChkValue("T");
+		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
+
+		
+		return repository.save(users);
 	}
 
 	/*

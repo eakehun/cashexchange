@@ -21,6 +21,8 @@ public interface UsersRepository extends JpaRepository<Users, Long>{
 	
 	Users findByTel(String tel);
 	
+	Users findByIdAndTel(String id, String tel);
+	
 	
 //	@Query(value="select email, create_date from users"
 //			+ "where tel = :tel",
