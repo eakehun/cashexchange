@@ -41,7 +41,7 @@ class UserRepositoryTest {
 		member.setBirth("781211");
 		member.setEmail("zest111@gmail.com");
 		member.setGender("F");
-		member.setId("gnogun");
+		member.setId("gnogun@naver.com");
 		member.setMobileOperator("sk");
 		member.setTel("123456789");
 		member.setTelChkValue("T");
