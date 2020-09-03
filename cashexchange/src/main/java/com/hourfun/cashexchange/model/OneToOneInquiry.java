@@ -34,7 +34,7 @@ public class OneToOneInquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
 	
-	@Column(length = 1024)
+	@Column(columnDefinition = "TEXT")
 	private String title;
 	@Column(columnDefinition = "TEXT")
 	private String content;
