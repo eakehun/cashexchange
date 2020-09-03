@@ -33,11 +33,15 @@ public class OneToOneInquiry {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
+	
+	@Column(length = 1024)
 	private String title;
+	@Column(columnDefinition = "TEXT")
 	private String content;
 	
 	private String userId;
 	private String userName;
+	private String tel;
 	
 	@Enumerated(EnumType.STRING)
 	private OneToOneInquiryType status;
@@ -53,14 +57,9 @@ public class OneToOneInquiry {
     @Temporal(TemporalType.TIMESTAMP)
     private Date responseDate;
     
-    @OneToMany(mappedBy = "oneToOneInquiry", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST},orphanRemoval = true)
-    @JsonManagedReference
-    private Collection<OneToOneInquiryResponse> oneToOneInquiryResponses;
-    
     @PreUpdate
     protected void updateDate() {
         updateDate = new Date();
-        
     }
     
 
