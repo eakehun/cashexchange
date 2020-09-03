@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2020-09-04 00:00:12.200 [main] INFO  c.h.c.CashexchangeApplication - Starting CashexchangeApplication on DESKTOP-FJ35GHC with PID 8544 (D:\spring-workspace\cashexchange\cashexchange\target\classes started by zest1 in D:\spring-workspace\cashexchange\cashexchange)
 2020-09-04 00:00:12.220 [main] DEBUG c.h.c.CashexchangeApplication - Running with Spring Boot v2.3.3.RELEASE, Spring v5.2.8.RELEASE
 2020-09-04 00:00:12.223 [main] INFO  c.h.c.CashexchangeApplication - The following profiles are active: local
@@ -33,3 +34,5 @@ Caused by: java.sql.SQLSyntaxErrorException: Specified key was too long; max key
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
 	... 18 common frames omitted
 2020-09-04 00:00:16.982 [main] INFO  c.h.c.CashexchangeApplication - Started CashexchangeApplication in 5.101 seconds (JVM running for 6.082)
+=======
+>>>>>>> branch 'dev' of https://github.com/eakehun/cashexchange

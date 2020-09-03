@@ -55,12 +55,12 @@ public class WebConfig implements WebMvcConfigurer{
     public HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(StandardCharsets.UTF_8);
     }
-//    
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//    	registry.addInterceptor(new AuthInterceptor())
-//    		.addPathPatterns("/user/**", "/admin/**", "/manager/**");
-//    }
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+    	registry.addInterceptor(new AuthInterceptor())
+    		.addPathPatterns("/user/**", "/admin/**", "/manager/**");
+    }
     
 
 }
