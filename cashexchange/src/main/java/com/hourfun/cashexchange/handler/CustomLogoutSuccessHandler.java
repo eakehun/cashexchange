@@ -16,9 +16,9 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler{
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
 		
-//		Cookie cookie = new Cookie("id", null);
-//		cookie.setMaxAge(0);
-//        response.addCookie(cookie);
+		Cookie cookie = new Cookie("id", null);
+		cookie.setMaxAge(0);
+        response.addCookie(cookie);
 		
 	}
 }

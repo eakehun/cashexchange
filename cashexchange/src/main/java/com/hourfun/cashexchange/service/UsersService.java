@@ -1,6 +1,7 @@
 package com.hourfun.cashexchange.service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,14 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
-import com.hourfun.cashexchange.model.LoginRequest;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.UsersRepository;
+
 
 @Service
 public class UsersService {
@@ -31,7 +33,7 @@ public class UsersService {
 	@Autowired
 	private PasswordEncoder customPasswordEncoder;
 
-	public Users customLogin(String id, String pwd, HttpSession session) {
+	public Users customLogin(String id, String pwd, HttpSession session, String auth) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id,
 				pwd);
 
@@ -41,7 +43,12 @@ public class UsersService {
 				SecurityContextHolder.getContext());
 		
 		if(authentication != null) {
-			return repository.findById(id);
+			List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) authentication.getAuthorities();
+
+			if(currentAuth.get(0).getAuthority().equals(auth)) {
+				return repository.findById(id);
+			}
+			
 		}
 		
 		return null;
