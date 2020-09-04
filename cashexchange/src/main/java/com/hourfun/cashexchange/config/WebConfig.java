@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -56,10 +57,16 @@ public class WebConfig implements WebMvcConfigurer{
         return new StringHttpMessageConverter(StandardCharsets.UTF_8);
     }
     
+    @Bean
+    public HandlerInterceptorAdapter authInterCeptor() {
+    	return new AuthInterceptor();
+    }
+    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    	registry.addInterceptor(new AuthInterceptor())
-    		.addPathPatterns("/user/**", "/admin/**", "/manager/**");
+    	registry.addInterceptor(authInterCeptor())
+    		.addPathPatterns("/users/**", "/admin/**", "/manager/**", "/board/**")
+    		.excludePathPatterns("/users/login/", "/admin/login/", "/manager/login/");
     }
     
 
