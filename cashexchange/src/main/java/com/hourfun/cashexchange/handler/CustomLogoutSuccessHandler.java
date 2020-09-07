@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler{
 
-	@Value("${session,cookie.key}")
+	@Value("${session.cookie.key}")
 	private String cookieKey;
 	
 	@Override

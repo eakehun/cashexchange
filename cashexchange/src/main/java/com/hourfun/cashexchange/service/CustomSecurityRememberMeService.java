@@ -32,6 +32,7 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 //		return super.createSuccessfulAuthentication(request, user);
 //	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication successfulAuthentication) {
