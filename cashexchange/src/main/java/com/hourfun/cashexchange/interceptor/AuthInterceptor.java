@@ -27,20 +27,21 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 			throws Exception {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) authentication.getAuthorities();
-		
-		String currentAuthString = currentAuth.get(0).getAuthority();
-		
-		if(currentAuthString.equals(AuthEnum.ROLE_USER.name()) ||
-				currentAuthString.equals(AuthEnum.ROLE_MANAGER.name()) ||
-				currentAuthString.equals(AuthEnum.ROLE_ADMIN.name())) {
-			HttpSession session = request.getSession();
-			if(session != null) {
-				Cookie cookie = new Cookie(cookieKey, session.getId());
-				cookie.setPath("/");
-				cookie.setMaxAge(60 * 60 * 24 * 7);
-				response.addCookie(cookie);
+		if(authentication != null) {
+			List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) authentication.getAuthorities();
+			
+			String currentAuthString = currentAuth.get(0).getAuthority();
+			
+			if(currentAuthString.equals(AuthEnum.ROLE_USER.name()) ||
+					currentAuthString.equals(AuthEnum.ROLE_MANAGER.name()) ||
+					currentAuthString.equals(AuthEnum.ROLE_ADMIN.name())) {
+				HttpSession session = request.getSession();
+				if(session != null) {
+					Cookie cookie = new Cookie(cookieKey, session.getId());
+					cookie.setPath("/");
+					cookie.setMaxAge(60 * 60 * 24 * 7);
+					response.addCookie(cookie);
+				}
 			}
 		}
 		
