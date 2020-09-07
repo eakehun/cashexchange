@@ -7,7 +7,7 @@ import com.hourfun.cashexchange.config.ApplicationContextProvider;
 
 public class BeanUtil {
 
-    public static Object getBean(Class clazz) {
+    public static Object getBean(Class<?> clazz) {
 
         ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 

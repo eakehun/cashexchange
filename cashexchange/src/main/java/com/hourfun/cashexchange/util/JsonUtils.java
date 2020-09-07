@@ -20,7 +20,8 @@ import java.util.Map;
  * Created by 1100480 on 2017. 4. 7..
  */
 public final class JsonUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
+    @SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
     /**
      * json값이 json 타입이 맞는지 확인.
      */
