@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
 
 	@GetMapping("/")
-	public String main(HttpSession session, Authentication auth, HttpServletRequest request) {
-		return "main";
+	public String main(HttpSession session, Authentication auth) {
+		String id = "";
+		if(auth != null) {
+			id = auth.getName(); 
+		}
+		
+		return "main " + id;
 	}
 	
 	@GetMapping("/users/page")

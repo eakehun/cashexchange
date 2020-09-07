@@ -19,9 +19,10 @@ import com.hourfun.cashexchange.common.AuthEnum;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter{
 	
-	@Value("${session,cookie.key}")
+	@Value("${session.cookie.key}")
 	private String cookieKey;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {

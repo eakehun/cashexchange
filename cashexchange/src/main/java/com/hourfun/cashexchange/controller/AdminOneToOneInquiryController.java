@@ -22,34 +22,14 @@ import com.hourfun.cashexchange.service.OneToOneInquiryReponseService;
 import com.hourfun.cashexchange.service.OneToOneInquiryService;
 
 @RestController
-@RequestMapping("/board/OneToOne")
-public class OneToOneInquiryController {
+@RequestMapping("/admin/board/OneToOne")
+public class AdminOneToOneInquiryController {
 	
 	@Autowired
 	private OneToOneInquiryService oneToOneInquiryService;
 	
 	@Autowired
 	private OneToOneInquiryReponseService oneToOneInquiryResponseService;
-	
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<OneToOneInquiry> insertOneToOne(@RequestBody OneToOneInquiry oneInquiry) {
-		if(oneInquiry.getIdx() >0l) {
-			throw new IllegalArgumentException("Idx value exists. Please check ..");
-		}
-		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-	
-	@RequestMapping(value = "/", method = RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<OneToOneInquiry> updateOneToOne(@RequestBody OneToOneInquiry oneInquiry) {
-		if(oneInquiry.getIdx() <1l) {
-			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
-		}
-		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 	
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.GET)
     @ResponseBody

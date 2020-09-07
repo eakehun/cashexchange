@@ -32,6 +32,7 @@ public class OneToOneInquiryReponseService {
 		}else {
 			Optional<OneToOneInquiry> oneToOneInquiryOptional =  oneToOneInquiryService.findById(parentIdx);
 			oneToOneInquiryResponse =  oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
+			//mail 보내기 기능 추가 
 			if(oneToOneInquiryOptional.isPresent()) {
 				OneToOneInquiry oneToOneInquiry = oneToOneInquiryOptional.get();
 				oneToOneInquiry.setStatus(OneToOneInquiryType.Response_Complate);

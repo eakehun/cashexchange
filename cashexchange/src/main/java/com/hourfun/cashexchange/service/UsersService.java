@@ -17,14 +17,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.UsersRepository;
-
 
 @Service
 public class UsersService {
@@ -37,36 +35,35 @@ public class UsersService {
 
 	@Autowired
 	private PasswordEncoder customPasswordEncoder;
-	
+
 	@Autowired
 	private RememberMeServices customSecurityRememberMeService;
 
 	@SuppressWarnings("unchecked")
-	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request, HttpServletResponse response) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id,
-				pwd);
+	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
+			HttpServletResponse response) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id, pwd);
 
 		Authentication authentication = authenticationManager.authenticate(token);
-		
+
 		HttpSession session = request.getSession();
-		
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
 				SecurityContextHolder.getContext());
-		
-		if(authentication != null) {
+
+		if (authentication != null) {
 			List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) authentication.getAuthorities();
 
-			if(currentAuth.get(0).getAuthority().equals(common.name())) {
-				
+			if (currentAuth.get(0).getAuthority().equals(common.name())) {
+
 				customSecurityRememberMeService.loginSuccess(request, response, authentication);
-				
-				
+
 				return repository.findById(id);
 			}
-			
+
 		}
-		
+
 		return null;
 
 	}
@@ -74,14 +71,14 @@ public class UsersService {
 	public Users findId(String tel) {
 
 		Users selectUser = repository.findByTel(tel);
-		
-		if(selectUser != null) {
+
+		if (selectUser != null) {
 			String maskedEmail = getMaskedEmail(selectUser.getId());
-			
+
 			selectUser.setId(maskedEmail);
 			selectUser.setEmail(maskedEmail);
 		}
-		
+
 		return selectUser;
 	}
 
@@ -90,20 +87,18 @@ public class UsersService {
 	}
 
 	public Users signIn(Users users, AuthEnum common) {
-		
-		
+
 		String auth = common.name().split("_")[1];
-		
+
 		users.setAuth(auth);
 		users.setTelChkValue("T");
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
 
-		
 		return repository.save(users);
 	}
 
 	/*
-	 * 그냥 검색해서 찾은  마스킹 코드
+	 * 그냥 검색해서 찾은 마스킹 코드
 	 */
 	public String getMaskedEmail(String email) {
 
