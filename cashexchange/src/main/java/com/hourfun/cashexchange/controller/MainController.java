@@ -15,7 +15,7 @@ public class MainController {
 		return "main";
 	}
 	
-	@GetMapping("/user/page")
+	@GetMapping("/users/page")
 	public String user(HttpSession session) {
 		
 		return "user";

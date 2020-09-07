@@ -39,7 +39,7 @@ public class UsersService {
 	private PasswordEncoder customPasswordEncoder;
 	
 	@Autowired
-	private TokenBasedRememberMeServices customSecurityRememberMeService;
+	private RememberMeServices customSecurityRememberMeService;
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request, HttpServletResponse response) {
@@ -59,7 +59,7 @@ public class UsersService {
 
 			if(currentAuth.get(0).getAuthority().equals(common.name())) {
 				
-				customSecurityRememberMeService.onLoginSuccess(request, response, authentication);
+				customSecurityRememberMeService.loginSuccess(request, response, authentication);
 				
 				
 				return repository.findById(id);
@@ -85,13 +85,16 @@ public class UsersService {
 		return selectUser;
 	}
 
-	public Users findPassword(Users users) {
-		return repository.findByIdAndTel(users.getId(), users.getTel());
+	public Users findPassword(String id, String tel) {
+		return repository.findByIdAndTel(id, tel);
 	}
 
-	public Users signIn(Users users) {
-
-		users.setAuth("USER");
+	public Users signIn(Users users, AuthEnum common) {
+		
+		
+		String auth = common.name().split("_")[1];
+		
+		users.setAuth(auth);
 		users.setTelChkValue("T");
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
 
