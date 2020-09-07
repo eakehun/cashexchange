@@ -36,13 +36,13 @@ public class UsersController {
 		return new ResponseEntity<Users>(service.findId(tel), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/findPassword/", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Users> findPassword(@RequestBody Users users) {
-		return new ResponseEntity<Users>(service.findPassword(users), HttpStatus.OK);
+	@RequestMapping(value = "/findPassword/id/{id}/tel/{tel}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findPassword(@PathVariable String id, @PathVariable String tel) {
+		return new ResponseEntity<Users>(service.findPassword(id, tel), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/signin/", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Users> signin(@RequestBody Users users) {
-		return new ResponseEntity<Users>(service.signIn(users), HttpStatus.OK);
+		return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
 	}
 }
