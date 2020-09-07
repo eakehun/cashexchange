@@ -24,8 +24,6 @@ public class CustomSecurityService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		
 		Users member = repository.findById(username);
 		
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

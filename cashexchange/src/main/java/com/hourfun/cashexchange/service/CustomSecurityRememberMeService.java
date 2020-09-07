@@ -22,26 +22,15 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		setAlwaysRemember(true);
 		setCookieName("qwer");
 		setTokenValiditySeconds(60 * 60 * 24 * 7);
-//		super.setUseSecureCookie(false);
-//		setUseSecureCookie(true);
 	}
 	
-//	@Override
-//	protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
-//		// TODO Auto-generated method stub
-//		return super.createSuccessfulAuthentication(request, user);
-//	}
 	
 	@Override
 	public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication successfulAuthentication) {
-		// TODO Auto-generated method stub
 		String username = retrieveUserName(successfulAuthentication);
 		String password = retrievePassword(successfulAuthentication);
 
-		// If unable to find a username and password, just abort as
-		// TokenBasedRememberMeServices is
-		// unable to construct a valid token in this case.
 		if (!StringUtils.hasLength(username)) {
 			logger.debug("Unable to retrieve username");
 			return;
@@ -106,13 +95,6 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		if (maxAge < 1) {
 			cookie.setVersion(1);
 		}
-
-//		if (useSecureCookie == null) {
-//			cookie.setSecure(request.isSecure());
-//		}
-//		else {
-//			cookie.setSecure(useSecureCookie);
-//		}
 		
 		cookie.setSecure(false);
 
