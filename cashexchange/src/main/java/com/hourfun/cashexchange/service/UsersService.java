@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.UsersRepository;
+import com.hourfun.cashexchange.util.DateUtils;
+import com.hourfun.cashexchange.util.StringUtil;
 
 @Service
 public class UsersService {
@@ -73,7 +77,7 @@ public class UsersService {
 		Users selectUser = repository.findByTel(tel);
 
 		if (selectUser != null) {
-			String maskedEmail = getMaskedEmail(selectUser.getId());
+			String maskedEmail = StringUtil.getMaskedEmail(selectUser.getId());
 
 			selectUser.setId(maskedEmail);
 			selectUser.setEmail(maskedEmail);
@@ -97,27 +101,20 @@ public class UsersService {
 		return repository.save(users);
 	}
 
-	/*
-	 * 그냥 검색해서 찾은 마스킹 코드
-	 */
-	public String getMaskedEmail(String email) {
+//	public Page<Users> findAllUsers(Pageable pageable){
+//		return repository.findAll(pageable);
+//	}
+	
+	public Page<Users> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
+		return repository.findByCreateDateBetween(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+	}
 
-		String regex = "\\b(\\S+)+@(\\S+.\\S+)";
-		Matcher matcher = Pattern.compile(regex).matcher(email);
-		if (matcher.find()) {
-			String id = matcher.group(1);
-			int length = id.length();
-			if (length < 3) {
-				char[] c = new char[length];
-				Arrays.fill(c, '*');
-				return email.replace(id, String.valueOf(c));
-			} else if (length == 3) {
-				return email.replaceAll("\\b(\\S+)[^@][^@]+@(\\S+)", "$1**@$2");
-			} else {
-				return email.replaceAll("\\b(\\S+)[^@][^@][^@]+@(\\S+)", "$1***@$2");
-			}
-		}
-		return email;
+	public Page<Users> findByCreateDateBetweenAndAccountStatus(String fromDate, String toDate, String accountStatus, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndAccountStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), accountStatus, pageable);
 	}
 
 }
