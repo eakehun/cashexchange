@@ -9,10 +9,8 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
@@ -48,7 +46,7 @@ public class OneToOneInquiryReponseService {
 			}
 			return oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
 		}else {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There are no registered comments...", new Throwable("There are no registered comments..."));
+			throw new IllegalArgumentException("There are no registered comments...");
 		}
 	}
 	public Map<String,Object> oneToOneInquiryDetail(long idx){
@@ -60,7 +58,7 @@ public class OneToOneInquiryReponseService {
 			returnVal.put("OneToOne", oneInquiry.get());
 			returnVal.put("oneToOneResponses", oneToOneInquiryResponses);
 		}else {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
+			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
 		return returnVal;
 	}
