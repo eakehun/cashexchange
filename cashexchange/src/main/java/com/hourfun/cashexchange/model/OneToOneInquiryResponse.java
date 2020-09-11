@@ -21,7 +21,6 @@ import lombok.Data;
 
 @Entity
 @Data
-
 public class OneToOneInquiryResponse {
 
 	@Id
@@ -30,9 +29,10 @@ public class OneToOneInquiryResponse {
 	
 	@ManyToOne(targetEntity = OneToOneInquiry.class, fetch = FetchType.LAZY, 
 			optional = false)
-    @JoinColumn(name = "parentIdx", referencedColumnName = "idx")
+    @JoinColumn(name = "parentIdx", referencedColumnName = "idx",nullable=false)
     @JsonBackReference
 	private OneToOneInquiry oneToOneInquiry;
+	
 	@Column(columnDefinition = "TEXT")
 	private String content;
 	

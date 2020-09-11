@@ -25,10 +25,13 @@ public class OneToOneInquiryService {
 	private UsersService usersService;
 	
 	public OneToOneInquiry save(OneToOneInquiry oneInquiry, Authentication auth) {
+		Users users = usersService.findByUserId(auth.getName());
+		oneInquiry.setUserId(users.getUserId());
+		oneInquiry.setTel(users.getTel());
+		oneInquiry.setUserName(users.getName());
 		if(oneInquiry.getIdx() < 1l) {
 			oneInquiry.setStatus(OneToOneInquiryType.Ready);
 		}
-		Users users = usersService.findByUserId(auth.getName());
 		return oneToOneInquiryRepository.save(oneInquiry);
 	}
 	

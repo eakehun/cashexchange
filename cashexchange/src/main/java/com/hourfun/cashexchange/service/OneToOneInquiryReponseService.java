@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
+import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.OneToOneInquiryResponseRepository;
 
 @Service
@@ -31,13 +32,12 @@ public class OneToOneInquiryReponseService {
 	
 	@Transactional
 	public OneToOneInquiryResponse save(OneToOneInquiryResponse oneToOneInquiryResponse, long parentIdx, Authentication auth) {
-		
+		Users users = usersService.findByUserId(auth.getName());
+		oneToOneInquiryResponse.setUserId(users.getUserId());
 		if(oneToOneInquiryResponse.getIdx() > 0) {
 			return oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
 		}else {
 			Optional<OneToOneInquiry> oneToOneInquiryOptional =  oneToOneInquiryService.findById(parentIdx);
-			
-			
 			oneToOneInquiryResponse =  oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
 			//mail 보내기 기능 추가 
 			if(oneToOneInquiryOptional.isPresent()) {
