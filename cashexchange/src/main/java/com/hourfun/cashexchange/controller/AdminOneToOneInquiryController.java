@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
@@ -37,7 +36,7 @@ public class AdminOneToOneInquiryController {
     @ResponseBody
     public ResponseEntity<Map<String,Object>> oneToOneInquiryDetail(@PathVariable long parentIdx) {
 		if(parentIdx < 1l) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
+			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
 		
         return new ResponseEntity<>(oneToOneInquiryResponseService.oneToOneInquiryDetail(parentIdx), HttpStatus.OK);
@@ -48,7 +47,7 @@ public class AdminOneToOneInquiryController {
     public ResponseEntity<OneToOneInquiryResponse> insertOneToOneResponse(@PathVariable long parentIdx, 
     		@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
 		if(oneInquiryResponse.getIdx() >0l) {
-			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Idx value exists. Please check ..");
+			throw new IllegalArgumentException("Idx value exists. Please check ..");
 		}
 		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,parentIdx,auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -58,7 +57,7 @@ public class AdminOneToOneInquiryController {
     @ResponseBody
     public ResponseEntity<OneToOneInquiryResponse> updateOneToOneResponse(@PathVariable long parentIdx,@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
 		if(oneInquiryResponse.getIdx() < 1l) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
+			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
 		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,parentIdx, auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
