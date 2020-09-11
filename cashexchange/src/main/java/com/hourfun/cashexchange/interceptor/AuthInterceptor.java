@@ -48,12 +48,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				Users users = usersService.findByUserId(authentication.getName());
 
 				String currentAccountStatus = users.getAccountStatus();
-
-				if (currentAccountStatus.equals(AccountStatusEnum.SUSPENDED.getValue())) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "suspended user");
-				} else if (currentAccountStatus.equals(AccountStatusEnum.WITHDRAW.getValue())) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "withdraw user");
+				
+				if(currentAccountStatus != null) {
+					if (currentAccountStatus.equals(AccountStatusEnum.SUSPENDED.getValue())) {
+						throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "suspended user");
+					} else if (currentAccountStatus.equals(AccountStatusEnum.WITHDRAW.getValue())) {
+						throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "withdraw user");
+					}
 				}
+
 
 				HttpSession session = request.getSession();
 				if (session != null) {

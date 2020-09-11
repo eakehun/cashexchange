@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,7 +46,7 @@ public class UsersService {
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws BadCredentialsException{
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id, pwd);
 
 		Authentication authentication = authenticationManager.authenticate(token);
@@ -65,11 +66,11 @@ public class UsersService {
 
 				return repository.findByUserId(id);
 			}else {
-				throw new IllegalArgumentException("login authority not correct. Please check ..");
+				throw new IllegalArgumentException("login authority not correct. Please check authority");
 			}
 
 		}else {
-			throw new IllegalArgumentException("account doesn't exists. Please check ..");
+			throw new IllegalArgumentException("account doesn't exists. Please check userid, password");
 		}		
 
 	}
@@ -86,7 +87,7 @@ public class UsersService {
 			
 			return selectUser;
 		}else {
-			throw new IllegalArgumentException("account doesn't exists. Please check ..");
+			throw new IllegalArgumentException("account doesn't exists. Please check tel");
 		}
 
 		
@@ -103,7 +104,7 @@ public class UsersService {
 		if (selectUser != null) {
 			return selectUser;
 		}else {
-			throw new IllegalArgumentException("account doesn't exists. Please check ..");
+			throw new IllegalArgumentException("account doesn't exists. Please check userid");
 		}
 		
 	}
@@ -119,10 +120,6 @@ public class UsersService {
 		return repository.save(users);
 	}
 
-//	public Page<Users> findAllUsers(Pageable pageable){
-//		return repository.findAll(pageable);
-//	}
-	
 	public Page<Users> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
 		return repository.findByCreateDateBetween(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
