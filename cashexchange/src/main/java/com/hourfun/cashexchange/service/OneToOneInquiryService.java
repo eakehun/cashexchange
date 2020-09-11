@@ -28,7 +28,7 @@ public class OneToOneInquiryService {
 		if(oneInquiry.getIdx() < 1l) {
 			oneInquiry.setStatus(OneToOneInquiryType.Ready);
 		}
-		Users users = usersService.findById(auth.getName());
+		Users users = usersService.findByUserId(auth.getName());
 		return oneToOneInquiryRepository.save(oneInquiry);
 	}
 	
