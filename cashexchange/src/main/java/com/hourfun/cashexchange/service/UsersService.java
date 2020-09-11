@@ -85,6 +85,10 @@ public class UsersService {
 
 		return selectUser;
 	}
+	
+	public Users findById(String id) {
+		return repository.findById(id);
+	}
 
 	public Users findPassword(String id, String tel) {
 		return repository.findByIdAndTel(id, tel);

@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
+import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.OneToOneInquiryRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
@@ -19,11 +21,14 @@ public class OneToOneInquiryService {
 	@Autowired
 	private OneToOneInquiryRepository oneToOneInquiryRepository;
 	
+	@Autowired
+	private UsersService usersService;
 	
-	public OneToOneInquiry save(OneToOneInquiry oneInquiry) {
+	public OneToOneInquiry save(OneToOneInquiry oneInquiry, Authentication auth) {
 		if(oneInquiry.getIdx() < 1l) {
 			oneInquiry.setStatus(OneToOneInquiryType.Ready);
 		}
+		Users users = usersService.findById(auth.getName());
 		return oneToOneInquiryRepository.save(oneInquiry);
 	}
 	

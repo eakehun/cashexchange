@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,21 +44,22 @@ public class AdminOneToOneInquiryController {
 	
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<OneToOneInquiryResponse> insertOneToOneResponse(@PathVariable long parentIdx, @RequestBody OneToOneInquiryResponse oneInquiryResponse) {
+    public ResponseEntity<OneToOneInquiryResponse> insertOneToOneResponse(@PathVariable long parentIdx, 
+    		@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
 		if(oneInquiryResponse.getIdx() >0l) {
 			throw new IllegalArgumentException("Idx value exists. Please check ..");
 		}
-		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,parentIdx);
+		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,parentIdx,auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/response/", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<OneToOneInquiryResponse> updateOneToOneResponse(@RequestBody OneToOneInquiryResponse oneInquiryResponse) {
+    public ResponseEntity<OneToOneInquiryResponse> updateOneToOneResponse(@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
 		if(oneInquiryResponse.getIdx() < 1l) {
 			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
-		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,0);
+		OneToOneInquiryResponse result = oneToOneInquiryResponseService.save(oneInquiryResponse,0, auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 	

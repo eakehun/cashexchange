@@ -3,6 +3,7 @@ package com.hourfun.cashexchange.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,21 +23,21 @@ public class UserOneToOneInquiryController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<OneToOneInquiry> insertOneToOne(@RequestBody OneToOneInquiry oneInquiry) {
+    public ResponseEntity<OneToOneInquiry> insertOneToOne(@RequestBody OneToOneInquiry oneInquiry,   Authentication auth) {
 		if(oneInquiry.getIdx() >0l) {
 			throw new IllegalArgumentException("Idx value exists. Please check ..");
 		}
-		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry);
+		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry,auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<OneToOneInquiry> updateOneToOne(@RequestBody OneToOneInquiry oneInquiry) {
+    public ResponseEntity<OneToOneInquiry> updateOneToOne(@RequestBody OneToOneInquiry oneInquiry,   Authentication auth) {
 		if(oneInquiry.getIdx() <1l) {
 			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
-		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry);
+		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry, auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

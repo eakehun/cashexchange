@@ -16,9 +16,6 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * Created by 1100480 on 2017. 4. 7..
- */
 public final class JsonUtils {
     @SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
