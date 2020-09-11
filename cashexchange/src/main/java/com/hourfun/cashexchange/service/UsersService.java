@@ -63,7 +63,7 @@ public class UsersService {
 
 				customSecurityRememberMeService.loginSuccess(request, response, authentication);
 
-				return repository.findById(id);
+				return repository.findByUserId(id);
 			}else {
 				throw new IllegalArgumentException("login authority not correct. Please check ..");
 			}
@@ -74,14 +74,14 @@ public class UsersService {
 
 	}
 
-	public Users findId(String tel) {
+	public Users findByTel(String tel) {
 
 		Users selectUser = repository.findByTel(tel);
 
 		if (selectUser != null) {
-			String maskedEmail = StringUtil.getMaskedEmail(selectUser.getId());
+			String maskedEmail = StringUtil.getMaskedEmail(selectUser.getUserId());
 
-			selectUser.setId(maskedEmail);
+			selectUser.setUserId(maskedEmail);
 			selectUser.setEmail(maskedEmail);
 			
 			return selectUser;
@@ -92,9 +92,9 @@ public class UsersService {
 		
 	}
 
-	public Users findPassword(String id, String tel) {
+	public Users findByUserIdAndTel(String id, String tel) {
 		
-		Users selectUser = repository.findByIdAndTel(id, tel);
+		Users selectUser = repository.findByUserIdAndTel(id, tel);
 		
 		if (selectUser != null) {
 			return selectUser;

@@ -32,12 +32,12 @@ public class UsersController {
 
 	@RequestMapping(value = "/findId/{tel}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> findId(@PathVariable String tel) {
-		return new ResponseEntity<Users>(service.findId(tel), HttpStatus.OK);
+		return new ResponseEntity<Users>(service.findByTel(tel), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/findPassword/id/{id}/tel/{tel}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> findPassword(@PathVariable String id, @PathVariable String tel) {
-		return new ResponseEntity<Users>(service.findPassword(id, tel), HttpStatus.OK);
+		return new ResponseEntity<Users>(service.findByUserIdAndTel(id, tel), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/signin/", method = RequestMethod.POST)

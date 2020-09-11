@@ -24,14 +24,14 @@ public class CustomSecurityService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Users member = repository.findById(username);
+		Users member = repository.findByUserId(username);
 		
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		
 		
 		authorities.add(new SimpleGrantedAuthority("ROLE_" + member.getAuth()));
 		
-		User user = new User(member.getId(), member.getPwd(), authorities);
+		User user = new User(member.getUserId(), member.getPwd(), authorities);
 		
 		return user;
 	}

@@ -16,11 +16,11 @@ import com.hourfun.cashexchange.model.Users;
 @Transactional
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-	Users findById(String id);
+	Users findByUserId(String userId);
 
 	Users findByTel(String tel);
 
-	Users findByIdAndTel(String id, String tel);
+	Users findByUserIdAndTel(String userId, String tel);
 
 //	Page<Users> findAll(Pageable pageable); 
 
