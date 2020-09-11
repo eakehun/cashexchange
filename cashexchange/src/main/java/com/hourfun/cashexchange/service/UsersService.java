@@ -91,6 +91,10 @@ public class UsersService {
 
 		
 	}
+	
+	public Users findById(String id) {
+		return repository.findById(id);
+	}
 
 	public Users findByUserIdAndTel(String id, String tel) {
 		

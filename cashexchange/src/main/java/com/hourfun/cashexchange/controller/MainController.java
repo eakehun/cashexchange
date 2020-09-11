@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
