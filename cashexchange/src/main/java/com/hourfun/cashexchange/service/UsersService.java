@@ -50,13 +50,13 @@ public class UsersService {
 
 		Authentication authentication = authenticationManager.authenticate(token);
 
-		HttpSession session = request.getSession();
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-				SecurityContextHolder.getContext());
 
 		if (authentication != null) {
+			HttpSession session = request.getSession();
+			
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+					SecurityContextHolder.getContext());
 			List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) authentication.getAuthorities();
 
 			if (currentAuth.get(0).getAuthority().equals(common.name())) {
@@ -64,11 +64,13 @@ public class UsersService {
 				customSecurityRememberMeService.loginSuccess(request, response, authentication);
 
 				return repository.findById(id);
+			}else {
+				throw new IllegalArgumentException("login authority not correct. Please check ..");
 			}
 
-		}
-
-		return null;
+		}else {
+			throw new IllegalArgumentException("account doesn't exists. Please check ..");
+		}		
 
 	}
 
@@ -81,13 +83,25 @@ public class UsersService {
 
 			selectUser.setId(maskedEmail);
 			selectUser.setEmail(maskedEmail);
+			
+			return selectUser;
+		}else {
+			throw new IllegalArgumentException("account doesn't exists. Please check ..");
 		}
 
-		return selectUser;
+		
 	}
 
 	public Users findPassword(String id, String tel) {
-		return repository.findByIdAndTel(id, tel);
+		
+		Users selectUser = repository.findByIdAndTel(id, tel);
+		
+		if (selectUser != null) {
+			return selectUser;
+		}else {
+			throw new IllegalArgumentException("account doesn't exists. Please check ..");
+		}
+		
 	}
 
 	public Users signIn(Users users, AuthEnum common) {
