@@ -30,10 +30,16 @@ public class OneToOneInquiryService {
 		oneInquiry.setTel(users.getTel());
 		oneInquiry.setUserName(users.getName());
 		if(oneInquiry.getIdx() < 1l) {
+			
 			oneInquiry.setStatus(OneToOneInquiryType.Ready);
 		}
 		return oneToOneInquiryRepository.save(oneInquiry);
 	}
+	
+	public OneToOneInquiry saveComplete(OneToOneInquiry oneInquiry) {
+		return oneToOneInquiryRepository.save(oneInquiry);
+	}
+	
 	
 	public Optional<OneToOneInquiry> findById(long idx){
 		return oneToOneInquiryRepository.findById(idx);

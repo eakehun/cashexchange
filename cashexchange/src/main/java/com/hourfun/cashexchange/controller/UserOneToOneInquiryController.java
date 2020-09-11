@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.service.OneToOneInquiryService;
@@ -25,7 +26,7 @@ public class UserOneToOneInquiryController {
     @ResponseBody
     public ResponseEntity<OneToOneInquiry> insertOneToOne(@RequestBody OneToOneInquiry oneInquiry,   Authentication auth) {
 		if(oneInquiry.getIdx() >0l) {
-			throw new IllegalArgumentException("Idx value exists. Please check ..");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value exists. Please check ..");
 		}
 		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry,auth);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -35,7 +36,7 @@ public class UserOneToOneInquiryController {
     @ResponseBody
     public ResponseEntity<OneToOneInquiry> updateOneToOne(@RequestBody OneToOneInquiry oneInquiry,   Authentication auth) {
 		if(oneInquiry.getIdx() <1l) {
-			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
 		}
 		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry, auth);
         return new ResponseEntity<>(result, HttpStatus.OK);

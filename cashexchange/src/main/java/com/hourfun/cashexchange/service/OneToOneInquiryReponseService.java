@@ -9,8 +9,10 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
@@ -34,20 +36,20 @@ public class OneToOneInquiryReponseService {
 	public OneToOneInquiryResponse save(OneToOneInquiryResponse oneToOneInquiryResponse, long parentIdx, Authentication auth) {
 		Users users = usersService.findByUserId(auth.getName());
 		oneToOneInquiryResponse.setUserId(users.getUserId());
-		if(oneToOneInquiryResponse.getIdx() > 0) {
-			return oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
-		}else {
-			Optional<OneToOneInquiry> oneToOneInquiryOptional =  oneToOneInquiryService.findById(parentIdx);
-			oneToOneInquiryResponse =  oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
-			//mail 보내기 기능 추가 
-			if(oneToOneInquiryOptional.isPresent()) {
-				OneToOneInquiry oneToOneInquiry = oneToOneInquiryOptional.get();
+		Optional<OneToOneInquiry> oneToOneInquiryOptional =  oneToOneInquiryService.findById(parentIdx);
+		if(oneToOneInquiryOptional.isPresent()) {
+			OneToOneInquiry oneToOneInquiry = oneToOneInquiryOptional.get();
+			oneToOneInquiryResponse.setOneToOneInquiry(oneToOneInquiry);
+			if(oneToOneInquiryResponse.getIdx() < 1l) {
+				//mail 보내기 기능 추가
 				oneToOneInquiry.setStatus(OneToOneInquiryType.Response_Complate);
 				oneToOneInquiry.setResponseDate(new Date());
-				oneToOneInquiryService.save(oneToOneInquiry,auth);
+				oneToOneInquiryService.saveComplete(oneToOneInquiry);
 			}
+			return oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);
+		}else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There are no registered comments...", new Throwable("There are no registered comments..."));
 		}
-		return oneToOneInquiryResponse;
 	}
 	public Map<String,Object> oneToOneInquiryDetail(long idx){
 		Optional<OneToOneInquiry> oneInquiry = oneToOneInquiryService.findById(idx);
@@ -58,7 +60,7 @@ public class OneToOneInquiryReponseService {
 			returnVal.put("OneToOne", oneInquiry.get());
 			returnVal.put("oneToOneResponses", oneToOneInquiryResponses);
 		}else {
-			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
 		}
 		return returnVal;
 	}
