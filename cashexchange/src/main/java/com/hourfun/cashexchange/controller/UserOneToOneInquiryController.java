@@ -36,7 +36,7 @@ public class UserOneToOneInquiryController {
     @ResponseBody
     public ResponseEntity<OneToOneInquiry> updateOneToOne(@RequestBody OneToOneInquiry oneInquiry,   Authentication auth) {
 		if(oneInquiry.getIdx() <1l) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Idx value doesn't exists. Please check ..", new IllegalArgumentException());
 		}
 		OneToOneInquiry result = oneToOneInquiryService.save(oneInquiry, auth);
         return new ResponseEntity<>(result, HttpStatus.OK);

@@ -46,8 +46,5 @@ public class UsersController {
 		return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
 	}
 	
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<String> illegalArgumentExceptionHandler(Exception e) {
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	
 }
