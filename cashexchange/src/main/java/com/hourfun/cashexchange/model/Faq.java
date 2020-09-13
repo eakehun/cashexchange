@@ -3,27 +3,36 @@ package com.hourfun.cashexchange.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.Data;
 
 @Data
-public class faq {
+@Entity
+@Table(indexes= {@Index(name = "faqUpdateDateDisplayFixed", unique=false, columnList = "createDate,display,fixed"),
+		@Index(name = "faqUpdateDate", unique=false, columnList = "createDate")})
+public class Faq {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
 	private String title;
+	@Column(columnDefinition = "TEXT")
 	private String content;
-	@Column(columnDefinition = "BOOLEAN default false")
+	@Column(columnDefinition = "BOOLEAN default true")
 	private boolean display;
-	private long userIdx;
+
+	@Column(columnDefinition = "BOOLEAN default true")
+	private boolean fixed;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

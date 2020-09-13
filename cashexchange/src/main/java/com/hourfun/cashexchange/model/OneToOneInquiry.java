@@ -22,7 +22,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(indexes= {@Index(name = "oneToOneInquiryTitle", unique=false, columnList = "createDate,status,title"),
-		@Index(name = "oneToOneInquiryTitle", unique=false, columnList = "createDate,status")})
+		@Index(name = "oneToOneInquiryStatus", unique=false, columnList = "createDate,status")})
 public class OneToOneInquiry {
 
 	@Id
