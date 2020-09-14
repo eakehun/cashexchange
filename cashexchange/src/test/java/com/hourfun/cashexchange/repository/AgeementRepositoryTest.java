@@ -1,10 +1,5 @@
 package com.hourfun.cashexchange.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.awt.print.Pageable;
-import java.util.List;
-
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
