@@ -15,6 +15,8 @@ import com.hourfun.cashexchange.model.Users;
 @Transactional
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
+	Users findByIdx(Long idx);
+	
 	Users findByUserId(String userId);
 
 	Users findByTel(String tel);
@@ -30,5 +32,9 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 	Page<Users> findByCreateDateBetweenAndAccountStatus(Date fromDate, Date toDate, String accountStatus,
 			Pageable pageable);
 
+	Page<Users> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable);
+
+	Page<Users> findByCreateDateBetweenAndUserIdAndAccountStatus(Date fromDate, Date toDate, String userId,
+			String accountStatus, Pageable pageable);
 
 }

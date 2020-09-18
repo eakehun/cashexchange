@@ -1,9 +1,6 @@
 package com.hourfun.cashexchange.service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,15 +43,14 @@ public class UsersService {
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
-			HttpServletResponse response) throws BadCredentialsException{
+			HttpServletResponse response) throws BadCredentialsException {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id, pwd);
 
 		Authentication authentication = authenticationManager.authenticate(token);
 
-
 		if (authentication != null) {
 			HttpSession session = request.getSession();
-			
+
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
 					SecurityContextHolder.getContext());
@@ -65,13 +61,13 @@ public class UsersService {
 				customSecurityRememberMeService.loginSuccess(request, response, authentication);
 
 				return repository.findByUserId(id);
-			}else {
+			} else {
 				throw new IllegalArgumentException("login authority not correct. Please check authority");
 			}
 
-		}else {
+		} else {
 			throw new IllegalArgumentException("account doesn't exists. Please check userid, password");
-		}		
+		}
 
 	}
 
@@ -84,29 +80,28 @@ public class UsersService {
 
 			selectUser.setUserId(maskedEmail);
 			selectUser.setEmail(maskedEmail);
-			
+
 			return selectUser;
-		}else {
+		} else {
 			throw new IllegalArgumentException("account doesn't exists. Please check tel");
 		}
 
-		
 	}
-	
+
 	public Users findByUserId(String id) {
 		return repository.findByUserId(id);
 	}
 
 	public Users findByUserIdAndTel(String id, String tel) {
-		
+
 		Users selectUser = repository.findByUserIdAndTel(id, tel);
-		
+
 		if (selectUser != null) {
 			return selectUser;
-		}else {
+		} else {
 			throw new IllegalArgumentException("account doesn't exists. Please check userid");
 		}
-		
+
 	}
 
 	public Users signIn(Users users, AuthEnum common) {
@@ -121,15 +116,38 @@ public class UsersService {
 	}
 
 	public Page<Users> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
-		return repository.findByCreateDateBetween(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+		return repository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
 	}
 
-	public Page<Users> findByCreateDateBetweenAndAccountStatus(String fromDate, String toDate, String accountStatus, Pageable pageable) {
+	public Page<Users> findByCreateDateBetweenAndAccountStatus(String fromDate, String toDate, String accountStatus,
+			Pageable pageable) {
 		return repository.findByCreateDateBetweenAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), accountStatus, pageable);
 	}
+
+	public Page<Users> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
+			Pageable pageable) {
+		return repository.findByCreateDateBetweenAndUserId(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+	}
+
+	public Page<Users> findByCreateDateBetweenAndUserIdAndAccountStatus(String fromDate, String toDate, String userId,
+			String accountStatus, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndUserIdAndAccountStatus(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, accountStatus, pageable);
+	}
+	
+	public Users updateAccountStatus(Users users) {
+		Users selectUser = repository.findByIdx(users.getIdx());
+		
+		selectUser.setAccountStatus(users.getAccountStatus());
+		
+		
+		return repository.save(selectUser);
+	}
+	
+	
 
 }
