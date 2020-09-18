@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum AccountStatusEnum {
-	SUSPENDED("정지"), WITHDRAW("탈퇴");
+	NORMAL("정상"), SUSPENDED("정지"), WITHDRAW("탈퇴");
 
 	private String value;
 	
