@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.hourfun.cashexchange.model.Faq;
-import com.hourfun.cashexchange.model.FaqMiniFindAll;
+import com.hourfun.cashexchange.model.FaqMini;
 
 public interface FaqRepository extends JpaRepository<Faq, Long>{
 
@@ -19,7 +19,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 			countQuery = "select count(*) from faq where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetween(Date fromDate,Date toDate, Pageable pageable);
+	public Page<FaqMini> findByCreateDateBetween(Date fromDate,Date toDate, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
@@ -29,7 +29,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like '%'||:title||'%' ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenLikeTitle(@Param("fromDate") Date fromDate,@Param("toDate") Date toDate, 
+	public Page<FaqMini> findByCreateDateBetweenLikeTitle(@Param("fromDate") Date fromDate,@Param("toDate") Date toDate, 
 			@Param("title") String title, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
@@ -40,7 +40,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like '%'||:content||'%' ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenLikeContent(@Param("fromDate") Date fromDate,@Param("toDate") Date toDate, 
+	public Page<FaqMini> findByCreateDateBetweenLikeContent(@Param("fromDate") Date fromDate,@Param("toDate") Date toDate, 
 			@Param("content") String content, Pageable pageable);
 	
 	
@@ -52,7 +52,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					" and display=:display ",
 					nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndDisplay(Date fromDate,Date toDate,Boolean display, Pageable pageable);
+	public Page<FaqMini> findByCreateDateBetweenAndDisplay(Date fromDate,Date toDate,Boolean display, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
@@ -62,7 +62,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like '%'||:title||'%' and display=:display ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndTitleLikeAndDisplay(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndTitleLikeAndDisplay(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, @Param("display")Boolean display, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
@@ -73,7 +73,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like '%'||:content||'%' and display=:display ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndContentLikeAndDisplay(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndContentLikeAndDisplay(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("content") String content, @Param("display")Boolean display, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
@@ -84,7 +84,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and fixed=:fixed ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndFixed(Date fromDate,Date toDate,Boolean fixed, Pageable pageable);
+	public Page<FaqMini> findByCreateDateBetweenAndFixed(Date fromDate,Date toDate,Boolean fixed, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
@@ -94,7 +94,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like '%'||:title||'%' and fixed=:fixed ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndTitleLikeAndFixed(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndTitleLikeAndFixed(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, @Param("fixed")Boolean fixed, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
@@ -105,7 +105,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like '%'||:content||'%' and fixed=:fixed ",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndContentLikeAndFixed(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndContentLikeAndFixed(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("content") String content, @Param("fixed")Boolean fixed, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
@@ -116,7 +116,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and display= :display and  fixed = :fixed",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndDisplayAndFixed(Date fromDate,Date toDate,Boolean display,Boolean fixed, Pageable pageable);
+	public Page<FaqMini> findByCreateDateBetweenAndDisplayAndFixed(Date fromDate,Date toDate,Boolean display,Boolean fixed, Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
@@ -126,7 +126,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like '%'||:title||'%' and display= :display and  fixed = :fixed",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndTitleLikeAndDisplayAndFixed(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndTitleLikeAndDisplayAndFixed(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, @Param("display")Boolean display,
 			@Param("fixed")Boolean fixed , Pageable pageable);
 	
@@ -138,14 +138,14 @@ public interface FaqRepository extends JpaRepository<Faq, Long>{
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like '%'||:content||'%' and display=:display and  fixed = :fixed",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findByCreateDateBetweenAndContentLikeAndDisplayAndFixed(@Param("fromDate")Date fromDate, 
+	public Page<FaqMini> findByCreateDateBetweenAndContentLikeAndDisplayAndFixed(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("content") String content, @Param("display")Boolean display,
 			@Param("fixed")Boolean fixed , Pageable pageable);
 	
 	@Query(value="select idx, user_id, title, display,create_date,update_date from faq ORDER BY ?#{#pageable}" ,
 			countQuery = "select count(*) from faq ORDER BY ?#{#pageable}",
 			nativeQuery = true)
-	public Page<FaqMiniFindAll> findSpecificAll( Pageable pageable);
+	public Page<FaqMini> findSpecificAll( Pageable pageable);
 
 	
 	

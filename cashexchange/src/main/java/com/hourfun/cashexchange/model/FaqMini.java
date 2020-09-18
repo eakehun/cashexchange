@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public interface FaqMiniFindAll {
+public interface FaqMini {
 	long getIdx();
 	@JsonProperty("createDate")
 	Date getCreate_date();

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hourfun.cashexchange.model.Faq;
-import com.hourfun.cashexchange.model.FaqMiniFindAll;
+import com.hourfun.cashexchange.model.FaqMini;
 import com.hourfun.cashexchange.service.FaqService;
 
 @RestController
@@ -26,7 +26,7 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetween( Pageable pageable){
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetween( Pageable pageable){
 		return new ResponseEntity<>(faqService.findSpecificAll(pageable), HttpStatus.OK);
 	}
 	
@@ -38,14 +38,14 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetween(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetween(@PathVariable String fromDate,
 			@PathVariable String toDate, Pageable pageable){
 		return new ResponseEntity<>(faqService.findByCreateDateBetween(fromDate, toDate, pageable), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/title/{title}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetweenLikeTitle(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetweenLikeTitle(@PathVariable String fromDate,
 			@PathVariable String toDate, 
 			@PathVariable String title, Pageable pageable){
 		return new ResponseEntity<>(faqService.findByCreateDateBetweenLikeTitle(fromDate, toDate,title,pageable), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/content/{content}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetweenLikeContent(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetweenLikeContent(@PathVariable String fromDate,
 			@PathVariable String toDate, 
 			@PathVariable String content, Pageable pageable){
 		return new ResponseEntity<>(faqService.findByCreateDateBetweenLikeContent(fromDate, toDate ,content,pageable), HttpStatus.OK);
@@ -61,7 +61,7 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/display/{display}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetweenAndDisplay(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetweenAndDisplay(@PathVariable String fromDate,
 			@PathVariable String toDate,
 			@PathVariable Boolean display, Pageable pageable){
 		return new ResponseEntity<>(faqService.findByCreateDateBetweenAndDisplay(fromDate, toDate ,display,pageable), HttpStatus.OK);
@@ -70,7 +70,7 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/display/{display}/title/{title}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetweenAndTitleLikeAndDisplay(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetweenAndTitleLikeAndDisplay(@PathVariable String fromDate,
 			@PathVariable String toDate,
 			@PathVariable String title, 
 			@PathVariable Boolean display, Pageable pageable){
@@ -79,7 +79,7 @@ public class AdminFaqController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/display/{display}/content/{content}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<FaqMiniFindAll>> findByCreateDateBetweenAndContentLikeAndDisplay(@PathVariable String fromDate,
+	public ResponseEntity<Page<FaqMini>> findByCreateDateBetweenAndContentLikeAndDisplay(@PathVariable String fromDate,
 			@PathVariable String toDate,		@PathVariable String content, 
 			@PathVariable Boolean display, Pageable pageable){
 		return new ResponseEntity<>(faqService.findByCreateDateBetweenAndContentLikeAndDisplay(fromDate, toDate, content, display, pageable), HttpStatus.OK);
