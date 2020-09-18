@@ -139,6 +139,10 @@ public class UsersService {
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, accountStatus, pageable);
 	}
 	
+	public Users findByIdx(long idx) {
+		return repository.findByIdx(idx);
+	}
+	
 	public Users updateAccountStatus(Users users) {
 		Users selectUser = repository.findByIdx(users.getIdx());
 		

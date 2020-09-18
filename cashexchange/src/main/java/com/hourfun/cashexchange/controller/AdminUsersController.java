@@ -70,6 +70,15 @@ public class AdminUsersController {
 		}
 	}
 
+	@RequestMapping(value = "/idx/{idx}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findByIdx(@PathVariable long idx) {
+		try {
+			return new ResponseEntity<Users>(service.findByIdx(idx), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public @ResponseBody ResponseEntity<Users> updateAccountStatus(@RequestBody Users users) {
 		try {
