@@ -14,17 +14,24 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 
 @Data
 @Entity
 @Table(indexes= {@Index(name = "faqUpdateDateDisplayFixed", unique=false, columnList = "createDate,display,fixed"),
 		@Index(name = "faqUpdateDate", unique=false, columnList = "createDate")})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Faq {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
+
+	
+	private String userId;
+	
 	private String title;
 	@Column(columnDefinition = "TEXT")
 	private String content;
