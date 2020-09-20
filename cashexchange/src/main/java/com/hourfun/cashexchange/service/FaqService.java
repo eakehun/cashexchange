@@ -23,6 +23,14 @@ public class FaqService {
 	@Autowired
 	private UsersService usersService;
 	
+	public Page<Faq> findByDisplay(Pageable pageable){
+		return faqRepository.findByDisplay(true, pageable);
+	}
+	
+	public Page<Faq> findByContentLikeAndTitleLike(String param, Pageable pageable){
+		return faqRepository.findByContentLikeAndTitleLike(param, pageable);
+	}
+	
 	public Page<FaqMini> findByCreateDateBetween(String fromDate,String toDate, Pageable pageable){
 		return faqRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"), 
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);

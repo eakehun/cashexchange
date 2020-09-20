@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
+import com.hourfun.cashexchange.model.OneToOneInquiryMini;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
 import com.hourfun.cashexchange.service.OneToOneInquiryReponseService;
@@ -63,30 +64,36 @@ public class AdminOneToOneInquiryController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 	
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateBetween(@PathVariable String fromDate, @PathVariable String toDate, 
+    		 Pageable pageable){
+		return new ResponseEntity<>(oneToOneInquiryService.adminFindByCreateBetween(fromDate, toDate, pageable), HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetweenAndUserId(@PathVariable String fromDate, @PathVariable String toDate, 
+    public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndUserId(@PathVariable String fromDate, @PathVariable String toDate, 
     		@PathVariable String userId, Pageable pageable) {
         return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/status/{status}/", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetweenAndUserIdAndStatus(@PathVariable String fromDate, @PathVariable String toDate, 
+    public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndUserIdAndStatus(@PathVariable String fromDate, @PathVariable String toDate, 
     		@PathVariable String userId,@PathVariable OneToOneInquiryType status, Pageable pageable) {
         return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndUserIdAndStatus(fromDate, toDate, userId,status, pageable), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/title/{title}/status/{status}/", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetweenAndTitleLikeAndStatus(@PathVariable String fromDate, 
+    public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndTitleLikeAndStatus(@PathVariable String fromDate, 
     		@PathVariable String toDate, @PathVariable String title,@PathVariable OneToOneInquiryType status, Pageable pageable) {
         return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndTitleLikeAndStatus(fromDate, toDate, title,status, pageable), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/title/{title}/", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetweenAndTitleLikeAndStatus(@PathVariable String fromDate, 
+    public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndTitleLikeAndStatus(@PathVariable String fromDate, 
     		@PathVariable String toDate, @PathVariable String title, Pageable pageable) {
         return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndTitleLike(fromDate, toDate, title, pageable), HttpStatus.OK);
     }

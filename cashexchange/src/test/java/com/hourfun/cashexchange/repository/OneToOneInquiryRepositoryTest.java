@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
+import com.hourfun.cashexchange.model.OneToOneInquiryMini;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
 
 @ActiveProfiles(value = "local")
@@ -54,7 +55,7 @@ class OneToOneInquiryRepositoryTest {
 
 
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "createDate"));
-		Page<OneToOneInquiry> onePage =  repository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, page);
+		Page<OneToOneInquiryMini> onePage =  repository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, page);
 		System.out.println(onePage);
 	}
 	
@@ -74,7 +75,7 @@ class OneToOneInquiryRepositoryTest {
 
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "createDate"));
 		
-		Page<OneToOneInquiry> onePage =  repository.findByCreateDateBetweenAndUserIdAndStatus(fromDate, toDate, userId, oneToOneInquiryType, page);
+		Page<OneToOneInquiryMini> onePage =  repository.findByCreateDateBetweenAndUserIdAndStatus(fromDate, toDate, userId, oneToOneInquiryType.name(), page);
 		System.out.println(onePage);
 	}
 	
@@ -95,7 +96,7 @@ class OneToOneInquiryRepositoryTest {
 
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "create_date"));
 		
-		Page<OneToOneInquiry> onePage =  repository.findByCreateDateBetweenAndTitleLikeAndStatus(fromDate, toDate, title,oneToOneInquiryType, page);
+		Page<OneToOneInquiryMini> onePage =  repository.findByCreateDateBetweenAndTitleLikeAndStatus(fromDate, toDate, title,oneToOneInquiryType.name(), page);
 		System.out.println(onePage);
 	}
 	
@@ -116,7 +117,7 @@ class OneToOneInquiryRepositoryTest {
 
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "create_date"));
 		
-		Page<OneToOneInquiry> onePage =  repository.findByCreateDateBetweenAndTitleLike(fromDate, toDate, title, page);
+		Page<OneToOneInquiryMini> onePage =  repository.findByCreateDateBetweenAndTitleLike(fromDate, toDate, title, page);
 		System.out.println(onePage);
 	}
 	

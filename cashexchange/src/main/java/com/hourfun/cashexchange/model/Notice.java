@@ -1,13 +1,9 @@
 package com.hourfun.cashexchange.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,34 +14,31 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.data.annotation.Transient;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(indexes= {@Index(name = "oneToOneInquiryTitle", unique=false, columnList = "createDate,status,title"),
-		@Index(name = "oneToOneInquiryStatus", unique=false, columnList = "createDate,status")})
-public class OneToOneInquiry {
+@Table(indexes= {@Index(name = "noticeCreateDateDisplayFixed", unique=false, columnList = "createDate,display,fixed"),
+		@Index(name = "noticeCreateDate", unique=false, columnList = "createDate")})
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Notice {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
+
+	private String userId;
 	
 	private String title;
 	@Column(columnDefinition = "TEXT")
 	private String content;
-	
-	private String userId;
-	private String userName;
-	private String tel;
-	
-	@Enumerated(EnumType.STRING)
-	private OneToOneInquiryType status;
-	
-	@javax.persistence.Transient
-	private List<OneToOneInquiryResponse> oneInquiryResponseList = new ArrayList<OneToOneInquiryResponse>();
-	
+	@Column(columnDefinition = "BOOLEAN default true")
+	private boolean display;
+
+	@Column(columnDefinition = "BOOLEAN default true")
+	private boolean fixed;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
@@ -54,12 +47,10 @@ public class OneToOneInquiry {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date responseDate;
-    
     @PreUpdate
     protected void updateDate() {
         updateDate = new Date();
+        
     }
     
 
@@ -68,4 +59,8 @@ public class OneToOneInquiry {
         createDate = new Date();
         updateDate = new Date();
     }
+
+	
+	
 }
+

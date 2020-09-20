@@ -4,15 +4,18 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public interface FaqMini {
+public interface OneToOneInquiryMini {
+
 	long getIdx();
 	@JsonProperty("createDate")
 	Date getCreate_date();
-	@JsonProperty("updateDate")
-	Date getUpdate_date();
+	@JsonProperty("responseDate")
+	Date getResponse_date();
 	@JsonProperty("userId")
 	String getUser_id();
+	@JsonProperty("userName")
+	String getUser_name();
 	String getTitle();
-    Boolean getDisplay();
-    Boolean getFixed();
+	String getStatus();
+	
 }

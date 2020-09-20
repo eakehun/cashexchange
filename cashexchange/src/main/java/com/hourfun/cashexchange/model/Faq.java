@@ -20,8 +20,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(indexes= {@Index(name = "faqUpdateDateDisplayFixed", unique=false, columnList = "createDate,display,fixed"),
-		@Index(name = "faqUpdateDate", unique=false, columnList = "createDate")})
+@Table(indexes= {@Index(name = "faqCreateDateDisplayFixed", unique=false, columnList = "createDate,display"),
+		@Index(name = "faqCreateDate", unique=false, columnList = "createDate")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Faq {
 
@@ -29,7 +29,6 @@ public class Faq {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
 
-	
 	private String userId;
 	
 	private String title;
@@ -38,7 +37,7 @@ public class Faq {
 	@Column(columnDefinition = "BOOLEAN default true")
 	private boolean display;
 
-	@Column(columnDefinition = "BOOLEAN default true")
+	@Column(columnDefinition = "BOOLEAN default false")
 	private boolean fixed;
 	
 	@Temporal(TemporalType.TIMESTAMP)

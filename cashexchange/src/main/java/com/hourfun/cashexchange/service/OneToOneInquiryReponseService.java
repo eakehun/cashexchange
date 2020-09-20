@@ -62,4 +62,8 @@ public class OneToOneInquiryReponseService {
 		}
 		return returnVal;
 	}
+	
+	public List<OneToOneInquiryResponse> findByParentIdx(long idx){
+		return oneToOneInquiryResponseRepository.findByParentIdx(idx);
+	}
 }
