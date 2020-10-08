@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -43,7 +44,7 @@ public class UsersService {
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
-			HttpServletResponse response) throws BadCredentialsException {
+			HttpServletResponse response) throws BadCredentialsException, UsernameNotFoundException {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id, pwd);
 
 		Authentication authentication = authenticationManager.authenticate(token);

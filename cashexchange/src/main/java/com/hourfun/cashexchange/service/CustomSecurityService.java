@@ -26,6 +26,10 @@ public class CustomSecurityService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Users member = repository.findByUserId(username);
 		
+		if(member == null) {
+			throw new UsernameNotFoundException("please check userid...");
+		}
+		
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		
 		
