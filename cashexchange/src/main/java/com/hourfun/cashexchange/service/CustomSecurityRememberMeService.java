@@ -22,7 +22,8 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		super(key, userDetailsService);
 		setAlwaysRemember(true);
 		setCookieName("qwer");
-		setTokenValiditySeconds(60 * 60 * 24 * 7);
+//		setTokenValiditySeconds(60 * 60 * 24 * 7);
+		setTokenValiditySeconds(60 * 30);
 	}
 
 	@SuppressWarnings("unchecked")

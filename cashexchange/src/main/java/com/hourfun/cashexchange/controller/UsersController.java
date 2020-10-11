@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +68,15 @@ public class UsersController {
 	public @ResponseBody ResponseEntity<Users> signin(@RequestBody Users users) {
 		try {
 			return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/checkCurrentAuth/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<String> checkCurrentAuth(Authentication auth) {
+		try {
+			return new ResponseEntity<String>(service.findByUserId(auth.getName()).getName(), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

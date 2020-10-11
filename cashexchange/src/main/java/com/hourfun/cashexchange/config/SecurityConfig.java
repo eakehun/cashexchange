@@ -31,12 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.addFilterAt(customRememberMeFilter(), RememberMeAuthenticationFilter.class).cors().and().csrf().disable() // csrf
-				.httpBasic().and().rememberMe()
-				.rememberMeServices(customSecurityRememberMeService()).and().logout().logoutUrl("/logout")
-				.logoutSuccessHandler(logoutSuccessHandler()).and().authorizeRequests().antMatchers("/board/**")
-				.hasAnyRole("USER", "ADMIN", "MANAGER").antMatchers("/users/**").hasAnyRole("USER")
-				.antMatchers("/admin/**").hasAnyRole("ADMIN").antMatchers("/manager/**").hasAnyRole("MANAGER")
-				.antMatchers("/**").permitAll();
+				.httpBasic().and().rememberMe().rememberMeServices(customSecurityRememberMeService()).and().logout()
+				.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()).and().authorizeRequests()
+				.antMatchers("/board/**").hasAnyRole("USER", "ADMIN", "MANAGER").antMatchers("/users/**")
+				.hasAnyRole("USER").antMatchers("/admin/**").hasAnyRole("ADMIN").antMatchers("/manager/**")
+				.hasAnyRole("MANAGER").antMatchers("/**").permitAll();
 
 	}
 
@@ -48,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/findId/**").antMatchers("/admin/findPassword/**").antMatchers("/admin/signin/")
 				.antMatchers("/manager/login/**").antMatchers("/manager/findId/**")
 				.antMatchers("/manager/findPassword/**").antMatchers("/manager/signin/");
-
 	}
 
 	@Bean

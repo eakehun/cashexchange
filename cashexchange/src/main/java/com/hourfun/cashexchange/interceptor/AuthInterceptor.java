@@ -62,7 +62,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				if (session != null) {
 					Cookie cookie = new Cookie(cookieKey, session.getId());
 					cookie.setPath("/");
-					cookie.setMaxAge(60 * 60 * 24 * 7);
+//					cookie.setMaxAge(60 * 60 * 24 * 7);
+					cookie.setMaxAge(60 * 30);
 					response.addCookie(cookie);
 				}
 			}
