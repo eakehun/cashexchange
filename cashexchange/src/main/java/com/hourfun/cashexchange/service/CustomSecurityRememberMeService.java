@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.service;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.util.StringUtils;
 
+import com.hourfun.cashexchange.common.AuthEnum;
+
 public class CustomSecurityRememberMeService extends TokenBasedRememberMeServices {
 
 	public CustomSecurityRememberMeService(String key, UserDetailsService userDetailsService) {
@@ -23,8 +24,7 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		setCookieName("qwer");
 		setTokenValiditySeconds(60 * 60 * 24 * 7);
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -53,39 +53,39 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		expiryTime += 1000L * (tokenLifetime < 0 ? TWO_WEEKS_S : tokenLifetime);
 
 		String signatureValue = makeTokenSignature(expiryTime, username, password);
-		
+
 		List<GrantedAuthority> currentAuth = (List<GrantedAuthority>) successfulAuthentication.getAuthorities();
-		
+
 		String currentAuthString = currentAuth.get(0).getAuthority();
-		
+
 		String cookieName = "";
-		
-		if(currentAuthString.equals("ROLE_ADMIN")) {
+
+		if (currentAuthString.equals(AuthEnum.ROLE_ADMIN.name())) {
 			cookieName = "RMB_RA";
-		}else if(currentAuthString.equals("ROLE_MANAGER")) {
+		} else if (currentAuthString.equals(AuthEnum.ROLE_MANAGER.name())) {
 			cookieName = "RMB_RM";
-		}else {
+		} else {
 			cookieName = "RMB_RU";
 		}
-		
+
 		setCookieName(cookieName);
 
-		setCookie(new String[] { username, Long.toString(expiryTime), signatureValue },
-				tokenLifetime, request, response);
+		setCookie(new String[] { username, Long.toString(expiryTime), signatureValue }, tokenLifetime, request,
+				response);
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Added remember-me cookie for user '" + username
-					+ "', expiry: '" + new Date(expiryTime) + "'");
+			logger.debug(
+					"Added remember-me cookie for user '" + username + "', expiry: '" + new Date(expiryTime) + "'");
 		}
 	}
-	
+
 	@Override
 	protected void setCookie(String[] tokens, int maxAge, HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		
+
 		String cookieName = getCookieName();
-		String cookieDomain = request.getServerName();	
-		
+		String cookieDomain = request.getServerName();
+
 		String cookieValue = encodeCookie(tokens);
 		Cookie cookie = new Cookie(cookieName, cookieValue);
 		cookie.setMaxAge(maxAge);
@@ -96,7 +96,7 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		if (maxAge < 1) {
 			cookie.setVersion(1);
 		}
-		
+
 		cookie.setSecure(false);
 
 		cookie.setHttpOnly(true);
@@ -108,5 +108,5 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		String contextPath = request.getContextPath();
 		return contextPath.length() > 0 ? contextPath : "/";
 	}
-	
+
 }
