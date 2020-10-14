@@ -25,7 +25,6 @@ public class PinCode {
 	@Column(unique = true, nullable = false)
 	private String pinCode;
 	
-	@Column(name = "trading_idx")
 	private long tradingIdx;
 
 	private String company;

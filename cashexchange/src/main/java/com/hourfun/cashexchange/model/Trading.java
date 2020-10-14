@@ -26,8 +26,7 @@ public class Trading {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
 	
-	@Column(name = "users_idx")
-	private long usersIdx;
+	private String userId;
 	
 	private String company;
 	

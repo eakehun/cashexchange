@@ -61,10 +61,6 @@ public class Users {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
     
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="users_idx")
-    private Collection<Trading> trading;
-    
     @PreUpdate
     protected void updateDate() {
         updateDate = new Date();
