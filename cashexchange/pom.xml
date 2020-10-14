@@ -93,13 +93,21 @@
 			<version>4.9.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>kcb.module</groupId>
+			<artifactId>okcert3</artifactId>
+			<version>1.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/OkCert3-java1.5-2.2.3.jar</systemPath>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<artifactId>spring-boot-maven-plugin</artifactId>				
 			</plugin>
 		</plugins>
 	</build>
