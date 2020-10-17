@@ -10,7 +10,7 @@ public class UserVerifyService {
 	@Value("${okcert.target}")
 	private String target;
 	
-	public void verify() {
+	public void verifyRequest() {
 		String cpCd = "V47630000000";
 		String svcName = "IDS_HS_POPUP_START";
 		
