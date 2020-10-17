@@ -13,6 +13,7 @@ public class PinService {
 	@Autowired
     private RedisTemplate<String, Object> redisTemplate;
 	
+	@SuppressWarnings("unchecked")
 	public void setPinCode(String pinCode) {
 		String key = "culture_pin";
 		
@@ -27,6 +28,7 @@ public class PinService {
 		redisTemplate.opsForValue().set(key, list);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> getPinCode() throws Exception{
 		String key = "culture_pin";
 		

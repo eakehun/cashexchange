@@ -28,6 +28,8 @@ public class Trading {
 	
 	private String userId;
 	
+	private String userName;
+	
 	private String company;
 	
 	private String status;
@@ -46,7 +48,7 @@ public class Trading {
 	private Date updateDate;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="trading_idx")
+    @JoinColumn(name="tradingIdx")
     private Collection<PinCode> pincode;
 
 	@PreUpdate
