@@ -15,7 +15,7 @@ import com.hourfun.cashexchange.model.TradingMini;
 public interface TradingRepository extends JpaRepository<Trading, Long> {
 	Trading findByIdx(Long idx);
 	
-	Page<Trading> findbyUserId(String userId, Pageable pageable);
+	Page<Trading> findByUserId(String userId, Pageable pageable);
 	
 	Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable);
 
