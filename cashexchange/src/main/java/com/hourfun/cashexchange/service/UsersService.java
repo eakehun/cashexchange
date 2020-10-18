@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -105,15 +106,23 @@ public class UsersService {
 
 	}
 
-	public Users signIn(Users users, AuthEnum common) {
+	public Users signIn(Users users, AuthEnum common) throws Exception{
 
 		String auth = common.name().split("_")[1];
 
 		users.setAuth(auth);
 		users.setTelChkValue("T");
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
+		
+		
+		try {
+			return repository.save(users);
+		} catch (ConstraintViolationException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new Exception("duplicate email");
+		}
 
-		return repository.save(users);
 	}
 
 	public Page<Users> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {

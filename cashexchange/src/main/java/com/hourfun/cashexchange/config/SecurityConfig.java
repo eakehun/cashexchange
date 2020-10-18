@@ -43,10 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		// TODO Auto-generated method stub
 		web.ignoring().antMatchers("/users/login/**").antMatchers("/users/findId/**")
-				.antMatchers("/users/findPassword/**").antMatchers("/users/signin/").antMatchers("/admin/login/**")
-				.antMatchers("/admin/findId/**").antMatchers("/admin/findPassword/**").antMatchers("/admin/signin/")
-				.antMatchers("/manager/login/**").antMatchers("/manager/findId/**")
-				.antMatchers("/manager/findPassword/**").antMatchers("/manager/signin/");
+				.antMatchers("/users/mobileUserVerifyRequest/**").antMatchers("/users/findPassword/**")
+				.antMatchers("/users/signin/").antMatchers("/admin/login/**").antMatchers("/admin/findId/**")
+				.antMatchers("/admin/findPassword/**").antMatchers("/admin/signin/").antMatchers("/manager/login/**")
+				.antMatchers("/manager/findId/**").antMatchers("/manager/findPassword/**")
+				.antMatchers("/manager/signin/")
+				.antMatchers("/users/board/notice/**")
+				.antMatchers("/users/board/faq/**")
+				.antMatchers("/users/fee/**");
 	}
 
 	@Bean

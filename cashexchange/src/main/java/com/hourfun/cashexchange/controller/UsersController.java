@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.service.UserVerifyService;
 import com.hourfun.cashexchange.service.UsersService;
 
 @RestController
@@ -27,7 +28,10 @@ public class UsersController {
 
 	@Autowired
 	private UsersService service;
-
+	
+	@Autowired
+	private UserVerifyService verifyService;
+	
 	@RequestMapping(value = "/login/id/{id}/pwd/{pwd}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> login(@PathVariable String id, @PathVariable String pwd,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -70,13 +74,22 @@ public class UsersController {
 			return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		} 
 	}
 
 	@RequestMapping(value = "/checkCurrentAuth/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> checkCurrentAuth(Authentication auth) {
 		try {
 			return new ResponseEntity<String>(service.findByUserId(auth.getName()).getName(), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/mobileUserVerifyRequest/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<String> mobileUserVerifyRequest(Authentication auth) {
+		try {
+			return new ResponseEntity<String>(verifyService.mobileUserVerifyRequest(), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

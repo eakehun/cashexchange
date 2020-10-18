@@ -43,6 +43,10 @@ public class Trading {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
 	private Date createDate;
+	
+	private Date pinCompleteDate;
+	
+	private Date withdrawCompleteDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate;
