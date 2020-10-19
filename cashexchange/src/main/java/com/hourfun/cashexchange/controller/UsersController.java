@@ -86,6 +86,15 @@ public class UsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/checkEmailDuplicate/{email}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<String> checkEmailDuplicate(@PathVariable String email) {
+		try {
+			return new ResponseEntity<String>(service.checkEmailDuplicate(email), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
 	@RequestMapping(value = "/mobileUserVerifyRequest/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> mobileUserVerifyRequest(Authentication auth) {
 		try {

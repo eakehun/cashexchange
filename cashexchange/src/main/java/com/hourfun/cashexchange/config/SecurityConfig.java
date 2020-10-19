@@ -50,7 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/manager/signin/")
 				.antMatchers("/users/board/notice/**")
 				.antMatchers("/users/board/faq/**")
-				.antMatchers("/users/fee/**");
+				.antMatchers("/users/fee/**")
+				.antMatchers("/users/checkEmailDuplicate/**")
+				;
 	}
 
 	@Bean

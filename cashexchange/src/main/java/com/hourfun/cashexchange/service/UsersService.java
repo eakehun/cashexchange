@@ -94,6 +94,16 @@ public class UsersService {
 		return repository.findByUserId(id);
 	}
 
+	public String checkEmailDuplicate(String id) {
+		Users user = repository.findByUserId(id);
+
+		if (user != null) {
+			throw new IllegalArgumentException("email duplicate");
+		} else {
+			return id;
+		}
+	}
+
 	public Users findByUserIdAndTel(String id, String tel) {
 
 		Users selectUser = repository.findByUserIdAndTel(id, tel);
@@ -106,15 +116,14 @@ public class UsersService {
 
 	}
 
-	public Users signIn(Users users, AuthEnum common) throws Exception{
+	public Users signIn(Users users, AuthEnum common) throws Exception {
 
 		String auth = common.name().split("_")[1];
 
 		users.setAuth(auth);
 		users.setTelChkValue("T");
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
-		
-		
+
 		try {
 			return repository.save(users);
 		} catch (ConstraintViolationException e) {
@@ -139,29 +148,28 @@ public class UsersService {
 
 	public Page<Users> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
 			Pageable pageable) {
-		return repository.findByCreateDateBetweenAndUserId(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+		return repository.findByCreateDateBetweenAndUserId(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
 	}
 
 	public Page<Users> findByCreateDateBetweenAndUserIdAndAccountStatus(String fromDate, String toDate, String userId,
 			String accountStatus, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndUserIdAndAccountStatus(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+		return repository.findByCreateDateBetweenAndUserIdAndAccountStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, accountStatus, pageable);
 	}
-	
+
 	public Users findByIdx(long idx) {
 		return repository.findByIdx(idx);
 	}
-	
+
 	public Users updateAccountStatus(Users users) {
 		Users selectUser = repository.findByIdx(users.getIdx());
-		
+
 		selectUser.setAccountStatus(users.getAccountStatus());
-		
-		
+
 		return repository.save(selectUser);
 	}
-	
-	
 
 }

@@ -34,11 +34,11 @@ public class Trading {
 	
 	private String status;
 	
-	private String requestPrice;
+	private int requestPrice;
 	
 	private String fees;
 	
-	private String comepletePrice;
+	private int comepletePrice;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)

@@ -31,7 +31,7 @@ public class PinCode {
 
 	private String status;
 
-	private String price;
+	private int price;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
