@@ -44,6 +44,21 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 			Cookie rememberMecookie = new Cookie(cookieName, null);
 			rememberMecookie.setMaxAge(0);
 			response.addCookie(rememberMecookie);
+		} else {
+			String cookieName = "RMB_RU";
+			Cookie rememberMeUserCookie = new Cookie(cookieName, null);
+			rememberMeUserCookie.setMaxAge(0);
+			response.addCookie(rememberMeUserCookie);
+			
+			cookieName = "RMB_RA";
+			Cookie rememberMeAdminCookie = new Cookie(cookieName, null);
+			rememberMeAdminCookie.setMaxAge(0);
+			response.addCookie(rememberMeAdminCookie);
+			
+			cookieName = "RMB_RM";
+			Cookie rememberMeManagerCookie = new Cookie(cookieName, null);
+			rememberMeManagerCookie.setMaxAge(0);
+			response.addCookie(rememberMeManagerCookie);
 		}
 
 	}
