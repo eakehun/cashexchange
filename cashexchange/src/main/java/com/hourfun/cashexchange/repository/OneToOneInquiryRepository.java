@@ -22,8 +22,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 			 Pageable pageable);
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
-			"create_date between :fromDate and :toDate \r\n" + 
-			"\n#pageable\n",
+			"create_date between :fromDate and :toDate \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" ,
 			nativeQuery = true)
@@ -32,8 +31,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and user_id = :userId \r\n" +
-			"\n#pageable\n",
+			"and user_id = :userId \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"and user_id = :userId \r\n" +
 					"create_date between :fromDate and :toDate \r\n" ,
@@ -43,8 +41,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and user_id = :userId and status=:status \r\n" +
-			"\n#pageable\n",
+			"and user_id = :userId and status=:status \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"and user_id = :userId and status=:status \r\n" +
 					"create_date between :fromDate and :toDate \r\n" ,
@@ -54,8 +51,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like CONCAT('%',:title,'%') and status = :status \r\n" + 
-			"\n#pageable\n",
+			"and title like CONCAT('%',:title,'%') and status = :status \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like CONCAT('%',:title,'%') and status=:status ",
@@ -65,8 +61,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like  CONCAT('%',:title,'%')  \r\n" + 
-			"\n#pageable\n",
+			"and title like  CONCAT('%',:title,'%')  \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like  CONCAT('%',:title,'%')",
@@ -80,7 +75,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from cashExchange.one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and status = :status and user_id=:userId \r\n" + 
-			"and title like %:title% or content like %:content%  \n#pageable\n",
+			"and title like %:title% or content like %:content% ",
 			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and status = :status and user_id=:userId \r\n" + 
@@ -93,7 +88,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from cashExchange.one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id=:userId \r\n" + 
-			"and title like %:title% or content like %:content%  \n#pageable\n",
+			"and title like %:title% or content like %:content% ",
 			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and user_id=:userId \r\n" + 

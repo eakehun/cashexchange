@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.common.AuthEnum;
+import com.hourfun.cashexchange.model.UserMobileVerify;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.UserVerifyService;
 import com.hourfun.cashexchange.service.UsersService;
@@ -96,12 +97,24 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value = "/mobileUserVerifyRequest/", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<String> mobileUserVerifyRequest(Authentication auth) {
+	public @ResponseBody ResponseEntity<UserMobileVerify> mobileUserVerifyRequest() {
 		try {
-			return new ResponseEntity<String>(verifyService.mobileUserVerifyRequest(), HttpStatus.OK);
+			return new ResponseEntity<UserMobileVerify>(verifyService.mobileUserVerifyRequest(), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/mobileUserVerifyCheck/{mdl_tkn}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> mobileUserVerifyCheck(@PathVariable String mdl_tkn) {
+		try {
+			return new ResponseEntity<Users>(verifyService.mobileUserVerifyCheck(mdl_tkn), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	
+	
 
 }

@@ -39,6 +39,7 @@ public class Users {
 	private String mobileOperator;
 	private String birth;
 	private String gender;
+	private String foreigner;
 	private String email;
 	private String telChkValue;
 	private String accountNum;

@@ -14,8 +14,7 @@ import com.hourfun.cashexchange.model.NoticeMini;
 public interface NoticeRepository extends JpaRepository<Notice, Long>{
 
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
-			"create_date between :fromDate and :toDate " + 
-			"\n#pageable\n",
+			"create_date between :fromDate and :toDate " ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n",
 			nativeQuery = true)
@@ -23,8 +22,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like CONCAT('%',:title,'%') \r\n" + 
-			"\n#pageable\n",
+			"and title like CONCAT('%',:title,'%') \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like CONCAT('%',:title,'%') ",
@@ -34,8 +32,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and content like CONCAT('%',:content,'%') \r\n" + 
-			"\n#pageable\n",
+			"and content like CONCAT('%',:content,'%') \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content CONCAT('%',:content,'%') ",
@@ -46,8 +43,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n"+ 
-			"and display = :display \r\n" + 
-			"\n#pageable\n",
+			"and display = :display \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					" and display=:display ",
@@ -56,8 +52,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like  CONCAT('%',:title,'%') and display = :display \r\n" + 
-			"\n#pageable\n",
+			"and title like  CONCAT('%',:title,'%') and display = :display \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like CONCAT('%',:title,'%') and display=:display ",
@@ -67,8 +62,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and content like CONCAT('%',:content,'%') and display = :display \r\n" + 
-			"\n#pageable\n",
+			"and content like CONCAT('%',:content,'%') and display = :display \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like CONCAT('%',:content,'%') and display=:display ",
@@ -78,8 +72,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and fixed=:fixed ",
@@ -88,8 +81,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed, create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like CONCAT('%',:title,'%') and fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and title like CONCAT('%',:title,'%') and fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like CONCAT('%',:title,'%') and fixed=:fixed ",
@@ -99,8 +91,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and content like CONCAT('%',:content,'%') and fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and content like CONCAT('%',:content,'%') and fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like CONCAT('%',:content,'%') and fixed=:fixed ",
@@ -110,8 +101,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and display = :display and  fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and display = :display and  fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and display= :display and  fixed = :fixed",
@@ -120,8 +110,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and title like CONCAT('%',:title,'%') and display = :display and  fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and title like CONCAT('%',:title,'%') and display = :display and  fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and title like CONCAT('%',:title,'%') and display= :display and  fixed = :fixed",
@@ -132,8 +121,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
-			"and content like CONCAT('%',:content,'%') and display = :display and  fixed = :fixed \r\n" + 
-			"\n#pageable\n",
+			"and content like CONCAT('%',:content,'%') and display = :display and  fixed = :fixed \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and content like CONCAT('%',:content,'%') and display=:display and  fixed = :fixed",
@@ -142,7 +130,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 			@Param("toDate")Date toDate,@Param("content") String content, @Param("display")Boolean display,
 			@Param("fixed")Boolean fixed , Pageable pageable);
 	
-	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice \n#pageable\n  " ,
+	@Query(value="select idx, user_id, title, display,fixed,create_date,update_date from notice  " ,
 			countQuery = "select count(*) from notice ",
 			nativeQuery = true)
 	public Page<NoticeMini> findSpecificAll( Pageable pageable);
@@ -153,8 +141,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 	
 	@Query(value="select * from ( select * from notice where \r\n" + 
 			"(content like CONCAT('%',:param,'%') or title like CONCAT('%',:param,'%') ) "
-			+ "and display = true order by idx desc) as temp \r\n" + 
-			"\n#pageable\n",
+			+ "and display = true order by idx desc) as temp \r\n" ,
 			countQuery = "select count(*) from notice where \r\n" + 
 					"(content like CONCAT('%',:param,'%') or title like CONCAT('%',:param,'%') ) "
 					+ "and display = true",
