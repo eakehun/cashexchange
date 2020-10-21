@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,9 @@ import org.springframework.util.StringUtils;
 import com.hourfun.cashexchange.common.AuthEnum;
 
 public class CustomSecurityRememberMeService extends TokenBasedRememberMeServices {
+	
+	@Value("${session.cookie.domain}")
+	private String cookieDomain;
 
 	public CustomSecurityRememberMeService(String key, UserDetailsService userDetailsService) {
 		super(key, userDetailsService);
@@ -85,7 +89,7 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 		// TODO Auto-generated method stub
 
 		String cookieName = getCookieName();
-		String cookieDomain = request.getServerName();
+//		String cookieDomain = request.getServerName();
 
 		String cookieValue = encodeCookie(tokens);
 		Cookie cookie = new Cookie(cookieName, cookieValue);
