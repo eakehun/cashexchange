@@ -31,12 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.addFilterAt(customRememberMeFilter(), RememberMeAuthenticationFilter.class).cors().and().csrf().disable() // csrf
-				.httpBasic().and().rememberMe().rememberMeServices(customSecurityRememberMeService()).and().logout()
+				.rememberMe().rememberMeServices(customSecurityRememberMeService()).and().logout()				
 				.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()).and().authorizeRequests()
 				.antMatchers("/board/**").hasAnyRole("USER", "ADMIN", "MANAGER").antMatchers("/users/**")
 				.hasAnyRole("USER").antMatchers("/admin/**").hasAnyRole("ADMIN").antMatchers("/manager/**")
 				.hasAnyRole("MANAGER").antMatchers("/**").permitAll();
-
 	}
 
 	@Override

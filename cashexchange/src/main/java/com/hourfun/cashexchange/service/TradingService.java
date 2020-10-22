@@ -1,5 +1,9 @@
 package com.hourfun.cashexchange.service;
 
+import java.util.Date;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
@@ -15,7 +19,7 @@ public class TradingService {
 	
 	private UsersRepository usersRepository;
 	
-	public Trading registTrading(String userId, Trading trading) {
+	public Trading save(String userId, Trading trading) {
 		Users user = usersRepository.findByUserId(userId);		
 		
 		trading.setUserId(user.getUserId());
@@ -24,5 +28,14 @@ public class TradingService {
 		
 		
 		return tradingRepository.save(trading);
+	}
+	
+	public Page<Trading> findByUserId(String userId, Pageable pageable){
+		return tradingRepository.findByUserId(userId, pageable);
+	}
+	
+	
+	public Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable){
+		return tradingRepository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable);
 	}
 }

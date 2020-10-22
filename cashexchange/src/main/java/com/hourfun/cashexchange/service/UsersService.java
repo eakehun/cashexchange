@@ -126,7 +126,7 @@ public class UsersService {
 
 		try {
 			return repository.save(users);
-		} catch (ConstraintViolationException e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			throw new Exception("duplicate email");

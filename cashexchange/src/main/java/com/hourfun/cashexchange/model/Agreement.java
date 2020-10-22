@@ -25,6 +25,7 @@ public class Agreement {
 	private long idx;
 	@Column(columnDefinition = "BOOLEAN default false")
 	private boolean  chkNecessary;
+	private String title;
 	private String contents;
 	
 	@Temporal(TemporalType.TIMESTAMP)
