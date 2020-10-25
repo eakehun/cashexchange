@@ -22,7 +22,7 @@ public class PinServiceTest {
 		
 		String pinCode = "qwer";
 		
-		service.setPinCode(pinCode);
+//		service.setPinCode(pinCode);
 	}
 	
 	
@@ -31,7 +31,7 @@ public class PinServiceTest {
 		
 		
 		try {
-			System.out.println(service.getPinCode());
+//			System.out.println(service.getPinCode());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

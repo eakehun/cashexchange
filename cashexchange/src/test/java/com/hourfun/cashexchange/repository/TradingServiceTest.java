@@ -37,16 +37,8 @@ public class TradingServiceTest {
 	public void tradingSave() {
 		String userId = "gnogun@naver.com";
 		
-		Trading trading = new Trading();
+		String company = "컬쳐랜드";
 		
-		trading.setCompany("컬쳐랜드");
-		
-		Trading saveTrading = service.save(userId, trading);
-		
-		pinSave(saveTrading);
-	}
-	
-	public void pinSave(Trading trading) {
 		List<String> pinList = new ArrayList<String>();
 		
 		pinList.add("pinQWE");
@@ -54,7 +46,8 @@ public class TradingServiceTest {
 		pinList.add("pinZXC");
 		pinList.add("pinGGG");
 		
-		pinService.save(trading, pinList);
+		Trading saveTrading = service.save(userId, company, pinList);
+		
 	}
 	
 //	@Test
@@ -95,16 +88,10 @@ public class TradingServiceTest {
 	public void tradingSelectDate() throws ParseException {
 		String fromDateStr="2020-08-30 16:18:00";
 		String toDateStr = "2020-10-26 16:18:02";
-		String status = "ready";
-		String userId="123";
-		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		Date fromDate = transFormat.parse(fromDateStr);
-		Date toDate = transFormat.parse(toDateStr);
 		
 		PageRequest pageable = PageRequest.of(0,10,Sort.by(Sort.Direction.DESC, "idx"));
 		
-		Page<Trading> tradings = service.findByCreateDateBetween(fromDate, toDate, pageable);
+		Page<Trading> tradings = service.findByCreateDateBetween(fromDateStr, toDateStr, pageable);
 		
 		System.out.println("!");
 	}

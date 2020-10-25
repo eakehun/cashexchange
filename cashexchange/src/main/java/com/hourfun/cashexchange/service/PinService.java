@@ -22,9 +22,16 @@ public class PinService {
 	private PinCodeRepository repository;
 
 	@SuppressWarnings("unchecked")
-	public void setPinCode(String pinCode) {
-		String key = "culture_pin";
-
+	public void setPinCode(String company, String pinCode) {		
+		
+		String key = "";
+		
+		if(company.equals("컬쳐랜드")) {
+			key = "culture_pin";
+		}else {
+			key = "happy_pin";
+		}
+		
 		List<String> list = new ArrayList<String>();
 
 		if (redisTemplate.hasKey(key)) {
@@ -37,9 +44,16 @@ public class PinService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> getPinCode() throws Exception {
-		String key = "culture_pin";
+	public List<String> getPinCode(String company) throws Exception {
 
+		String key = "";
+		
+		if(company.equals("컬쳐랜드")) {
+			key = "culture_pin";
+		}else {
+			key = "happy_pin";
+		}
+		
 		if (redisTemplate.hasKey(key)) {
 			List<String> list = (List<String>) redisTemplate.opsForValue().get(key);
 
@@ -50,7 +64,7 @@ public class PinService {
 
 	}
 
-	public List<PinCode> save(Trading trading, List<String> pinCodes) {
+	public List<PinCode> save(Trading trading, List<String> pinCodes) throws Exception{
 		List<PinCode> saveList = new ArrayList<PinCode>();
 
 		for (String pinCode : pinCodes) {
