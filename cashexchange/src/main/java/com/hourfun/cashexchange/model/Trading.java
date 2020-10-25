@@ -34,6 +34,8 @@ public class Trading {
 	
 	private String status;
 	
+	private String withdrawStatus;
+	
 	private int requestPrice;
 	
 	private String fees;

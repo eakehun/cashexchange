@@ -49,10 +49,10 @@ public class TradingServiceTest {
 	public void pinSave(Trading trading) {
 		List<String> pinList = new ArrayList<String>();
 		
-		pinList.add("pin123");
-		pinList.add("pin456");
-		pinList.add("pin789");
-		pinList.add("pin101");
+		pinList.add("pinQWE");
+		pinList.add("pinASD");
+		pinList.add("pinZXC");
+		pinList.add("pinGGG");
 		
 		pinService.save(trading, pinList);
 	}
@@ -60,28 +60,28 @@ public class TradingServiceTest {
 //	@Test
 	public void pinUpdate() {
 		PinCode code = new PinCode();
-		code.setPinCode("pin123");
+		code.setPinCode("pinQWE");
 		code.setPrice(10000);		
 		
 		pinService.update(code);
 		
-		code.setPinCode("pin456");
+		code.setPinCode("pinASD");
 		code.setPrice(10000);		
 		
 		pinService.update(code);
 		
-		code.setPinCode("pin789");
+		code.setPinCode("pinZXC");
 		code.setPrice(10000);		
 		
 		pinService.update(code);
 		
-		code.setPinCode("pin101");
-		code.setPrice(0);		
+		code.setPinCode("pinGGG");
+		code.setPrice(10000);		
 		
 		pinService.update(code);
 	}
 	
-//	@Test
+	@Test
 	public void tradingSelect() {
 		String userId = "gnogun@naver.com";
 		PageRequest pageable = PageRequest.of(0,10,Sort.by(Sort.Direction.DESC, "idx"));
@@ -91,7 +91,7 @@ public class TradingServiceTest {
 		System.out.println("!");
 	}
 	
-	@Test
+//	@Test
 	public void tradingSelectDate() throws ParseException {
 		String fromDateStr="2020-08-30 16:18:00";
 		String toDateStr = "2020-10-26 16:18:02";

@@ -28,6 +28,7 @@ public class TradingService {
 		trading.setUserId(user.getUserId());
 		trading.setUserName(user.getName());
 		trading.setStatus(TradingStatusEnum.PROGRESS.getValue());
+		trading.setWithdrawStatus(TradingStatusEnum.PROGRESS.getValue());
 		
 		return tradingRepository.save(trading);
 	}
