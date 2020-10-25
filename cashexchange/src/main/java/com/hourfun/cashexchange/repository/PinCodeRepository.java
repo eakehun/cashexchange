@@ -13,4 +13,7 @@ import com.hourfun.cashexchange.model.PinCode;
 @Transactional
 public interface PinCodeRepository extends JpaRepository<PinCode, Long> {
 	public Page<PinCode> findByTradingIdx(Long tradingIdx, Pageable pageable);
+	
+	PinCode findByPinCode(String pinCode);
 }
+

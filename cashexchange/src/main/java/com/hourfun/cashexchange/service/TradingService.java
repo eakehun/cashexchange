@@ -2,6 +2,7 @@ package com.hourfun.cashexchange.service;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,10 @@ import com.hourfun.cashexchange.repository.UsersRepository;
 @Service
 public class TradingService {
 
+	@Autowired
 	private TradingRepository tradingRepository;
 	
+	@Autowired
 	private UsersRepository usersRepository;
 	
 	public Trading save(String userId, Trading trading) {
@@ -26,7 +29,6 @@ public class TradingService {
 		trading.setUserName(user.getName());
 		trading.setStatus(TradingStatusEnum.PROGRESS.getValue());
 		
-		
 		return tradingRepository.save(trading);
 	}
 	
@@ -34,8 +36,19 @@ public class TradingService {
 		return tradingRepository.findByUserId(userId, pageable);
 	}
 	
+	public Trading findByIdx(long idx) {
+		return tradingRepository.findByIdx(idx);
+	}
 	
 	public Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable){
 		return tradingRepository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable);
+	}
+	
+	public Page<Trading> findByCreateDateBetween(Date fromDate, Date toDate, Pageable pageable){
+		return tradingRepository.findByCreateDateBetween(fromDate, toDate, pageable);
+	}
+	
+	public Trading update(Trading trading) {
+		return tradingRepository.save(trading);
 	}
 }
