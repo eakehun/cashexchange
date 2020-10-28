@@ -26,9 +26,9 @@ public class PinService {
 		
 		String key = "";
 		
-		if(company.equals("컬쳐랜드")) {
+		if(company.equals("culture")) {
 			key = "culture_pin";
-		}else {
+		}else if(company.equals("happy")){
 			key = "happy_pin";
 		}
 		
@@ -75,7 +75,7 @@ public class PinService {
 			code.setStatus(TradingStatusEnum.PROGRESS.getValue());
 			code.setTradingIdx(trading.getIdx());
 
-			repository.save(code);
+			saveList.add(repository.save(code));
 		}
 
 		return saveList;
