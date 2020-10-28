@@ -26,9 +26,20 @@ public class UsersNoticeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<List<Page<Notice>>> findByFixed( Pageable pageable){
+	public ResponseEntity<List<Page<Notice>>> findByAllList( Pageable pageable){
 		
+		return new ResponseEntity<>(noticeService.findByAllList(pageable), HttpStatus.OK);
+	}
+	@RequestMapping(value = "/fixed/", method = RequestMethod.GET)
+    @ResponseBody
+	public ResponseEntity<Page<Notice>> findByFixed(Pageable pageable){
 		return new ResponseEntity<>(noticeService.findByFixed(pageable), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/notFixed/", method = RequestMethod.GET)
+    @ResponseBody
+	public ResponseEntity<Page<Notice>> findByNotFixed(Pageable pageable){
+		return new ResponseEntity<>(noticeService.findByNotFixed(pageable), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/search/{search}/", method = RequestMethod.GET)

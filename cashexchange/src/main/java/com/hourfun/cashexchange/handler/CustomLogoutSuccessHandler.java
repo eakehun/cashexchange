@@ -16,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.hourfun.cashexchange.common.AuthEnum;
-import com.hourfun.cashexchange.service.UserVerifyService;
 
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 	
@@ -28,6 +27,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 	@Value("${session.cookie.domain}")
 	private String cookieDomain;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
@@ -50,29 +50,24 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 				cookieName = "RMB_RM";
 			}
 
-			Cookie rememberMecookie = new Cookie(cookieName, null);			
-			rememberMecookie.setMaxAge(0);
-			rememberMecookie.setDomain(cookieDomain);
-			response.addCookie(rememberMecookie);
+			setCookie(response, cookieName);
 		} else {
 			String cookieName = "RMB_RU";
-			Cookie rememberMeUserCookie = new Cookie(cookieName, null);
-			rememberMeUserCookie.setMaxAge(0);
-			rememberMeUserCookie.setDomain(cookieDomain);
-			response.addCookie(rememberMeUserCookie);
+			setCookie(response, cookieName);
 			
 			cookieName = "RMB_RA";
-			Cookie rememberMeAdminCookie = new Cookie(cookieName, null);
-			rememberMeAdminCookie.setMaxAge(0);
-			rememberMeAdminCookie.setDomain(cookieDomain);
-			response.addCookie(rememberMeAdminCookie);
+			setCookie(response, cookieName);
 			
 			cookieName = "RMB_RM";
-			Cookie rememberMeManagerCookie = new Cookie(cookieName, null);
-			rememberMeManagerCookie.setMaxAge(0);
-			rememberMeManagerCookie.setDomain(cookieDomain);
-			response.addCookie(rememberMeManagerCookie);
+			setCookie(response, cookieName);
 		}
 
+	}
+
+	private void setCookie(HttpServletResponse response, String cookieName) {
+		Cookie rememberMecookie = new Cookie(cookieName, null);			
+		rememberMecookie.setMaxAge(0);
+		rememberMecookie.setDomain(cookieDomain);
+		response.addCookie(rememberMecookie);
 	}
 }

@@ -29,7 +29,7 @@ public class NoticeService {
 	private UsersService usersService;
 	
 	//client 리스트만 보이는 서비스 
-	public List<Page<Notice>> findByFixed(Pageable pageable){
+	public List<Page<Notice>> findByAllList(Pageable pageable){
 		PageRequest page = PageRequest.of(0,5,Sort.by(Sort.Direction.DESC, "idx"));
 		Page<Notice> fixedPage = noticeRepository.findByFixedAndDisplay(true,true, page);
 		Page<Notice> notFixedPage = noticeRepository.findByFixedAndDisplay(false,true, pageable);
@@ -37,6 +37,16 @@ public class NoticeService {
 		list.add(fixedPage);
 		list.add(notFixedPage);
 		return list;
+	}
+	
+	public Page<Notice> findByFixed(Pageable pageable){
+		Page<Notice> fixedPage = noticeRepository.findByFixedAndDisplay(true,true, pageable);
+		return fixedPage;
+	}
+	
+	public Page<Notice> findByNotFixed(Pageable pageable){
+		Page<Notice> notFixedPage = noticeRepository.findByFixedAndDisplay(false,true, pageable);
+		return notFixedPage;
 	}
 	
 	public Page<Notice> findByContentLikeAndTitleLike(String param, Pageable pageable){
