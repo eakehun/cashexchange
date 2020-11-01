@@ -34,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.rememberMe().rememberMeServices(customSecurityRememberMeService()).and().logout()				
 				.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()).and().authorizeRequests()
 				.antMatchers("/board/**").hasAnyRole("USER", "ADMIN", "MANAGER").antMatchers("/users/**")
-				.hasAnyRole("USER").antMatchers("/admin/**").hasAnyRole("ADMIN").antMatchers("/manager/**")
+				.hasAnyRole("USER").antMatchers("/admin/**").hasAnyRole("ADMIN")
+				.antMatchers("/macro/**").hasAnyRole("ADMIN").antMatchers("/manager/**")
 				.hasAnyRole("MANAGER").antMatchers("/**").permitAll();
 	}
 
@@ -42,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		// TODO Auto-generated method stub
 		web.ignoring().antMatchers("/users/login/**").antMatchers("/users/findId/**")
-				.antMatchers("/users/mobileUserVerifyRequest/**").antMatchers("/users/findPassword/**")
+				.antMatchers("/users/findPassword/**")
 				.antMatchers("/users/signin/").antMatchers("/admin/login/**").antMatchers("/admin/findId/**")
 				.antMatchers("/admin/findPassword/**").antMatchers("/admin/signin/").antMatchers("/manager/login/**")
 				.antMatchers("/manager/findId/**").antMatchers("/manager/findPassword/**")
@@ -51,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/board/faq/**")
 				.antMatchers("/users/fee/**")
 				.antMatchers("/users/checkEmailDuplicate/**")
+				.antMatchers("/users/mobileUserVerifyRequest/**")
+				.antMatchers("/users/mobileUserVerifyCheck/**")
 				;
 	}
 

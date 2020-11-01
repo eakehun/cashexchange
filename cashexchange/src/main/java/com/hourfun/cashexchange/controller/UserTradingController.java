@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +21,32 @@ import com.hourfun.cashexchange.service.TradingService;
 @RestController
 @RequestMapping("/users/trading")
 public class UserTradingController {
-	
+
 	@Autowired
 	private TradingService service;
-	
+
 	@RequestMapping(value = "/regist/{company}/", method = RequestMethod.POST)
-	public ResponseEntity<Trading> registTrading(Authentication auth, @PathVariable String company, @RequestBody List<String> pinCodes) {
+	public ResponseEntity<Trading> registTrading(Authentication auth, @PathVariable String company,
+			@RequestBody List<String> pinCodes) {
 		try {
-			return new ResponseEntity<Trading>(service.save(auth.getName(), company, pinCodes),
+			return new ResponseEntity<Trading>(service.save(auth.getName(), company, pinCodes), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(service.findByUserId(auth.getName(), pageable), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{idx}", method = RequestMethod.GET)
+	public ResponseEntity<Trading> findByIdx(Authentication auth, @PathVariable String idx, Pageable pageable) {
+		try {
+			return new ResponseEntity<Trading>(service.findByIdx(auth.getName(), Long.parseLong(idx)),
 					HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, Pageable pageable){
-		return new ResponseEntity<Page<Trading>>(service.findByUserId((String) auth.getPrincipal(), pageable),
-				HttpStatus.OK);
-	}
-
 }

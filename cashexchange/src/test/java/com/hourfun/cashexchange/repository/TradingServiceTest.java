@@ -52,26 +52,7 @@ public class TradingServiceTest {
 	
 //	@Test
 	public void pinUpdate() {
-		PinCode code = new PinCode();
-		code.setPinCode("pinQWE");
-		code.setPrice(10000);		
 		
-		pinService.update(code);
-		
-		code.setPinCode("pinASD");
-		code.setPrice(10000);		
-		
-		pinService.update(code);
-		
-		code.setPinCode("pinZXC");
-		code.setPrice(10000);		
-		
-		pinService.update(code);
-		
-		code.setPinCode("pinGGG");
-		code.setPrice(10000);		
-		
-		pinService.update(code);
 	}
 	
 	@Test

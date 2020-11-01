@@ -28,6 +28,8 @@ public class PinCode {
 	private long tradingIdx;
 
 	private String company;
+	
+	private String message;
 
 	private String status;
 

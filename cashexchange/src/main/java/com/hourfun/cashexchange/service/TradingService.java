@@ -38,7 +38,6 @@ public class TradingService {
 		trading.setStatus(TradingStatusEnum.PROGRESS.getValue());
 		trading.setWithdrawStatus(TradingStatusEnum.PROGRESS.getValue());
 
-
 		try {
 			Trading savedTrading = tradingRepository.save(trading);
 			List<PinCode> savedPincodes = pinService.save(savedTrading, pinCodes);
@@ -51,7 +50,6 @@ public class TradingService {
 			throw new IllegalArgumentException(e.getMessage());
 		}
 
-
 	}
 
 	public Page<Trading> findByUserId(String userId, Pageable pageable) {
@@ -59,7 +57,19 @@ public class TradingService {
 	}
 
 	public Trading findByIdx(long idx) {
+
 		return tradingRepository.findByIdx(idx);
+	}
+
+	public Trading findByIdx(String userId, long idx) {
+
+		Trading trading = tradingRepository.findByIdx(idx);
+
+		if (userId.equals(trading.getUserId())) {
+			return tradingRepository.findByIdx(idx);
+		} else {
+			throw new IllegalArgumentException("권한이 없습니다.");
+		}
 	}
 
 	public Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId,

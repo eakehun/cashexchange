@@ -29,9 +29,8 @@ public class PinServiceTest {
 	@Test
 	public void getPinList() {
 		
-		
 		try {
-//			System.out.println(service.getPinCode());
+			System.out.println(service.getPinCode("culture"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

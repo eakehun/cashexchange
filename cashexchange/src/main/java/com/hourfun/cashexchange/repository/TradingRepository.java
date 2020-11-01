@@ -19,9 +19,9 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 	@Query(value="SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date" +
 			",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date \r\n" +
 			"FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n" +
-			"where td.user_id = :userId \r\n group by td.idx" ,			
+			"where td.user_id = :userId \r\n group by td.idx " ,			
 			countQuery = "select count(*) from trading where \r\n" + 
-					"td.user_id = :userId \r\n",
+					"user_id = :userId \r\n",
 			nativeQuery = true)	
 	Page<Trading> findByUserId(String userId, Pageable pageable);
 	
@@ -30,7 +30,7 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 			"FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n" +
 			"where td.create_date between :fromDate and :toDate and td.user_id = :userId \r\n group by td.idx" ,			
 			countQuery = "select count(*) from trading \r\n" + 
-					"where td.create_date between :fromDate and :toDate and user_id = :userId \r\n" ,
+					"where create_date between :fromDate and :toDate and user_id = :userId \r\n" ,
 			nativeQuery = true)	
 	Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable);
 	
@@ -39,7 +39,7 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 			"FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n" +
 			"where td.create_date between :fromDate and :toDate \r\n group by td.idx" ,			
 			countQuery = "select count(*) from trading \r\n" + 
-					"where td.create_date between :fromDate and :toDate \r\n" ,
+					"where create_date between :fromDate and :toDate \r\n" ,
 			nativeQuery = true)	
 	Page<Trading> findByCreateDateBetween(Date fromDate, Date toDate, Pageable pageable);
 
