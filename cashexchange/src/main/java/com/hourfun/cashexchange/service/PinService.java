@@ -113,22 +113,51 @@ public class PinService {
 
 		List<PinCode> returnList = new ArrayList<PinCode>();
 
+//		for (PinCode pinCode : pinCodes) {
+//			PinCode code = repository.findByPinCode(pinCode.getPinCode());
+//			code.setPrice(pinCode.getPrice());
+//
+//			if (pinCode.getPrice() == 0) {
+//				code.setStatus(TradingStatusEnum.FAIL.getValue());
+//			} else {
+//				code.setStatus(TradingStatusEnum.COMPLETE.getValue());
+//			}
+//
+//			code.setMessage(pinCode.getStatus() + " - " + pinCode.getMessage());
+//
+//			checkAndUpdate(code);
+//
+//			returnList.add(repository.save(code));
+//		}
+		List<String> pinStringList = new ArrayList<String>();
+		
 		for (PinCode pinCode : pinCodes) {
-			PinCode code = repository.findByPinCode(pinCode.getPinCode());
-			code.setPrice(pinCode.getPrice());
-
-			if (pinCode.getPrice() == 0) {
-				code.setStatus(TradingStatusEnum.FAIL.getValue());
-			} else {
-				code.setStatus(TradingStatusEnum.COMPLETE.getValue());
-			}
-
-			code.setMessage(pinCode.getStatus() + " - " + pinCode.getMessage());
-
-			checkAndUpdate(code);
-
-			returnList.add(repository.save(code));
+			pinStringList.add(pinCode.getPinCode());
 		}
+		
+		
+		List<PinCode> selectList = repository.findByPinCodeIn(pinStringList);
+		
+		for (PinCode pinCode : pinCodes) {
+			for(PinCode selectPin : selectList) {
+				
+				if(pinCode.getPinCode().equals(selectPin.getPinCode())) {
+					selectPin.setPrice(pinCode.getPrice());
+					
+					if (pinCode.getPrice() == 0) {
+						selectPin.setStatus(TradingStatusEnum.FAIL.getValue());
+					} else {
+						selectPin.setStatus(TradingStatusEnum.COMPLETE.getValue());
+					}
+					
+					selectPin.setMessage(pinCode.getStatus() + " - " + pinCode.getMessage());
+					
+					returnList.add(repository.save(selectPin));
+					checkAndUpdate(selectPin);
+				}
+			}
+		}
+		
 
 		return returnList;
 	}

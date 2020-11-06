@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.service.PinService;
 
 @RestController
@@ -22,10 +24,19 @@ public class MacroController {
 	private PinService service;
 	
 	
-	@RequestMapping(value = "/{company}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{company}/", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> selectPin(Authentication auth, @PathVariable String company) {
 		try {
 			return new ResponseEntity<List<String>>(service.getPinCode(company), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public ResponseEntity<List<PinCode>> updatePin(Authentication auth, @RequestBody List<PinCode> pinCodes) {
+		try {
+			return new ResponseEntity<List<PinCode>>(service.update(pinCodes), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

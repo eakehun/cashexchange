@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.hourfun.cashexchange.model.Mail;
+import com.hourfun.cashexchange.model.Users;
 
 @Service
 public class MailService {
@@ -44,5 +45,9 @@ public class MailService {
 //        message.setText(mail.getMessage());
 
         mailSender.send(message);
+    }
+    
+    public void welcomeMailSend(Users users) {
+    	
     }
 }

@@ -15,5 +15,7 @@ public interface PinCodeRepository extends JpaRepository<PinCode, Long> {
 	public List<PinCode> findByTradingIdx(Long tradingIdx);
 	
 	PinCode findByPinCode(String pinCode);
+	
+	List<PinCode> findByPinCodeIn(List<String> pinStringList);
 }
 

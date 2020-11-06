@@ -125,7 +125,10 @@ public class UsersService {
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
 
 		try {
-			return repository.save(users);
+			Users savedUser = repository.save(users);
+
+			return savedUser;
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
