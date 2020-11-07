@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.interceptor;
 
+import java.util.Formatter;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -19,7 +20,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.AuthEnum;
+import com.hourfun.cashexchange.model.History;
 import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.service.HistoryService;
 import com.hourfun.cashexchange.service.UsersService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -29,6 +32,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+    private HistoryService historyService;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -76,6 +82,85 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
-		super.postHandle(request, response, handler, modelAndView);
+//		super.postHandle(request, response, handler, modelAndView);
+		
+		String url = request.getRequestURL().toString();
+        String body = null;
+        Object requestBody = request.getAttribute("requestBody");
+        if (requestBody != null) {
+            body = requestBody.toString();
+        }
+        History history = new History();
+        switch (request.getMethod()) {
+            case "POST":
+                crudHistory(request, response, url, body, history, "insert");
+                break;
+            case "PUT":
+                crudHistory(request, response, url, body, history, "update");
+                break;
+            case "DELETE":
+                crudHistory(request, response, url, body, history, "delete");
+                break;
+        }
+        if (history.getType() != null) {
+            historyService.upsertHistory(history, history.getType());
+        }
 	}
+	
+	private void crudHistory(HttpServletRequest request, HttpServletResponse response, String url, String body, History history, String type) {
+        if (history == null) {
+            return;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return;
+        }
+        StringBuilder sbuf = new StringBuilder();
+        Formatter fmt = new Formatter(sbuf);
+        String ip = request.getHeader("X-FORWARDED-FOR");
+        if (ip == null) {
+            ip = request.getRemoteAddr();
+        }
+        history.setIp(ip);
+        Users users = usersService.findByUserId(authentication.getName());
+        history.setUser(users.getUserId());
+        if (url.contains("/user/login/") && !url.contains("project_id")) {
+        	
+        } else if (url.contains("/user_group/")) {
+            if (type.equals("insert")) {
+                if (response.getStatus() == HttpStatus.OK.value() || response.getStatus() == HttpStatus.CREATED.value()) {
+                    fmt.format("<%s> " + type + " this user create data :<%s>.", users.getName(), users.getCreateDate());
+                } else {
+                    fmt.format("<%s> failed to " + type + "  .", users.getName());
+                }
+                history.setType("INSERT USER");
+                history.setKeyword(sbuf.toString());
+            } else if (type.equals("delete")) {
+                int index = url.indexOf("user_group");
+                String temp = url.substring(index);
+                String[] strArr = temp.split("[/]");
+                if (strArr.length == 2) {
+                    String groupId = strArr[1];
+                    if (response.getStatus() == HttpStatus.OK.value() ) {
+                        fmt.format("<%s> " + type + " this group Id :<%s>.", users.getName(), groupId);
+                    } else {
+                        fmt.format("<%s> failed to " + type + " group Id :<%s>.", users.getName(), groupId);
+                    }
+                }
+                history.setType("INSERT USER");
+                if (sbuf.toString().length() > 200) {
+                    String tempData = sbuf.toString().substring(0, 200);
+                    history.setKeyword(tempData);
+                } else {
+                    history.setKeyword(sbuf.toString());
+                }
+            }
+        } else if (url.contains("/user") && (!url.contains("login") || !url.contains("check")
+                || !url.contains("logout")) && !url.contains("role")) {
+            String userId;
+            
+        } 
+    }
+
+    
 }

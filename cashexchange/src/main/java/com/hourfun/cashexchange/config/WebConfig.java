@@ -3,13 +3,12 @@ package com.hourfun.cashexchange.config;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.hourfun.cashexchange.filter.RequestBodyLoggingFilter;
 import com.hourfun.cashexchange.interceptor.AuthInterceptor;
 
 @Configuration
@@ -70,6 +70,12 @@ public class WebConfig implements WebMvcConfigurer{
     		.addPathPatterns("/users/**", "/admin/**", "/manager/**", "/board/**")
     		.excludePathPatterns("/users/login/", "/admin/login/", "/manager/login/");
     }
+    
+    @Bean
+    public FilterRegistrationBean<RequestBodyLoggingFilter> getFilterRegistrationBean() {
+        return new FilterRegistrationBean<RequestBodyLoggingFilter>(new RequestBodyLoggingFilter());
+    }
+
     
 
 }
