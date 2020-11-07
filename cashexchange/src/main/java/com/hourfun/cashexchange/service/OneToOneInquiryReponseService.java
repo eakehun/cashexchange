@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,28 @@ public class OneToOneInquiryReponseService {
 	@Autowired
 	private UsersService usersService;
 	
+	@Autowired
+	private MailService mailService;
+	
 	@Transactional
-	public OneToOneInquiryResponse save(OneToOneInquiryResponse oneToOneInquiryResponse, long parentIdx, Authentication auth) {
+	public OneToOneInquiryResponse save(OneToOneInquiryResponse oneToOneInquiryResponse, long parentIdx, Authentication auth) throws MessagingException {
 		Users users = usersService.findByUserId(auth.getName());
 		oneToOneInquiryResponse.setUserId(users.getUserId());
 		Optional<OneToOneInquiry> oneToOneInquiryOptional =  oneToOneInquiryService.findById(parentIdx);
 		if(oneToOneInquiryOptional.isPresent()) {
 			OneToOneInquiry oneToOneInquiry = oneToOneInquiryOptional.get();
+			
 			oneToOneInquiryResponse.setOneToOneInquiry(oneToOneInquiry);
 			if(oneToOneInquiryResponse.getIdx() < 1l) {
+				Date date = new Date();
 				//mail 보내기 기능 추가
+				if(users.getEmail() != null && !users.getEmail().equals("")) {
+					mailService.ontToOneInquirySend(oneToOneInquiry.getUserId(), date);
+				}
+				
+				
 				oneToOneInquiry.setStatus(OneToOneInquiryType.Response_Complate);
-				oneToOneInquiry.setResponseDate(new Date());
+				oneToOneInquiry.setResponseDate(date);
 				oneToOneInquiryService.saveComplete(oneToOneInquiry);
 			}
 			return oneToOneInquiryResponseRepository.save(oneToOneInquiryResponse);

@@ -1,5 +1,7 @@
 package com.hourfun.cashexchange.service;
 
+import java.util.Date;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -22,6 +24,28 @@ public class MailService {
     private SpringTemplateEngine templateEngine;
     private static final String FROM_ADDRESS = "cs<cs@makepin.co.kr>";
 
+    
+    public void ontToOneInquirySend(String sendAddress,Date registDate) throws MessagingException {
+    	Mail mail = new Mail();
+    	mail.setTitle("1:1문의 답변안내");
+    	mail.setAddress(sendAddress);
+    	mail.setMessage("등록 날짜는 "+registDate);
+    	MimeMessage message = mailSender.createMimeMessage();
+    	MimeMessageHelper helper = new MimeMessageHelper(message,true);
+    	
+    	helper.setSubject(mail.getTitle());
+    	helper.setFrom(FROM_ADDRESS);
+    	helper.setTo(mail.getAddress());
+    	
+    	Context context = new Context();
+    	context.setVariable("contents", mail.getMessage());
+    	String html = templateEngine.process("mail", context);
+    	helper.setText(html,true);
+
+        mailSender.send(message);
+    }
+    
+    
     public void mailSend() throws MessagingException {
     	Mail mail = new Mail();
     	mail.setTitle("test");

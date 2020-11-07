@@ -1,8 +1,6 @@
 package com.hourfun.cashexchange.service;
 
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
 import com.hourfun.cashexchange.model.OneToOneInquiryMini;
-import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
 import com.hourfun.cashexchange.model.OneToOneInquiryType;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.OneToOneInquiryRepository;
-import com.hourfun.cashexchange.repository.OneToOneInquiryResponseRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
 @Service
@@ -28,9 +24,6 @@ public class OneToOneInquiryService {
 	
 	@Autowired
 	private UsersService usersService;
-	
-	@Autowired
-	private OneToOneInquiryResponseRepository oneToOneInquiryReponseRepository;
 	
 	public OneToOneInquiry save(OneToOneInquiry oneInquiry, Authentication auth) {
 		Users users = usersService.findByUserId(auth.getName());

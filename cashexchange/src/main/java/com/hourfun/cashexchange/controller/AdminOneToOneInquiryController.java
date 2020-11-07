@@ -3,6 +3,8 @@ package com.hourfun.cashexchange.controller;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +48,7 @@ public class AdminOneToOneInquiryController {
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<OneToOneInquiryResponse> insertOneToOneResponse(@PathVariable long parentIdx, 
-    		@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
+    		@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) throws MessagingException {
 		if(oneInquiryResponse.getIdx() >0l) {
 			throw new IllegalArgumentException("Idx value exists. Please check ..");
 		}
@@ -56,7 +58,7 @@ public class AdminOneToOneInquiryController {
 	
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<OneToOneInquiryResponse> updateOneToOneResponse(@PathVariable long parentIdx,@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) {
+    public ResponseEntity<OneToOneInquiryResponse> updateOneToOneResponse(@PathVariable long parentIdx,@RequestBody OneToOneInquiryResponse oneInquiryResponse,  Authentication auth) throws MessagingException {
 		if(oneInquiryResponse.getIdx() < 1l) {
 			throw new IllegalArgumentException("Idx value doesn't exists. Please check ..");
 		}
