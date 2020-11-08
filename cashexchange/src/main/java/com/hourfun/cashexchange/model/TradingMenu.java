@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.model;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,6 +12,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 import lombok.Data;
 
 @Entity
@@ -22,11 +22,15 @@ public class TradingMenu {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
+	
+	@Column(nullable = false, unique = true)
 	private String menuName;
 	
 	@Column(columnDefinition = "BOOLEAN default true")
 	private boolean used;
 	
+	@Column(columnDefinition = "TEXT")
+	private String content;
 	
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -35,6 +39,9 @@ public class TradingMenu {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stopDate;
     
     @PreUpdate
     protected void updateDate() {
