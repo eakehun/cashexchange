@@ -42,6 +42,9 @@ public class UsersService {
 
 	@Autowired
 	private RememberMeServices customSecurityRememberMeService;
+	
+	@Autowired
+	private MailService mailService;
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
@@ -126,6 +129,8 @@ public class UsersService {
 
 		try {
 			Users savedUser = repository.save(users);
+			
+			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
 
 			return savedUser;
 

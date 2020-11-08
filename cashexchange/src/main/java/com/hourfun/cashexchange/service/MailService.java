@@ -71,7 +71,23 @@ public class MailService {
         mailSender.send(message);
     }
     
-    public void welcomeMailSend(Users users) {
+    public void welcomeMailSend(String address, String name) throws MessagingException {
+    	String title = "회원가입 환영";
+    	
+    	MimeMessage message = mailSender.createMimeMessage();
+    	MimeMessageHelper helper = new MimeMessageHelper(message,true);
+    	
+    	helper.setSubject(title);
+    	helper.setFrom(FROM_ADDRESS);
+    	helper.setTo(address);
+    	
+    	Context context = new Context();
+    	context.setVariable("name", name);
+    	
+    	String html = templateEngine.process("welcome", context);
+    	helper.setText(html,true);
+    	
+    	mailSender.send(message);
     	
     }
 }
