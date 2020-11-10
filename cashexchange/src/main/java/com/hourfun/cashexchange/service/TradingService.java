@@ -1,9 +1,14 @@
 package com.hourfun.cashexchange.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -80,6 +85,69 @@ public class TradingService {
 	public Page<Trading> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
 		return tradingRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+	}
+
+	public File excelDownload(String fromDate, String toDate) {
+		
+		List<Trading> selectList = tradingRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"));
+		
+		StringBuilder content = new StringBuilder();
+		
+		content
+			.append("idx").append(",")
+			.append("userId").append(",")
+			.append("userName").append(",")
+			.append("company").append(",")
+			.append("status").append(",")
+			.append("withdrawStatus").append(",")
+			.append("requestPrice").append(",")
+			.append("fees").append(",")
+			.append("comepletePrice").append(",")
+			.append("createDate").append(",")
+			.append("pinCompleteDate").append(",")
+			.append("withdrawCompleteDate")
+			.append("\n");
+		
+		for(Trading trading : selectList) {
+			content
+			.append(trading.getIdx()).append(",")
+			.append(trading.getUserId()).append(",")
+			.append(trading.getUserName()).append(",")
+			.append(trading.getCompany()).append(",")
+			.append(trading.getStatus()).append(",")
+			.append(trading.getWithdrawStatus()).append(",")
+			.append(trading.getRequestPrice()).append(",")
+			.append(trading.getFees()).append(",")
+			.append(trading.getComepletePrice()).append(",")
+			.append(trading.getCreateDate()).append(",")
+			.append(trading.getPinCompleteDate()).append(",")
+			.append(trading.getWithdrawCompleteDate())
+			.append("\n");
+		}
+		
+		File file = null;
+	    PrintWriter pw = null;
+	    
+	    
+	    try
+	    {
+	        file = new File("trading.csv");
+	        pw = new PrintWriter( file );
+	        pw.write( content.toString() );
+	    }
+	    catch ( FileNotFoundException e )
+	    {
+	        e.printStackTrace();
+	    }
+	    finally
+	    {
+	        pw.flush();
+	        pw.close();
+	    }
+
+	    
+		return file;
 	}
 
 	public Trading update(Trading trading) {

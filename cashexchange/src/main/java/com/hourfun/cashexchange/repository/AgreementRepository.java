@@ -1,6 +1,8 @@
 package com.hourfun.cashexchange.repository;
 
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -23,4 +25,9 @@ public interface AgreementRepository extends JpaRepository<Agreement, Long> {
 					+ "on a.idx=ma.agreements_idx where ma.member_idx=:member_idx",
 			nativeQuery = true)
 	Page<Agreement> findAllByMemberIdx(@Param("member_idx")long memberIdx,Pageable pageable);
+	
+	
+	List<Agreement> findByUsed(boolean used);
+	
+	
 }
