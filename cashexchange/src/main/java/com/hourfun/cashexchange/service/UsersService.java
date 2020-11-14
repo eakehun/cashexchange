@@ -179,5 +179,13 @@ public class UsersService {
 
 		return repository.save(selectUser);
 	}
+	
+	public Users updateAccountPassword(String userId, Users users) {
+		Users selectUser = findByUserId(userId);
+
+		selectUser.setPwd(customPasswordEncoder.encode(users.getPwd()));
+
+		return repository.save(selectUser);
+	}
 
 }

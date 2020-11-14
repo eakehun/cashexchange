@@ -25,7 +25,7 @@ public class UserTradingController {
 	@Autowired
 	private TradingService service;
 
-	@RequestMapping(value = "/regist/{company}/", method = RequestMethod.POST)
+	@RequestMapping(value = "/{company}/", method = RequestMethod.POST)
 	public ResponseEntity<Trading> registTrading(Authentication auth, @PathVariable String company,
 			@RequestBody List<String> pinCodes) {
 		try {

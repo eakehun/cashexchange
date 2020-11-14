@@ -132,7 +132,7 @@ public class TradingService {
 	    
 	    try
 	    {
-	        file = new File("trading.csv");
+	        file = new File("trading_" + fromDate + "_" + toDate + ".csv");
 	        pw = new PrintWriter( file );
 	        pw.write( content.toString() );
 	    }

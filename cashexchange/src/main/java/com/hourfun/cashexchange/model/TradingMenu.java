@@ -30,8 +30,7 @@ public class TradingMenu {
 	private boolean used;
 	
 	@Column(columnDefinition = "TEXT")
-	private String content;
-	
+	private String content;	
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

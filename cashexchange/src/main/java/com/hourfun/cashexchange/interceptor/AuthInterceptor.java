@@ -89,6 +89,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			body = requestBody.toString();
 		}
 		History history = new History();
+
+		if (url.contains("/login/")) {
+			crudHistory(request, response, url, body, history, "login");
+		}
+
 		switch (request.getMethod()) {
 		case "POST":
 			crudHistory(request, response, url, body, history, "insert");
@@ -123,46 +128,115 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		history.setIp(ip);
 		Users users = usersService.findByUserId(authentication.getName());
 		history.setUser(users.getUserId());
-		if (url.contains("/user/login/")) {
-			// 로그인 기록 저장
 
-		} else if (url.contains("/user_group/")) {
+		history.setType(type);
+
+		if (url.contains("/login/")) {
+			history.setService("user");
+			sbuf.append("login");
+			history.setContents(users.getUserId() + " login");
+		} else if (url.contains("/password/")) {
+			history.setService("user");
+			history.setKeyword("password");
+			history.setContents(users.getUserId() + " password change");
+		} else if (url.contains("/trading/")) {
+			history.setService("trading");
 			if (type.equals("insert")) {
-				if (response.getStatus() == HttpStatus.OK.value()
-						|| response.getStatus() == HttpStatus.CREATED.value()) {
-					fmt.format("<%s> " + type + " this user create data :<%s>.", users.getName(),
-							users.getCreateDate());
-				} else {
-					fmt.format("<%s> failed to " + type + "  .", users.getName());
-				}
-				history.setType("INSERT USER");
-				history.setKeyword(sbuf.toString());
-			} else if (type.equals("delete")) {
-				int index = url.indexOf("user_group");
-				String temp = url.substring(index);
-				String[] strArr = temp.split("[/]");
-				if (strArr.length == 2) {
-					String groupId = strArr[1];
-					if (response.getStatus() == HttpStatus.OK.value()) {
-						fmt.format("<%s> " + type + " this group Id :<%s>.", users.getName(), groupId);
-					} else {
-						fmt.format("<%s> failed to " + type + " group Id :<%s>.", users.getName(), groupId);
-					}
-				}
-				history.setType("INSERT USER");
-				if (sbuf.toString().length() > 200) {
-					String tempData = sbuf.toString().substring(0, 200);
-					history.setKeyword(tempData);
-				} else {
-					history.setKeyword(sbuf.toString());
-				}
+				sbuf.append("insert trading");
+			} else if (type.equals("update")) {
+				sbuf.append("update trading");
 			}
-		} else if (url.contains("/user")
-				&& (!url.contains("login") || !url.contains("check") || !url.contains("logout"))
-				&& !url.contains("role")) {
-			String userId;
-
+			
+			history.setContents(body.toString());
+		} else if (url.contains("/OneToOne/")) {
+			history.setService("OneToOne");
+			
+			if (type.equals("insert")) {
+				sbuf.append("insert OneToOne");
+			} else if (type.equals("update")) {
+				sbuf.append("update OneToOne");
+			}
 		}
+		
+		if (response.getStatus() == HttpStatus.OK.value()
+				|| response.getStatus() == HttpStatus.CREATED.value()) {
+			sbuf.append(" success");
+		}else {
+			sbuf.append(" fail");
+		}
+		
+		history.setKeyword(sbuf.toString());
+
+//		if (url.contains("/user/login/")) {
+//			// 로그인 기록 저장
+//
+//		} else if (url.contains("/user_group/")) {
+//			if (type.equals("insert")) {
+//				if (response.getStatus() == HttpStatus.OK.value()
+//						|| response.getStatus() == HttpStatus.CREATED.value()) {
+//					fmt.format("<%s> " + type + " this user create data :<%s>.", users.getName(),
+//							users.getCreateDate());
+//				} else {
+//					fmt.format("<%s> failed to " + type + "  .", users.getName());
+//				}
+//				history.setType("INSERT USER");
+//				history.setKeyword(sbuf.toString());
+//			} else if (type.equals("delete")) {
+//				int index = url.indexOf("user_group");
+//				String temp = url.substring(index);
+//				String[] strArr = temp.split("[/]");
+//				if (strArr.length == 2) {
+//					String groupId = strArr[1];
+//					if (response.getStatus() == HttpStatus.OK.value()) {
+//						fmt.format("<%s> " + type + " this group Id :<%s>.", users.getName(), groupId);
+//					} else {
+//						fmt.format("<%s> failed to " + type + " group Id :<%s>.", users.getName(), groupId);
+//					}
+//				}
+//				history.setType("INSERT USER");
+//				if (sbuf.toString().length() > 200) {
+//					String tempData = sbuf.toString().substring(0, 200);
+//					history.setKeyword(tempData);
+//				} else {
+//					history.setKeyword(sbuf.toString());
+//				}
+//			}
+//		} else if (url.contains("/user")
+//				&& (!url.contains("login") || !url.contains("check") || !url.contains("logout"))
+//				&& !url.contains("role")) {
+//			String userId;
+//
+//		}
 	}
+
+//	private void crudHistory(HttpServletRequest request, HttpServletResponse response, String url, String body,
+//			History history, String type) {
+//		
+//		if (history == null) {
+//			return;
+//		}
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		if (authentication == null) {
+//			return;
+//		}
+//		
+//		String ip = request.getHeader("X-FORWARDED-FOR");
+//		if (ip == null) {
+//			ip = request.getRemoteAddr();
+//		}
+//		history.setIp(ip);
+//		
+//		Users users = usersService.findByUserId(authentication.getName());
+//		history.setUser(users.getUserId());
+//		
+//		if (url.contains("/user/login/")) {
+//			
+//			history.setType("LOGIN");
+//			history.setContents("");
+//		} else if () {
+//			
+//		}
+//
+//	}
 
 }

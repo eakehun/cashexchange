@@ -60,7 +60,7 @@ public class UsersController {
 		}
 	}
 
-	@RequestMapping(value = "/findPassword/id/{id}/tel/{tel}", method = RequestMethod.GET)
+	@RequestMapping(value = "/findPassword/id/{id}/tel/{tel}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> findPassword(@PathVariable String id, @PathVariable String tel) {
 		try {
 			return new ResponseEntity<Users>(service.findByUserIdAndTel(id, tel), HttpStatus.OK);
@@ -87,7 +87,7 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "/checkEmailDuplicate/{email}", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkEmailDuplicate/{email}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> checkEmailDuplicate(@PathVariable String email) {
 		try {
 			return new ResponseEntity<String>(service.checkEmailDuplicate(email), HttpStatus.OK);
@@ -105,7 +105,7 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "/mobileUserVerifyCheck/{mdl_tkn}", method = RequestMethod.GET)
+	@RequestMapping(value = "/mobileUserVerifyCheck/{mdl_tkn}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> mobileUserVerifyCheck(@PathVariable String mdl_tkn) {
 		try {
 			return new ResponseEntity<Users>(verifyService.mobileUserVerifyCheck(mdl_tkn), HttpStatus.OK);
@@ -114,7 +114,13 @@ public class UsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/password/", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<Users> updateAccountPassword(Authentication auth, @RequestBody Users users) {
+		try {
+			return new ResponseEntity<Users>(service.updateAccountPassword(auth.getName(), users), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
 	
-	
-
 }

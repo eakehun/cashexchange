@@ -33,7 +33,7 @@ public class MacroController {
 		}
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<List<PinCode>> updatePin(Authentication auth, @RequestBody List<PinCode> pinCodes) {
 		try {
 			return new ResponseEntity<List<PinCode>>(service.update(pinCodes), HttpStatus.OK);
