@@ -1,0 +1,6 @@
+idx,userId,userName,company,status,withdrawStatus,requestPrice,fees,comepletePrice,createDate,pinCompleteDate,withdrawCompleteDate
+1,gnogun@naver.com,송,컬쳐랜드,처리중,처리중,0,null,0,2020-10-25 13:17:39.0,null,null
+2,gnogun@naver.com,송,컬쳐랜드,처리중,처리중,0,null,0,2020-10-25 15:27:25.0,null,null
+3,gnogun@naver.com,송,culture,판매완료(일부),처리중,0,null,0,2020-10-28 22:08:05.0,null,null
+4,gnogun@naver.com,송,happy,처리중,처리중,0,null,0,2020-10-28 22:10:59.0,null,null
+5,gnogun@naver.com,송,happy,처리중,처리중,0,null,0,2020-10-28 22:20:19.0,null,null

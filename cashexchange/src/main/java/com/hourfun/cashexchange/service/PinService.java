@@ -29,11 +29,14 @@ public class PinService {
 	public void setPinCode(String company, String pinCode) {
 
 		String key = "";
+		
 
 		if (company.equals("culture")) {
 			key = "culture_pin";
+			
 		} else if (company.equals("happy")) {
 			key = "happy_pin";
+			
 		}
 
 		List<String> list = new ArrayList<String>();
@@ -51,12 +54,16 @@ public class PinService {
 	public List<String> getPinCode(String company) throws Exception {
 
 		String key = "";
+		String backupKey = "";
+		
 		List<String> returnList = new ArrayList<String>();
 
 		if (company.equals("culture")) {
 			key = "culture_pin";
+			backupKey = "culture_pin_used";
 		} else {
 			key = "happy_pin";
+			backupKey = "happy_pin_used";
 		}
 
 		if (redisTemplate.hasKey(key)) {
@@ -83,6 +90,7 @@ public class PinService {
 				}
 
 				redisTemplate.opsForValue().set(key, list);
+				redisTemplate.opsForValue().set(backupKey, returnList);
 			}
 
 			return returnList;
@@ -153,6 +161,23 @@ public class PinService {
 					selectPin.setMessage(pinCode.getStatus() + " - " + pinCode.getMessage());
 					
 					returnList.add(repository.save(selectPin));
+					
+					
+					String backupKey = "";
+					String company = selectPin.getCompany();
+					
+					if (company.equals("culture")) {
+						backupKey = "culture_pin_used";
+					} else {
+						backupKey = "happy_pin_used";
+					}
+
+					if (redisTemplate.hasKey(backupKey)) {
+						List<String> list = (List<String>) redisTemplate.opsForValue().get(backupKey);
+						list.remove(selectPin.getPinCode());
+						redisTemplate.opsForValue().set(backupKey, list);
+					}
+					
 					checkAndUpdate(selectPin);
 				}
 			}

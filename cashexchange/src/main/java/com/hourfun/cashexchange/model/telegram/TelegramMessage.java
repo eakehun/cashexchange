@@ -10,5 +10,6 @@ public class TelegramMessage {
 	@JsonProperty("chat_id")
 	private String chatId; 
 	private String text;
+	private String photo; 
 
 }

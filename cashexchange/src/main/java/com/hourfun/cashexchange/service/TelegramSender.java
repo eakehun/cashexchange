@@ -1,17 +1,29 @@
 package com.hourfun.cashexchange.service;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import com.hourfun.cashexchange.component.TelegramBot;
 import com.hourfun.cashexchange.model.telegram.TelegramMessage;
 import com.hourfun.cashexchange.util.JsonUtils;
-
 
 @Service
 public class TelegramSender {
@@ -25,6 +37,9 @@ public class TelegramSender {
 
 	@Value("${notification.telegram.chat.id}")
 	private String chatId;
+	
+	@Autowired
+	TelegramBot telegramBot;
 
 	public void sendTelegram(String contents) {
 		if (telegramEnabled) {
@@ -48,5 +63,53 @@ public class TelegramSender {
 
 		}
 
+	}
+
+	public void sendPhoto(String contents, File file) {
+		if (telegramEnabled) {
+			try {
+				SendPhoto photo = new SendPhoto();
+				photo.setCaption(contents);
+				photo.setPhoto(file);
+				photo.setChatId("-458890529");
+				
+				
+				telegramBot.sendPhoto(photo);
+			} catch (TelegramApiException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// make a request URL using telegram bot api
+//			String url = "https://api.telegram.org/bot" + token + "/sendPhoto";
+//			try {
+////				TelegramMessage telegramMessage = new TelegramMessage();
+////				telegramMessage.setChatId(chatId);
+////				telegramMessage.setText(contents);				
+////				telegramMessage.setPhoto(file.getAbsolutePath());
+//
+//				MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+//				
+//				body.set("chat_id", chatId);
+//				body.set("photo", file);
+//				
+////				String param = JsonUtils.toJson(telegramMessage);
+//
+//				RestTemplate restTemplate = new RestTemplate();
+//				restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+//				
+//				HttpHeaders headers = new HttpHeaders();
+////				headers.set("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE); // send the post request
+//				headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//				
+//				HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(body,
+//						headers);
+//				
+//				restTemplate.postForEntity(url, entity, String.class);
+//			} catch (Exception e) {
+//				logger.error("Unhandled exception occurred while send Telegram.", e);
+//			}
+
+		}
 	}
 }
