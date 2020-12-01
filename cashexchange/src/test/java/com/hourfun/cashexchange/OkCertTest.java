@@ -17,7 +17,7 @@ public class OkCertTest {
 		String license = "C:/Users/gnogu/Downloads/V47630000000_IDS_01_PROD_AES_license.dat";
 		JSONObject requestJson = new JSONObject();
 		
-		requestJson.put("RETURN_URL", "http://dev.makepin.co.kr/");
+		requestJson.put("RETURN_URL", "http://makepinbackdev4env-env.eba-mdmx2i2y.ap-northeast-2.elasticbeanstalk.com:8080/");
 		requestJson.put("SITE_NAME", "makepin");
 		requestJson.put("SITE_URL", "http://dev.makepin.co.kr/");
 		requestJson.put("RQST_CAUS_CD", "00");
@@ -34,6 +34,7 @@ public class OkCertTest {
 		try {
 			String responseString = cert.callOkCert(target, cpCd, svcName, license, param);
 			JSONObject responseJson = new JSONObject(responseString);
+			System.out.println(responseJson);
 			System.out.println("TX_SEQ_NO: " + responseJson.get("TX_SEQ_NO"));
 			System.out.println("MDL_TKN: " + responseJson.get("MDL_TKN"));
 		} catch (OkCertException e) {

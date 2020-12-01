@@ -34,7 +34,7 @@ public class UserTradingController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(service.findByUserId(auth.getName(), pageable), HttpStatus.OK);
@@ -48,5 +48,11 @@ public class UserTradingController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+	
+	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByCreateDateBetween(Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable),
+				HttpStatus.OK);
 	}
 }

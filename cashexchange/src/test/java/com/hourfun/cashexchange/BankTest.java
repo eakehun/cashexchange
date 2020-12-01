@@ -6,7 +6,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -39,12 +42,12 @@ public class BankTest {
 		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
 		String shaKey = "ST190808090913247723";
 
-		MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+		Map<String, Object> body = new HashMap<String, Object>();
 		
 		Date date = new Date();
 		SimpleDateFormat oidFormat = new SimpleDateFormat("yyyyMMddhhmm");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("hhmmss");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");
 		
 
 		String hdInfo = "SP_NA00_1.0";
@@ -56,13 +59,12 @@ public class BankTest {
 
 		String reqDt = dateFormat.format(date);
 		String reqTm = timeFormat.format(date);
+		String bankCd = "081";
 
-		String bankCd = "003";
-
-		String custAcntNo = "67690201671251";
+		String custAcntNo = "14989000267801";
 		String aesCustAcntNo = encryptAES256(custAcntNo, aesKey);
 
-		String mchtCustNm = "송근호";
+		String mchtCustNm = "홍길동";
 		String aesMchtCustNm = encryptAES256(mchtCustNm, aesKey);
 
 		String custIp = "121.165.86.243";
@@ -70,51 +72,34 @@ public class BankTest {
 		String pktHash = mchtId + mchtCustId + reqDt + reqTm + custAcntNo + shaKey;
 		pktHash = sha256(pktHash);
 		
-		body.set("hdInfo", hdInfo);
-		body.set("mchtId", mchtId);
-		body.set("mchtTrdNo", mchtTrdNo);
-		body.set("aesMchtCustId", aesMchtCustId);
-		body.set("reqDt", reqDt);
-		body.set("reqTm", reqTm);
-		body.set("bankCd", bankCd);
-		body.set("aesCustAcntNo", aesCustAcntNo);
-		body.set("aesMchtCustNm", aesMchtCustNm);
-		body.set("custIp", custIp);
-		body.set("pktHash", pktHash);
+		body.put("hdInfo", hdInfo);
+		body.put("mchtId", mchtId);
+		body.put("mchtTrdNo", mchtTrdNo);
+		body.put("mchtCustId", aesMchtCustId);
+		body.put("reqDt", reqDt);
+		body.put("reqTm", reqTm);
+		body.put("bankCd", bankCd);
+		body.put("custAcntNo", aesCustAcntNo);
+		body.put("mchtCustNm", aesMchtCustNm);
+		body.put("custIp", custIp);
+		body.put("pktHash", pktHash);
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
-		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 		
 		System.out.println(response);
 
+		
+		
+		
 	}
 
 	public static String encryptAES256(String msg, String key) throws Exception {
 
-		SecureRandom random = new SecureRandom();
-
-		byte bytes[] = new byte[20];
-
-		random.nextBytes(bytes);
-
-		byte[] saltBytes = bytes;
-
-		// Password-Based Key Derivation function 2
-
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-		// 70000번 해시하여 256 bit 길이의 키를 만든다.
-
-		PBEKeySpec spec = new PBEKeySpec(key.toCharArray(), saltBytes, 70000, 256);
-
-		SecretKey secretKey = factory.generateSecret(spec);
-
-		SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
-
-		// 알고리즘/모드/패딩
+		SecretKeySpec secret = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
 
 		// CBC : Cipher Block Chaining Mode
 
@@ -122,10 +107,8 @@ public class BankTest {
 
 		cipher.init(Cipher.ENCRYPT_MODE, secret);
 
-		AlgorithmParameters params = cipher.getParameters();
-
 		byte[] encrypted = cipher.doFinal(msg.getBytes());
-		return byteToHexString(encrypted);
+		return byteToBase64String(encrypted);
 
 	}
 
@@ -151,6 +134,13 @@ public class BankTest {
 
 	    return sb.toString();
 
+	}
+	
+	public static String byteToBase64String(byte[] data) {
+		Encoder encoder = Base64.getEncoder();
+		byte[] encodedBytes = encoder.encode(data);
+		
+		return new String(encodedBytes);
 	}
 
 

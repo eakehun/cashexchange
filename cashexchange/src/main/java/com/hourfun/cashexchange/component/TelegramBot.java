@@ -58,15 +58,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 		return AUTH_KEY;
 	}
 
-	@PostConstruct
-	public void registerBot(){
-	     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-	     try {
-	       telegramBotsApi.registerBot(this);
-	     } catch (TelegramApiException e) {
-	    	 logger.error(e.getMessage());
-	     }
-	}
+//	@PostConstruct
+//	public void registerBot(){
+//	     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+//	     try {
+//	       telegramBotsApi.registerBot(this);
+//	     } catch (TelegramApiException e) {
+//	    	 logger.error(e.getMessage());
+//	     }
+//	}
 
 	
 	public Message sendPhoto(SendPhoto photo) throws TelegramApiException {
