@@ -123,4 +123,13 @@ public class UsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/secede/", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Users> secede(@RequestBody Users users) {
+		try {
+			return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} 
+	}
+	
 }

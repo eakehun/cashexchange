@@ -45,6 +45,8 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 	Page<Trading> findByCreateDateBetween(Date fromDate, Date toDate, Pageable pageable);
 	
 	List<Trading> findByCreateDateBetween(Date fromDate, Date toDate);
+	
+	List<Trading> findByUserIdAndWithdrawStatusNot(String userId, String withdrawStatus);
 
 	
 	Page<TradingMini> findByCreateDate(Date fromDate, Pageable pageable);

@@ -22,7 +22,10 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
+import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.AuthEnum;
+import com.hourfun.cashexchange.common.TradingStatusEnum;
+import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.UsersRepository;
 import com.hourfun.cashexchange.util.DateUtils;
@@ -45,6 +48,9 @@ public class UsersService {
 	
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private TradingService tradingService;
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
@@ -126,6 +132,7 @@ public class UsersService {
 		users.setAuth(auth);
 		users.setTelChkValue("T");
 		users.setPwd(customPasswordEncoder.encode(users.getPwd()));
+		users.setAccountStatus(AccountStatusEnum.NORMAL.getValue());
 
 		try {
 			Users savedUser = repository.save(users);
@@ -186,6 +193,22 @@ public class UsersService {
 		selectUser.setPwd(customPasswordEncoder.encode(users.getPwd()));
 
 		return repository.save(selectUser);
+	}
+	
+	public Users secede(String userId) {
+		
+		Users selectUser = findByUserId(userId);
+		
+		List<Trading> tradingList = tradingService.findByUserIdAndWithdrawStatusNot(userId, TradingStatusEnum.COMPLETE.getValue()); 
+		
+		if(tradingList.size() > 0) {
+			throw new IllegalArgumentException("not complete trading remain"); 
+		}
+		
+		selectUser.setAccountStatus(AccountStatusEnum.WITHDRAW.getValue());
+		
+		return repository.save(selectUser);
+		
 	}
 
 }

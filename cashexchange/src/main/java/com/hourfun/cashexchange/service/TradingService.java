@@ -189,5 +189,9 @@ public class TradingService {
 		}
 
 	}
+	
+	public List<Trading> findByUserIdAndWithdrawStatusNot(String userId, String withdrawStatus){
+		return tradingRepository.findByUserIdAndWithdrawStatusNot(userId, withdrawStatus);
+	}
 
 }
