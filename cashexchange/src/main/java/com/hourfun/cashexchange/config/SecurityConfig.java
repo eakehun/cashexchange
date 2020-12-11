@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/mobileUserVerifyRequest/**")
 				.antMatchers("/users/mobileUserVerifyCheck/**")
 				.antMatchers("/users/trading/recent/")
+				.antMatchers("/users/bank/**")
 				;
 	}
 

@@ -42,6 +42,7 @@ public class Users {
 	private String telChkValue;
 	private String accountNum;
 	private String accountName;
+	private String accountCode;
 	private String accountStatus;
 	private String backCode;
 	

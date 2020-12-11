@@ -3,7 +3,7 @@ package com.hourfun.cashexchange.common;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum BankCode {
+public enum BankCodeEnum {
 	
 	KDB("산업은행", "002"),
 	IBK("기업은행", "003"),

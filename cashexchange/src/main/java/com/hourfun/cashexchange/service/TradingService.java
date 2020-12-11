@@ -38,18 +38,20 @@ public class TradingService {
 	private PinService pinService;
 
 	public Trading save(String userId, String company, List<String> pinCodes) {
-		Users user = usersRepository.findByUserId(userId);
-
-		Trading trading = new Trading();
-		trading.setUserId(user.getUserId());
-		trading.setCompany(company);
-		trading.setUserName(user.getName());
-		trading.setStatus(TradingStatusEnum.PROGRESS.getValue());
-		trading.setWithdrawStatus(TradingStatusEnum.PROGRESS.getValue());
 
 		try {
+			Users user = usersRepository.findByUserId(userId);
+			
+			Trading trading = new Trading();
+			trading.setUserId(user.getUserId());
+			trading.setCompany(company);
+			trading.setUserName(user.getName());
+			trading.setStatus(TradingStatusEnum.PROGRESS.getValue());
+			trading.setWithdrawStatus(TradingStatusEnum.PROGRESS.getValue());
+			trading.setRequestPrice(0);
+			trading.setComepletePrice(0);
 			Trading savedTrading = tradingRepository.save(trading);
-			List<PinCode> savedPincodes = pinService.save(savedTrading, pinCodes);
+			pinService.save(savedTrading, pinCodes);
 			for (String pinCode : pinCodes) {
 				pinService.setPinCode(company, pinCode);
 			}
@@ -159,7 +161,7 @@ public class TradingService {
 			String replaceString = trading.getUserName();
 
 			String pattern = "";
-			if (replaceString.length() == 2) {
+			if (replaceString.length() <= 2) {
 				pattern = "^(.)(.+)$";
 			} else {
 				pattern = "^(.)(.+)(.)$";

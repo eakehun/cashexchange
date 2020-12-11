@@ -9,4 +9,5 @@ import com.hourfun.cashexchange.model.Fee;
 @Repository
 public interface FeeRepository extends JpaRepository<Fee, Long>{
 
+	Fee findByCompany(String company);
 }

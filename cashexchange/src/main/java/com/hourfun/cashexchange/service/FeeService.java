@@ -27,4 +27,8 @@ public class FeeService {
 	public void deleteById(long idx) {
 		feeRepository.deleteById(idx);
 	}
+	
+	public Fee findByCompany(String company) {
+		return feeRepository.findByCompany(company);
+	}
 }

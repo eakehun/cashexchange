@@ -37,7 +37,9 @@ public class BankTest {
 	 */
 
 	public static void main(String[] args) throws Exception {
-		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
+//		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
+//		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownership";
+		String url = "https://tbnpay.settlebank.co.kr/v1/api/pay/rmt";
 
 		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
 		String shaKey = "ST190808090913247723";
@@ -47,27 +49,29 @@ public class BankTest {
 		Date date = new Date();
 		SimpleDateFormat oidFormat = new SimpleDateFormat("yyyyMMddhhmm");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");
-		
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
 
-		String hdInfo = "SP_NA00_1.0";
+//		String hdInfo = "SP_NA00_1.0";
+//		String hdInfo = "SPAY_AA00_1.0";
+		String hdInfo = "SPAY_AR0W_1.0";
+		
 		String mchtId = "M20B2449";
 
 		String mchtTrdNo = "OID" + oidFormat.format(date);
-		String mchtCustId = "gnogun";
+		String mchtCustId = "makepin";
 		String aesMchtCustId = encryptAES256(mchtCustId, aesKey);
 
 		String reqDt = dateFormat.format(date);
 		String reqTm = timeFormat.format(date);
-		String bankCd = "081";
+		String bankCd = "004";
 
-		String custAcntNo = "14989000267801";
+		String custAcntNo = "001010947978";
 		String aesCustAcntNo = encryptAES256(custAcntNo, aesKey);
 
 		String mchtCustNm = "홍길동";
 		String aesMchtCustNm = encryptAES256(mchtCustNm, aesKey);
 
-		String custIp = "121.165.86.243";
+		String custIp = "121.165.82.110";
 
 		String pktHash = mchtId + mchtCustId + reqDt + reqTm + custAcntNo + shaKey;
 		pktHash = sha256(pktHash);
@@ -76,11 +80,14 @@ public class BankTest {
 		body.put("mchtId", mchtId);
 		body.put("mchtTrdNo", mchtTrdNo);
 		body.put("mchtCustId", aesMchtCustId);
-		body.put("reqDt", reqDt);
-		body.put("reqTm", reqTm);
+//		body.put("reqDt", reqDt);
+//		body.put("reqTm", reqTm);
+		body.put("trdDt", reqDt);
+		body.put("trdTm", reqTm);
 		body.put("bankCd", bankCd);
 		body.put("custAcntNo", aesCustAcntNo);
-		body.put("mchtCustNm", aesMchtCustNm);
+//		body.put("mchtCustNm", aesMchtCustNm);
+		body.put("custAcntSumry", encryptAES256("123", aesKey));
 		body.put("custIp", custIp);
 		body.put("pktHash", pktHash);
 
@@ -88,7 +95,7 @@ public class BankTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
-		ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(url, entity, HashMap.class);
 		
 		System.out.println(response);
 

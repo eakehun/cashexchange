@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
+import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
@@ -24,6 +26,9 @@ public class PinService {
 
 	@Autowired
 	private TradingService tradingService;
+	
+	@Autowired
+	private FeeService feeService;
 
 	@SuppressWarnings("unchecked")
 	public void setPinCode(String company, String pinCode) {
@@ -196,6 +201,7 @@ public class PinService {
 		int progress = 0;
 
 		String status = TradingStatusEnum.PROGRESS.getValue();
+		Trading trading = tradingService.findByIdx(tradingIdx);
 
 		for (PinCode selectPinCode : selectPinCodes) {
 			if (selectPinCode.getStatus().equals(TradingStatusEnum.COMPLETE.getValue())) {
@@ -216,6 +222,22 @@ public class PinService {
 		} else {
 			if (complete > 0 && fail == 0) {
 				status = TradingStatusEnum.COMPLETE.getValue();
+				String company = "";
+				if(trading.getCompany().equals("culture")) {
+					company = "컬쳐랜드";
+				}else {
+					company = "해피머니";
+				}
+				Fee fee = feeService.findByCompany(company);
+				
+				
+				
+				BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01); 
+				
+				BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
+				BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee);
+				
+				trading.setFees(String.valueOf(decimalPrice));
 			} else if (complete == 0 && fail > 0) {
 				status = TradingStatusEnum.FAIL.getValue();
 			} else {
@@ -224,7 +246,7 @@ public class PinService {
 
 		}
 
-		Trading trading = tradingService.findByIdx(tradingIdx);
+		
 		trading.setStatus(status);
 		
 		tradingService.update(trading);
