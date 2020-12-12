@@ -123,13 +123,32 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "/secede/", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Users> secede(@RequestBody Users users) {
+	@RequestMapping(value = "/secede/", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<Users> secede(Authentication auth) {
 		try {
-			return new ResponseEntity<Users>(service.signIn(users, AuthEnum.ROLE_USER), HttpStatus.OK);
+			return new ResponseEntity<Users>(service.secede(auth.getName()), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} 
+	}
+	
+	@RequestMapping(value = "/phone/", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<Users> updatePhone(Authentication auth, @RequestBody Users users) {
+		try {
+			return new ResponseEntity<Users>(service.updatePhone(auth.getName(), users), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	
+	@RequestMapping(value = "/info/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> getCurrentUsers(Authentication auth) {
+		try {
+			return new ResponseEntity<Users>(service.findByUserId(auth.getName()), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 	
 }

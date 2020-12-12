@@ -20,7 +20,6 @@ public class RequestBodyLoggingFilter implements Filter {
             wrapper.setAttribute("requestBody", wrapper.getRequestBody());
             chain.doFilter(wrapper, response);
         } catch (Exception e) {
-//            chain.doFilter(request, response);
             throw new IllegalArgumentException(e.getMessage());
         }
     }

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.hourfun.cashexchange.common.BankCodeEnum;
-import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.util.StringUtil;
 
 @Service
@@ -89,6 +88,14 @@ public class BankService {
 		String resultMessage = (String) response.getBody().get("outRsltMsg");
 		
 		if(resultCode.equals("0021")) {
+			String profile = System.getProperty("spring.profiles.active");
+	        if(profile != null && profile.equals("prod")) {
+	        	String resultCustNm = (String) response.getBody().get("mchtCustNm");
+	        	if(!name.equals(resultCustNm)) {
+	        		throw new IllegalArgumentException("CI not match");
+	        	}
+	        }
+			
 			return resultMessage;
 		}else {
 			throw new Exception(resultMessage);

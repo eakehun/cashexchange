@@ -63,14 +63,8 @@ public class UserVerifyService {
 		try {
 			InputStream resource = new ClassPathResource("license/V47630000000_IDS_01_PROD_AES_license.dat")
 					.getInputStream();
-//			String responseString = cert.callOkCert(target, cpCd, svcName, license, param);
 			String responseString = cert.callOkCert(target, cpCd, svcName, license, param, resource);
 			JSONObject responseJson = new JSONObject(responseString);
-//			logger.error("responseString: " + responseString);
-//			logger.error("RSLT_CD: " + responseJson.get("RSLT_CD"));
-//			logger.error("RSLT_MSG: " + responseJson.get("RSLT_MSG"));
-//			logger.error("TX_SEQ_NO: " + responseJson.get("TX_SEQ_NO"));
-//			logger.error("MDL_TKN: " + responseJson.get("MDL_TKN"));
 			if (responseJson.has("MDL_TKN")) {
 				userMobileVerify.setMdl_tkn(responseJson.getString("MDL_TKN"));
 				return userMobileVerify;

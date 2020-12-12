@@ -33,8 +33,8 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id = :userId \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
-					"and user_id = :userId \r\n" +
-					"create_date between :fromDate and :toDate \r\n" ,
+					"create_date between :fromDate and :toDate \r\n" +
+					"and user_id = :userId \r\n",
 			nativeQuery = true)
 	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, 
 			String userId, Pageable pageable);
@@ -43,8 +43,8 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id = :userId and status=:status \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
-					"and user_id = :userId and status=:status \r\n" +
-					"create_date between :fromDate and :toDate \r\n" ,
+					"create_date between :fromDate and :toDate \r\n" +
+					"and user_id = :userId and status=:status \r\n" ,
 			nativeQuery = true)
 	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserIdAndStatus(Date fromDate, Date toDate, 
 			String userId,String status, Pageable pageable);

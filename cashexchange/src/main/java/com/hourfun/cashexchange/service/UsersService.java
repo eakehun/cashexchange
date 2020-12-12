@@ -210,5 +210,19 @@ public class UsersService {
 		return repository.save(selectUser);
 		
 	}
+	
+	public Users updatePhone(String userId, Users users) {
+		Users selectUser = findByUserId(userId);
+		
+		if(selectUser.getCi().equals(users.getCi())) {
+			selectUser.setMobileOperator(users.getMobileOperator());
+			selectUser.setTel(users.getTel());
+			
+			return repository.save(selectUser);
+		}else {
+			throw new IllegalArgumentException("CI not match");
+		}
+		
+	}
 
 }

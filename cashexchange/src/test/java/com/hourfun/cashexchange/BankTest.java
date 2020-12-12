@@ -37,9 +37,9 @@ public class BankTest {
 	 */
 
 	public static void main(String[] args) throws Exception {
-//		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
+		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
 //		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownership";
-		String url = "https://tbnpay.settlebank.co.kr/v1/api/pay/rmt";
+//		String url = "https://tbnpay.settlebank.co.kr/v1/api/pay/rmt";
 
 		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
 		String shaKey = "ST190808090913247723";
@@ -51,9 +51,9 @@ public class BankTest {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
 
-//		String hdInfo = "SP_NA00_1.0";
+		String hdInfo = "SP_NA00_1.0";
 //		String hdInfo = "SPAY_AA00_1.0";
-		String hdInfo = "SPAY_AR0W_1.0";
+//		String hdInfo = "SPAY_AR0W_1.0";
 		
 		String mchtId = "M20B2449";
 
@@ -80,14 +80,14 @@ public class BankTest {
 		body.put("mchtId", mchtId);
 		body.put("mchtTrdNo", mchtTrdNo);
 		body.put("mchtCustId", aesMchtCustId);
-//		body.put("reqDt", reqDt);
-//		body.put("reqTm", reqTm);
-		body.put("trdDt", reqDt);
-		body.put("trdTm", reqTm);
+		body.put("reqDt", reqDt);
+		body.put("reqTm", reqTm);
+//		body.put("trdDt", reqDt);
+//		body.put("trdTm", reqTm);
 		body.put("bankCd", bankCd);
 		body.put("custAcntNo", aesCustAcntNo);
-//		body.put("mchtCustNm", aesMchtCustNm);
-		body.put("custAcntSumry", encryptAES256("123", aesKey));
+		body.put("mchtCustNm", aesMchtCustNm);
+//		body.put("custAcntSumry", encryptAES256("123", aesKey));
 		body.put("custIp", custIp);
 		body.put("pktHash", pktHash);
 

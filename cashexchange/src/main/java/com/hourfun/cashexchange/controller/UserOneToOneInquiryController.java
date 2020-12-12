@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.OneToOneInquiry;
+import com.hourfun.cashexchange.model.OneToOneInquiryMini;
 import com.hourfun.cashexchange.model.OneToOneInquiryResponse;
 import com.hourfun.cashexchange.service.OneToOneInquiryReponseService;
 import com.hourfun.cashexchange.service.OneToOneInquiryService;
@@ -35,9 +36,9 @@ public class UserOneToOneInquiryController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetween(@PathVariable String fromDate, @PathVariable String toDate, Pageable pageable){
+	public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetween(Authentication auth, @PathVariable String fromDate, @PathVariable String toDate, Pageable pageable){
 		
-		return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetween(fromDate, toDate, pageable), HttpStatus.OK);
+		return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndUserId(fromDate, toDate, auth.getName(), pageable), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/response/parentIdx/{parentIdx}/", method = RequestMethod.GET)

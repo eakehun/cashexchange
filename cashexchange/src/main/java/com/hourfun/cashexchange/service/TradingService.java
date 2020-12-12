@@ -40,8 +40,12 @@ public class TradingService {
 	public Trading save(String userId, String company, List<String> pinCodes) {
 
 		try {
-			Users user = usersRepository.findByUserId(userId);
+			if(pinCodes == null || pinCodes.size() < 0) {
+				throw new IllegalArgumentException("");
+			}
 			
+			Users user = usersRepository.findByUserId(userId);
+
 			Trading trading = new Trading();
 			trading.setUserId(user.getUserId());
 			trading.setCompany(company);
@@ -83,9 +87,12 @@ public class TradingService {
 		}
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId,
+	public Page<Trading> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
 			Pageable pageable) {
-		return tradingRepository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable);
+
+		return tradingRepository.findByCreateDateBetweenAndUserId(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
 	}
 
 	public Page<Trading> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
@@ -140,12 +147,11 @@ public class TradingService {
 	public Page<Trading> findByCreateDateBetweenMasking(Pageable pageable) {
 
 		Date now = new Date();
-		
+
 		Calendar cal = Calendar.getInstance();
-        cal.setTime(now);
-        cal.add(Calendar.MONTH, -3);
-        
-		
+		cal.setTime(now);
+		cal.add(Calendar.MONTH, -3);
+
 		Date tomorrow = cal.getTime();
 
 		Page<Trading> tradings = tradingRepository.findByCreateDateBetween(tomorrow, now, pageable);
@@ -189,8 +195,8 @@ public class TradingService {
 		}
 
 	}
-	
-	public List<Trading> findByUserIdAndWithdrawStatusNot(String userId, String withdrawStatus){
+
+	public List<Trading> findByUserIdAndWithdrawStatusNot(String userId, String withdrawStatus) {
 		return tradingRepository.findByUserIdAndWithdrawStatusNot(userId, withdrawStatus);
 	}
 

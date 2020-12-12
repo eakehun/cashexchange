@@ -34,25 +34,25 @@ public class UserTradingController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(service.findByUserId(auth.getName(), pageable), HttpStatus.OK);
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, @PathVariable String fromDate,
+			@PathVariable String toDate, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenAndUserId(fromDate, toDate, auth.getName(), pageable),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{idx}", method = RequestMethod.GET)
 	public ResponseEntity<Trading> findByIdx(Authentication auth, @PathVariable String idx, Pageable pageable) {
 		try {
-			return new ResponseEntity<Trading>(service.findByIdx(auth.getName(), Long.parseLong(idx)),
-					HttpStatus.OK);
+			return new ResponseEntity<Trading>(service.findByIdx(auth.getName(), Long.parseLong(idx)), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Trading>> findByCreateDateBetween(Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable),
-				HttpStatus.OK);
+		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable), HttpStatus.OK);
 	}
 }
