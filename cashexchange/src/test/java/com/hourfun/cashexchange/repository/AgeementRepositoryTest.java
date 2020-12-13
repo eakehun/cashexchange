@@ -23,16 +23,18 @@ class AgeementRepositoryTest {
 	@Autowired
 	private AgreementRepository repository;
 	
-//	@Test
+	@Test
 	void save() {
 		Agreement agreement = new Agreement();
-		agreement.setChkNecessary(true);
-		agreement.setContents("test 약관 동의 . ");
+		agreement.setChkNecessary(false);
+		agreement.setUsed(true);
+		agreement.setTitle("선택 약관 제목");
+		agreement.setContents("선택 약관 본문");
 		repository.save(agreement);
 	}
 
 	
-	@Test
+//	@Test
 	void findAllByMemberIdx() {
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "idx"));
 		Page<Agreement> agreements =repository.findAllByMemberIdx(1l,page);

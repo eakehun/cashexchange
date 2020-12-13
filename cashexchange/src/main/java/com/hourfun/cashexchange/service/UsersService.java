@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +26,10 @@ import org.springframework.stereotype.Service;
 import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
+import com.hourfun.cashexchange.model.Agreement;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.repository.AgreementRepository;
 import com.hourfun.cashexchange.repository.UsersRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 import com.hourfun.cashexchange.util.StringUtil;
@@ -51,6 +54,9 @@ public class UsersService {
 	
 	@Autowired
 	private TradingService tradingService;
+	
+	@Autowired
+	private AgreementRepository agreementRepository; 
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
@@ -126,6 +132,10 @@ public class UsersService {
 	}
 
 	public Users signIn(Users users, AuthEnum common) throws Exception {
+		
+		if(repository.findByTel(users.getTel()) != null) {
+			throw new Exception("duplicate tel");
+		}
 
 		String auth = common.name().split("_")[1];
 
@@ -135,11 +145,24 @@ public class UsersService {
 		users.setAccountStatus(AccountStatusEnum.NORMAL.getValue());
 
 		try {
-			Users savedUser = repository.save(users);
 			
-			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
-
-			return savedUser;
+			List<Agreement> agreementList = new ArrayList<Agreement>(); ;
+			
+			for(Agreement agreement : users.getAgreements()) {
+				agreementList.add(agreementRepository.getOne(agreement.getIdx()));
+			}
+			
+			return null;
+//			users.setAgreements(null);
+//			
+//			Users savedUser = repository.save(users);
+//			
+//			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
+//			
+//			savedUser.setAgreements(agreementList);
+//			savedUser = repository.save(savedUser);
+//
+//			return savedUser;
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -187,8 +210,16 @@ public class UsersService {
 		return repository.save(selectUser);
 	}
 	
-	public Users updateAccountPassword(String userId, Users users) {
-		Users selectUser = findByUserId(userId);
+	public Users updateAccountPassword(Authentication auth, Users users) {
+		Users selectUser = null;
+		if(auth != null) {
+			selectUser = findByUserId(auth.getName());
+		}else {
+			selectUser = findByUserId(users.getUserId());
+			if(!selectUser.getCi().equals(users.getCi())) {
+				throw new IllegalArgumentException("CI not match");
+			}
+		}
 
 		selectUser.setPwd(customPasswordEncoder.encode(users.getPwd()));
 

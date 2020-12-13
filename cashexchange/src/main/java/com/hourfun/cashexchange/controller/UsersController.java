@@ -117,7 +117,16 @@ public class UsersController {
 	@RequestMapping(value = "/password/", method = RequestMethod.PUT)
 	public @ResponseBody ResponseEntity<Users> updateAccountPassword(Authentication auth, @RequestBody Users users) {
 		try {
-			return new ResponseEntity<Users>(service.updateAccountPassword(auth.getName(), users), HttpStatus.OK);
+			return new ResponseEntity<Users>(service.updateAccountPassword(auth, users), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/findPassword/", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<Users> updateMissingAccountPassword(Authentication auth, @RequestBody Users users) {
+		try {
+			return new ResponseEntity<Users>(service.updateAccountPassword(auth, users), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

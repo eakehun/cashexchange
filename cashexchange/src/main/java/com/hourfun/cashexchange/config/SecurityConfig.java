@@ -44,9 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// TODO Auto-generated method stub
 		web.ignoring().antMatchers("/users/login/**").antMatchers("/users/findId/**")
 				.antMatchers("/users/findPassword/**")
-				.antMatchers("/users/signin/").antMatchers("/admin/login/**").antMatchers("/admin/findId/**")
-				.antMatchers("/admin/findPassword/**").antMatchers("/admin/signin/").antMatchers("/manager/login/**")
-				.antMatchers("/manager/findId/**").antMatchers("/manager/findPassword/**")
+				.antMatchers("/users/signin/")
+				.antMatchers("/admin/login/**")
+				.antMatchers("/admin/findId/**")
+				.antMatchers("/admin/findPassword/**")
+				.antMatchers("/admin/signin/")
+				.antMatchers("/manager/login/**")
+				.antMatchers("/manager/findId/**")
+				.antMatchers("/manager/findPassword/**")
 				.antMatchers("/manager/signin/")
 				.antMatchers("/users/board/notice/**")
 				.antMatchers("/users/board/faq/**")
@@ -54,8 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/checkEmailDuplicate/**")
 				.antMatchers("/users/mobileUserVerifyRequest/**")
 				.antMatchers("/users/mobileUserVerifyCheck/**")
+				.antMatchers("/users/agreement/")				
 				.antMatchers("/users/trading/recent/")
 				.antMatchers("/users/bank/**")
+//				.antMatchers("/users/password/")
 				;
 	}
 
