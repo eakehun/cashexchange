@@ -57,7 +57,7 @@ public class OneToOneInquiryService {
 				,DateUtils.changeStringToDate(toDateStr, "yyyy-MM-dd HH:mm:ss"), pageable);
 	}
 	
-	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserId(String fromDateStr,String toDateStr, 
+	public Page<OneToOneInquiry> findByCreateDateBetweenAndUserId(String fromDateStr,String toDateStr, 
 			String userId, Pageable pageable){
 		
 		return oneToOneInquiryRepository.findByCreateDateBetweenAndUserId(DateUtils.changeStringToDate(fromDateStr, "yyyy-MM-dd HH:mm:ss")

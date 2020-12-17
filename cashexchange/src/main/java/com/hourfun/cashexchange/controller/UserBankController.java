@@ -33,10 +33,10 @@ public class UserBankController {
 	}
 
 	@RequestMapping(value = "/bank/{code}/{account}/{name}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<String> bankVerify(HttpServletRequest request, @PathVariable String code,
+	public @ResponseBody ResponseEntity<String> bankVerify(@PathVariable String code,
 			@PathVariable String account, @PathVariable String name) {
 		try {
-			return new ResponseEntity<String>(service.bankUserCheck(request, code, account, name), HttpStatus.OK);
+			return new ResponseEntity<String>(service.ownerCheck(code, account, name), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

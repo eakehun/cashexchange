@@ -133,10 +133,6 @@ public class UsersService {
 
 	public Users signIn(Users users, AuthEnum common) throws Exception {
 		
-		if(repository.findByTel(users.getTel()) != null) {
-			throw new Exception("duplicate tel");
-		}
-
 		String auth = common.name().split("_")[1];
 
 		users.setAuth(auth);
@@ -152,17 +148,16 @@ public class UsersService {
 				agreementList.add(agreementRepository.getOne(agreement.getIdx()));
 			}
 			
-			return null;
-//			users.setAgreements(null);
-//			
-//			Users savedUser = repository.save(users);
-//			
-//			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
-//			
-//			savedUser.setAgreements(agreementList);
-//			savedUser = repository.save(savedUser);
-//
-//			return savedUser;
+			users.setAgreements(null);
+			
+			Users savedUser = repository.save(users);
+			
+			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
+			
+			savedUser.setAgreements(agreementList);
+			savedUser = repository.save(savedUser);
+
+			return savedUser;
 
 		} catch (Exception e) {
 			// TODO: handle exception

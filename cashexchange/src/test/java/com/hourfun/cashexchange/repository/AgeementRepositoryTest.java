@@ -26,10 +26,10 @@ class AgeementRepositoryTest {
 	@Test
 	void save() {
 		Agreement agreement = new Agreement();
-		agreement.setChkNecessary(false);
+		agreement.setChkNecessary(true);
 		agreement.setUsed(true);
-		agreement.setTitle("선택 약관 제목");
-		agreement.setContents("선택 약관 본문");
+		agreement.setTitle("마케팅 정보 수신");
+		agreement.setContents("");
 		repository.save(agreement);
 	}
 

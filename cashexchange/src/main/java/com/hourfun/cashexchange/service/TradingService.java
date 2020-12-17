@@ -7,11 +7,14 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,14 +39,20 @@ public class TradingService {
 
 	@Autowired
 	private PinService pinService;
+	
+	@Value("${trading.limit.day}")
+	private String dayLimit;
+	
+	@Value("${trading.limit.month}")
+	private String monthLimit;
 
 	public Trading save(String userId, String company, List<String> pinCodes) {
 
 		try {
-			if(pinCodes == null || pinCodes.size() < 0) {
+			if (pinCodes == null || pinCodes.size() < 0) {
 				throw new IllegalArgumentException("");
 			}
-			
+
 			Users user = usersRepository.findByUserId(userId);
 
 			Trading trading = new Trading();
@@ -198,6 +207,42 @@ public class TradingService {
 
 	public List<Trading> findByUserIdAndWithdrawStatusNot(String userId, String withdrawStatus) {
 		return tradingRepository.findByUserIdAndWithdrawStatusNot(userId, withdrawStatus);
+	}
+
+	public Map<String, Long> getTradingLimit(String userId) {
+		Map<String, Long> returnMap = new HashMap<String, Long>();
+
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);		
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Date dayStart = calendar.getTime();
+		
+		
+		calendar.set(Calendar.DAY_OF_MONTH, 0);
+		Date monthStart = calendar.getTime();
+		
+		calendar.setTime(now);
+	    calendar.set(Calendar.HOUR_OF_DAY, 23);
+	    calendar.set(Calendar.MINUTE, 59);
+	    calendar.set(Calendar.SECOND, 59);
+	    calendar.set(Calendar.MILLISECOND, 999);
+	    Date dayEnd = calendar.getTime();
+	    
+	    
+	    Long dayCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, dayStart, dayEnd);
+	    Long monthCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, monthStart, dayEnd);
+	    
+	    returnMap.put("dayLimit", Long.valueOf(dayLimit));
+	    returnMap.put("monthLimit", Long.valueOf(monthLimit));
+	    returnMap.put("dayCompletePrice", dayCompletePrice);
+	    returnMap.put("monthCompletePrice", monthCompletePrice);
+
+		return returnMap;
+
 	}
 
 }

@@ -71,7 +71,7 @@ public class TelegramSender {
 				SendPhoto photo = new SendPhoto();
 				photo.setCaption(contents);
 				photo.setPhoto(file);
-				photo.setChatId("-458890529");
+				photo.setChatId(chatId);
 				
 				
 				telegramBot.sendPhoto(photo);
@@ -80,35 +80,6 @@ public class TelegramSender {
 				e.printStackTrace();
 			}
 			
-			// make a request URL using telegram bot api
-//			String url = "https://api.telegram.org/bot" + token + "/sendPhoto";
-//			try {
-////				TelegramMessage telegramMessage = new TelegramMessage();
-////				telegramMessage.setChatId(chatId);
-////				telegramMessage.setText(contents);				
-////				telegramMessage.setPhoto(file.getAbsolutePath());
-//
-//				MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
-//				
-//				body.set("chat_id", chatId);
-//				body.set("photo", file);
-//				
-////				String param = JsonUtils.toJson(telegramMessage);
-//
-//				RestTemplate restTemplate = new RestTemplate();
-//				restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-//				
-//				HttpHeaders headers = new HttpHeaders();
-////				headers.set("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE); // send the post request
-//				headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//				
-//				HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(body,
-//						headers);
-//				
-//				restTemplate.postForEntity(url, entity, String.class);
-//			} catch (Exception e) {
-//				logger.error("Unhandled exception occurred while send Telegram.", e);
-//			}
 
 		}
 	}

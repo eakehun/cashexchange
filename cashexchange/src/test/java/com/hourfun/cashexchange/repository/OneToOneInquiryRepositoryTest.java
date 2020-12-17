@@ -55,7 +55,7 @@ class OneToOneInquiryRepositoryTest {
 
 
 		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "createDate"));
-		Page<OneToOneInquiryMini> onePage =  repository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, page);
+		Page<OneToOneInquiry> onePage =  repository.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, page);
 		System.out.println(onePage);
 	}
 	

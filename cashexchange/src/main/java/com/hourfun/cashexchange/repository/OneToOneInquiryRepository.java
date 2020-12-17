@@ -18,7 +18,10 @@ import com.hourfun.cashexchange.model.OneToOneInquiryMini;
 @Transactional
 public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry, Long>{
 
-	public Page<OneToOneInquiry> findByCreateDateBetween(Date fromDate,Date toDate, 
+	public Page<OneToOneInquiry> findByCreateDateBetween(Date fromDate,Date toDate,
+			 Pageable pageable);
+	
+	public Page<OneToOneInquiry> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, String userId,
 			 Pageable pageable);
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
@@ -29,15 +32,15 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	public Page<OneToOneInquiryMini> adminFindByCreateDateBetween(Date fromDate,Date toDate, 
 			 Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
-			"create_date between :fromDate and :toDate \r\n" + 
-			"and user_id = :userId \r\n" ,
-			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
-					"create_date between :fromDate and :toDate \r\n" +
-					"and user_id = :userId \r\n",
-			nativeQuery = true)
-	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, 
-			String userId, Pageable pageable);
+//	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
+//			"create_date between :fromDate and :toDate \r\n" + 
+//			"and user_id = :userId \r\n" ,
+//			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
+//					"create_date between :fromDate and :toDate \r\n" +
+//					"and user_id = :userId \r\n",
+//			nativeQuery = true)
+//	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, 
+//			String userId, Pageable pageable);
 	
 	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 

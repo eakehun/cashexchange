@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +18,21 @@ import com.hourfun.cashexchange.util.StringUtil;
 
 @Service
 public class BankService {
+	
+	@Value("${settle.ownercheck.url}")
+	private String ownerCheckUrl;
+	
+	@Value("${settle.pay.url}")
+	private String payUrl;
+	
+	@Value("${settle.crypto.aeskey}")
+	private String aesKey;
+	
+	@Value("${settle.crypto.shakey}")
+	private String shaKey;
+	
+	@Value("${settle.market.id}")
+	private String mchtId;
 
 	public Map<String, String> bankList(){
 		Map<String, String> map = new HashMap<String, String>();
@@ -31,11 +45,7 @@ public class BankService {
 		
 	}
 	
-	public String bankUserCheck(HttpServletRequest request, String code, String account, String name) throws Exception {
-		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
-
-		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
-		String shaKey = "ST190808090913247723";
+	public String ownerCheck(String code, String account, String name) throws Exception {
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		
@@ -45,7 +55,6 @@ public class BankService {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
 
 		String hdInfo = "SP_NA00_1.0";
-		String mchtId = "M20B2449";
 
 		String mchtTrdNo = "OID" + oidFormat.format(date);
 		String mchtCustId = "makepin";
@@ -61,8 +70,6 @@ public class BankService {
 		String mchtCustNm = name;
 		String aesMchtCustNm = StringUtil.encryptAES256(mchtCustNm, aesKey);
 
-		String custIp = (null != request.getHeader("X-FORWARDED-FOR")) ? request.getHeader("X-FORWARDED-FOR") : request.getRemoteAddr();
-
 		String pktHash = mchtId + mchtCustId + reqDt + reqTm + custAcntNo + shaKey;
 		pktHash = StringUtil.sha256(pktHash);
 		
@@ -75,14 +82,13 @@ public class BankService {
 		body.put("bankCd", bankCd);
 		body.put("custAcntNo", aesCustAcntNo);
 		body.put("mchtCustNm", aesMchtCustNm);
-		body.put("custIp", custIp);
 		body.put("pktHash", pktHash);
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
-		ResponseEntity<HashMap> response = restTemplate.postForEntity(url, entity, HashMap.class);
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(ownerCheckUrl, entity, HashMap.class);
 		
 		String resultCode = (String) response.getBody().get("outStatCd");
 		String resultMessage = (String) response.getBody().get("outRsltMsg");
@@ -96,6 +102,57 @@ public class BankService {
 	        	}
 	        }
 			
+			return resultMessage;
+		}else {
+			throw new Exception(resultMessage);
+		}
+		
+	}
+	
+	public String pay(String code, String account) throws Exception {
+		Map<String, Object> body = new HashMap<String, Object>();
+		
+		Date date = new Date();
+		SimpleDateFormat oidFormat = new SimpleDateFormat("yyyyMMddhhmm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
+
+		String hdInfo = "SPAY_AR0W_1.0";
+		
+		String mchtTrdNo = "OID" + oidFormat.format(date);
+		String mchtCustId = "makepin";
+
+		String reqDt = dateFormat.format(date);
+		String reqTm = timeFormat.format(date);
+
+		String custAcntSumry = "메이크핀";
+		
+		String trdAmt = "1000";
+
+		String pktHash = mchtId + mchtTrdNo + reqDt + reqTm + code + account + trdAmt + shaKey;
+		
+		body.put("hdInfo", hdInfo);
+		body.put("mchtId", mchtId);
+		body.put("mchtTrdNo", mchtTrdNo);
+		body.put("mchtCustId", StringUtil.encryptAES256(mchtCustId, aesKey));
+		body.put("trdDt", reqDt);
+		body.put("trdTm", reqTm);
+		body.put("bankCd", code);
+		body.put("custAcntNo", StringUtil.encryptAES256(account, aesKey));
+		body.put("custAcntSumry", StringUtil.encryptAES256(custAcntSumry, aesKey));
+		body.put("trdAmt", trdAmt);
+		body.put("pktHash", StringUtil.sha256(pktHash));
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(payUrl, entity, HashMap.class);
+		
+		String resultCode = (String) response.getBody().get("outStatCd");
+		String resultMessage = (String) response.getBody().get("outRsltMsg");
+		
+		if(resultCode.equals("0021")) {
 			return resultMessage;
 		}else {
 			throw new Exception(resultMessage);

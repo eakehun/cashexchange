@@ -37,9 +37,16 @@ public class BankTest {
 	 */
 
 	public static void main(String[] args) throws Exception {
+		
+
+//		ownerCheck();
+		pay();
+		
+		
+	}
+	
+	public static void ownerCheck() throws Exception {
 		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
-//		String url = "https://tbnpay.settlebank.co.kr/v1/api/auth/acnt/ownership";
-//		String url = "https://tbnpay.settlebank.co.kr/v1/api/pay/rmt";
 
 		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
 		String shaKey = "ST190808090913247723";
@@ -52,8 +59,6 @@ public class BankTest {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
 
 		String hdInfo = "SP_NA00_1.0";
-//		String hdInfo = "SPAY_AA00_1.0";
-//		String hdInfo = "SPAY_AR0W_1.0";
 		
 		String mchtId = "M20B2449";
 
@@ -82,14 +87,67 @@ public class BankTest {
 		body.put("mchtCustId", aesMchtCustId);
 		body.put("reqDt", reqDt);
 		body.put("reqTm", reqTm);
-//		body.put("trdDt", reqDt);
-//		body.put("trdTm", reqTm);
 		body.put("bankCd", bankCd);
 		body.put("custAcntNo", aesCustAcntNo);
 		body.put("mchtCustNm", aesMchtCustNm);
-//		body.put("custAcntSumry", encryptAES256("123", aesKey));
 		body.put("custIp", custIp);
 		body.put("pktHash", pktHash);
+		
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+		
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(url, entity, HashMap.class);
+		
+		System.out.println(response);
+	}
+	
+	public static void pay() throws Exception {
+		String url = "https://tbnpay.settlebank.co.kr/v1/api/pay/rmt";
+
+		String aesKey = "SETTLEBANKISGOODSETTLEBANKISGOOD";
+		String shaKey = "ST190808090913247723";
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		
+		Date date = new Date();
+		SimpleDateFormat oidFormat = new SimpleDateFormat("yyyyMMddhhmm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");		
+
+		String hdInfo = "SPAY_AR0W_1.0";
+		
+		String mchtId = "M20B2449";
+
+		String mchtTrdNo = "OID" + oidFormat.format(date);
+		String mchtCustId = "makepin";
+
+		String reqDt = dateFormat.format(date);
+		String reqTm = timeFormat.format(date);
+		String bankCd = "004";
+
+		String custAcntNo = "001010947978";
+
+		String custAcntSumry = "원투";
+		
+		String trdAmt = "1000";
+
+
+		String pktHash = mchtId + mchtTrdNo + reqDt + reqTm + bankCd + custAcntNo + trdAmt + shaKey;
+		
+		body.put("hdInfo", hdInfo);
+		body.put("mchtId", mchtId);
+		body.put("mchtTrdNo", mchtTrdNo);
+		body.put("mchtCustId", encryptAES256(mchtCustId, aesKey));
+		body.put("trdDt", reqDt);
+		body.put("trdTm", reqTm);
+		body.put("bankCd", bankCd);
+		body.put("custAcntNo", encryptAES256(custAcntNo, aesKey));
+		body.put("custAcntSumry", encryptAES256(custAcntSumry, aesKey));
+		body.put("trdAmt", trdAmt);
+		body.put("pktHash", sha256(pktHash));
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -98,10 +156,6 @@ public class BankTest {
 		ResponseEntity<HashMap> response = restTemplate.postForEntity(url, entity, HashMap.class);
 		
 		System.out.println(response);
-
-		
-		
-		
 	}
 
 	public static String encryptAES256(String msg, String key) throws Exception {

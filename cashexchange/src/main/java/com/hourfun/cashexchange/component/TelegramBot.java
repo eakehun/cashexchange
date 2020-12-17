@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -21,8 +22,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 	private static final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
 	private final String BOT_NAME = "makepin_test_bot"; // Bot Name
-	private final String AUTH_KEY = "1365915155:AAFfsDsBXAJ2Qcwvh94jfxG03NagxfmNVZg"; // Bot Auth-Key
-	private final String CHAT_ID = "-458890529"; // Chat ID
+	
+	@Value("${notification.telegram.bot.token}")
+	private String token;
+
+	@Value("${notification.telegram.chat.id}")
+	private String chatId;
 	
 	@Autowired
 	CaptchaService captchaService;
@@ -55,7 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 	@Override
 	public String getBotToken() {
 		// TODO Auto-generated method stub
-		return AUTH_KEY;
+		return token;
 	}
 
 //	@PostConstruct

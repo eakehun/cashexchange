@@ -50,4 +50,10 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 
 	
 	Page<TradingMini> findByCreateDate(Date fromDate, Pageable pageable);
+	
+	@Query(value="SELECT sum(comeplete_price) as complete_price\r\n" + 
+			"FROM cashexchange.trading \r\n" + 
+			"where create_date between :fromDate and :toDate\r\n" + 
+			"and user_id = :userId")
+	Long findCompletePriceByCreateDateBetween(String userId, Date fromDate, Date toDate);
 }

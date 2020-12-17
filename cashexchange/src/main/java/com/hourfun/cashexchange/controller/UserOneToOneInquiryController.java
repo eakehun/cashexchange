@@ -36,7 +36,7 @@ public class UserOneToOneInquiryController {
 	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
     @ResponseBody
-	public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetween(Authentication auth, @PathVariable String fromDate, @PathVariable String toDate, Pageable pageable){
+	public ResponseEntity<Page<OneToOneInquiry>> findByCreateDateBetween(Authentication auth, @PathVariable String fromDate, @PathVariable String toDate, Pageable pageable){
 		
 		return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndUserId(fromDate, toDate, auth.getName(), pageable), HttpStatus.OK);
 	}

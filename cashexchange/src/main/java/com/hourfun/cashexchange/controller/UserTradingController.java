@@ -1,6 +1,7 @@
 package com.hourfun.cashexchange.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,5 +55,11 @@ public class UserTradingController {
 	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Trading>> findByCreateDateBetween(Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Long>> getTradingLimit(Authentication auth) {
+		return new ResponseEntity<Map<String, Long>>(service.getTradingLimit(auth.getName()),
+				HttpStatus.OK);
 	}
 }
