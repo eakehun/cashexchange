@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.AuthEnum;
+import com.hourfun.cashexchange.common.CacheKey;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Agreement;
 import com.hourfun.cashexchange.model.Trading;
@@ -48,15 +51,15 @@ public class UsersService {
 
 	@Autowired
 	private RememberMeServices customSecurityRememberMeService;
-	
+
 	@Autowired
 	private MailService mailService;
-	
+
 	@Autowired
 	private TradingService tradingService;
-	
+
 	@Autowired
-	private AgreementRepository agreementRepository; 
+	private AgreementRepository agreementRepository;
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
@@ -105,12 +108,13 @@ public class UsersService {
 
 	}
 
-	public Users findByUserId(String id) {
-		return repository.findByUserId(id);
-	}
+//	@Cacheable(value = "users", key="#p0")
+//	public Users findByUserIdWithoutAgreement(String id) {
+//		return repository.findByUserIdWithoutAgreement(id);
+//	}
 
 	public String checkEmailDuplicate(String id) {
-		Users user = repository.findByUserId(id);
+		Users user = findByUserId(id);
 
 		if (user != null) {
 			throw new IllegalArgumentException("email duplicate");
@@ -132,7 +136,7 @@ public class UsersService {
 	}
 
 	public Users signIn(Users users, AuthEnum common) throws Exception {
-		
+
 		String auth = common.name().split("_")[1];
 
 		users.setAuth(auth);
@@ -141,19 +145,20 @@ public class UsersService {
 		users.setAccountStatus(AccountStatusEnum.NORMAL.getValue());
 
 		try {
-			
-			List<Agreement> agreementList = new ArrayList<Agreement>(); ;
-			
-			for(Agreement agreement : users.getAgreements()) {
+
+			List<Agreement> agreementList = new ArrayList<Agreement>();
+			;
+
+			for (Agreement agreement : users.getAgreements()) {
 				agreementList.add(agreementRepository.getOne(agreement.getIdx()));
 			}
-			
+
 			users.setAgreements(null);
-			
+
 			Users savedUser = repository.save(users);
-			
-			mailService.welcomeMailSend(savedUser.getUserId(), savedUser.getName());
-			
+
+			mailService.welcomeMailSend(savedUser);
+
 			savedUser.setAgreements(agreementList);
 			savedUser = repository.save(savedUser);
 
@@ -186,6 +191,21 @@ public class UsersService {
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
 	}
 
+	public Page<Users> findByCreateDateBetweenAndName(String fromDate, String toDate, String name, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndName(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), name, pageable);
+	}
+
+	public Page<Users> findByCreateDateBetweenAndTel(String fromDate, String toDate, String tel, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndTel(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), tel, pageable);
+	}
+
+	public Page<Users> findByCreateDateBetweenAndIdx(String fromDate, String toDate, String idx, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndIdx(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), Long.valueOf(idx), pageable);
+	}
+
 	public Page<Users> findByCreateDateBetweenAndUserIdAndAccountStatus(String fromDate, String toDate, String userId,
 			String accountStatus, Pageable pageable) {
 		return repository.findByCreateDateBetweenAndUserIdAndAccountStatus(
@@ -193,10 +213,33 @@ public class UsersService {
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, accountStatus, pageable);
 	}
 
+	public Page<Users> findByCreateDateBetweenAndNameAndAccountStatus(String fromDate, String toDate, String name,
+			String accountStatus, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndNameAndAccountStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), name, accountStatus, pageable);
+	}
+
+	public Page<Users> findByCreateDateBetweenAndTelAndAccountStatus(String fromDate, String toDate, String tel,
+			String accountStatus, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndTelAndAccountStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), tel, accountStatus, pageable);
+	}
+
+	public Page<Users> findByCreateDateBetweenAndIdxAndAccountStatus(String fromDate, String toDate, String idx,
+			String accountStatus, Pageable pageable) {
+		return repository.findByCreateDateBetweenAndIdxAndAccountStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), Long.valueOf(idx), accountStatus,
+				pageable);
+	}
+
 	public Users findByIdx(long idx) {
 		return repository.findByIdx(idx);
 	}
 
+	@CachePut(value = "users", key = "#p0")
 	public Users updateAccountStatus(Users users) {
 		Users selectUser = repository.findByIdx(users.getIdx());
 
@@ -204,14 +247,15 @@ public class UsersService {
 
 		return repository.save(selectUser);
 	}
-	
+
+	@CachePut(value = "users", key = "#p0")
 	public Users updateAccountPassword(Authentication auth, Users users) {
 		Users selectUser = null;
-		if(auth != null) {
+		if (auth != null) {
 			selectUser = findByUserId(auth.getName());
-		}else {
+		} else {
 			selectUser = findByUserId(users.getUserId());
-			if(!selectUser.getCi().equals(users.getCi())) {
+			if (!selectUser.getCi().equals(users.getCi())) {
 				throw new IllegalArgumentException("CI not match");
 			}
 		}
@@ -220,35 +264,71 @@ public class UsersService {
 
 		return repository.save(selectUser);
 	}
-	
+
+	@CachePut(value = "users", key = "#p0")
 	public Users secede(String userId) {
-		
+
 		Users selectUser = findByUserId(userId);
-		
-		List<Trading> tradingList = tradingService.findByUserIdAndWithdrawStatusNot(userId, TradingStatusEnum.COMPLETE.getValue()); 
-		
-		if(tradingList.size() > 0) {
-			throw new IllegalArgumentException("not complete trading remain"); 
+
+		List<Trading> tradingList = tradingService.findByUserIdAndWithdrawStatusNot(userId,
+				TradingStatusEnum.COMPLETE.getValue());
+
+		if (tradingList.size() > 0) {
+			throw new IllegalArgumentException("not complete trading remain");
 		}
-		
+
 		selectUser.setAccountStatus(AccountStatusEnum.WITHDRAW.getValue());
-		
+
 		return repository.save(selectUser);
-		
+
 	}
-	
+
+	@CachePut(value = "users", key = "#p0")
 	public Users updatePhone(String userId, Users users) {
 		Users selectUser = findByUserId(userId);
-		
-		if(selectUser.getCi().equals(users.getCi())) {
+
+		if (selectUser.getCi().equals(users.getCi())) {
 			selectUser.setMobileOperator(users.getMobileOperator());
 			selectUser.setTel(users.getTel());
-			
+
 			return repository.save(selectUser);
-		}else {
+		} else {
 			throw new IllegalArgumentException("CI not match");
 		}
-		
+
+	}
+
+	@CachePut(value = "users", key = "#p0")
+	public Users updateAccount(String userId, Users users) {
+		Users selectUser = findByUserId(userId);
+
+		selectUser.setAccountCode(users.getAccountCode());
+		selectUser.setAccountName(users.getAccountName());
+		selectUser.setAccountNum(users.getAccountNum());
+
+		return repository.save(selectUser);
+
+//		if(selectUser.getCi().equals(users.getCi())) {
+//			selectUser.setMobileOperator(users.getMobileOperator());
+//			selectUser.setTel(users.getTel());
+//			
+//			return repository.save(selectUser);
+//		}else {
+//			throw new IllegalArgumentException("CI not match");
+//		}
+
+	}
+
+	@Cacheable(value = CacheKey.USER, cacheManager = "cacheManager")
+	
+	public Users findByUserId(String userId) {
+		return repository.findByUserId(userId);
+	}
+	
+	public List<Agreement> findAgreementByUserId(String userId){
+		Users selectUser = findByUserId(userId);
+		return agreementRepository.findAllByMemberIdx(selectUser.getIdx());
+//		return null;
 	}
 
 }

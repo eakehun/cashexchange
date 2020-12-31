@@ -1,6 +1,7 @@
 package com.hourfun.cashexchange.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,7 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Agreement {
+public class Agreement implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -57,9 +57,9 @@ public class UserTradingController {
 		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Long>> getTradingLimit(Authentication auth) {
-		return new ResponseEntity<Map<String, Long>>(service.getTradingLimit(auth.getName()),
+	@RequestMapping(value = "/limit/", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Integer>> getTradingLimit(Authentication auth) {
+		return new ResponseEntity<Map<String, Integer>>(service.getTradingLimit(auth.getName()),
 				HttpStatus.OK);
 	}
 }

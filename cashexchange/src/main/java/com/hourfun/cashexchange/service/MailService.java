@@ -71,7 +71,7 @@ public class MailService {
         mailSender.send(message);
     }
     
-    public void welcomeMailSend(String address, String name) throws MessagingException {
+    public void welcomeMailSend(Users users) throws MessagingException {
     	String title = "회원가입 환영";
     	
     	MimeMessage message = mailSender.createMimeMessage();
@@ -79,12 +79,15 @@ public class MailService {
     	
     	helper.setSubject(title);
     	helper.setFrom(FROM_ADDRESS);
-    	helper.setTo(address);
+    	helper.setTo(users.getUserId());
     	
     	Context context = new Context();
-    	context.setVariable("name", name);
+    	context.setVariable("email", users.getUserId());
+    	context.setVariable("name", users.getName());
+    	context.setVariable("createDate", users.getCreateDate());
     	
-    	String html = templateEngine.process("welcome", context);
+    	
+    	String html = templateEngine.process("makepin_welcome", context);
     	helper.setText(html,true);
     	
     	mailSender.send(message);

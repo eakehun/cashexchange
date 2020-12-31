@@ -30,6 +30,8 @@ public class History {
     private String ip;
 
     private String user;
+    
+    private String device;
 
     private String type;
 

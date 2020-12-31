@@ -36,8 +36,8 @@ class AgeementRepositoryTest {
 	
 //	@Test
 	void findAllByMemberIdx() {
-		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "idx"));
-		Page<Agreement> agreements =repository.findAllByMemberIdx(1l,page);
-		System.out.println(agreements);
+//		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "idx"));
+//		Page<Agreement> agreements =repository.findAllByMemberIdx(1l,page);
+//		System.out.println(agreements);
 	}
 }

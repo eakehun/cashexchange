@@ -24,7 +24,19 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	public Page<OneToOneInquiry> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, String userId,
 			 Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
+	
+	
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel  from one_to_one_inquiry where \r\n" + 
+			"create_date between :fromDate and :toDate \r\n" + 
+			"and status=:status \r\n" ,
+			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
+					"create_date between :fromDate and :toDate \r\n" +
+					"and status=:status \r\n" ,
+			nativeQuery = true)
+	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndStatus(Date fromDate,Date toDate, String status,
+			 Pageable pageable);
+	
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel  from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" ,
@@ -42,7 +54,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 //	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserId(Date fromDate,Date toDate, 
 //			String userId, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date  from one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel  from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id = :userId and status=:status \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
@@ -52,7 +64,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndUserIdAndStatus(Date fromDate, Date toDate, 
 			String userId,String status, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and title like CONCAT('%',:title,'%') and status = :status \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
@@ -62,7 +74,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	public Page<OneToOneInquiryMini> findByCreateDateBetweenAndTitleLikeAndStatus(@Param("fromDate")Date fromDate, 
 			@Param("toDate")Date toDate,@Param("title") String title, @Param("status")String status, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and title like  CONCAT('%',:title,'%')  \r\n" ,
 			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
@@ -75,7 +87,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and status = :status and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",
@@ -88,7 +100,7 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	(@Param("fromDate")String fromDate, @Param("toDate")String toDate,@Param("status") String status, 
 			@Param("userId")String userId,@Param("title") String title, @Param("content")String content, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",

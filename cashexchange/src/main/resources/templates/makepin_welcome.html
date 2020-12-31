@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<title></title>
+</head>
+<style>
+</style>
+<body style="margin: 0; padding: 0; list-style: none;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"
+		style="margin: 0 auto">
+		<tbody>
+			<tr>
+				<td colspan="2" align="left" height="140"
+					style="background-color: #fff; vertical-align: middle; padding: .5rem 2rem; border-bottom: solid 1px #ccc"><img
+					src="http://dev.makepin.co.kr/img/make_pin_logo.2daff08f.png"
+					alt="" style="width: 220px;"></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding: 0 20px;">
+					<table border="0" cellspacing="0" cellpadding="0"
+						style="width: 100%; margin: 40px 0">
+						<tr>
+							<td><h1
+									style="padding: 0; margin: 0; font-weight: normal; color: #464646; text-align: center; font-size: 2em;">
+									환영합니다<br />
+								</h1></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" style="padding: 0 20px 0 20px;">
+					<h4 style="margin: .87rem 0;">회원가입 완료</h4>
+
+					<div
+						style="border-top: solid 2px #333; padding: .7rem; color: #444">메이크핀
+						회원가입을 축하합니다.</div>
+
+					<table border="0" cellspacing="0" cellpadding="0"
+						style="width: 100%; font-size: 13px; color: #464646; margin: 0 0 10px 0;">
+						<tr>
+							<td
+								style="width: 23%; padding: 15px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1; background-color: #ededed">아이디</td>
+							<td
+								style="padding: 10px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1"
+								th:text="${email}">abc@abcdef.co.kr</td>
+						</tr>
+						<tr>
+							<td
+								style="width: 23%; padding: 15px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1; background-color: #ededed">이름</td>
+							<td
+								style="padding: 10px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1"
+								th:text="${name}">홍*동</td>
+						</tr>
+						<tr>
+							<td
+								style="width: 23%; padding: 15px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1; background-color: #ededed">가입일시</td>
+							<td
+								style="padding: 10px; color: #464646; font-weight: bold; border-bottom: solid 1px #e1e1e1"
+								th:text="${createDate}">YYYY-MM-DD HH:MM:SS</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding: 0 20px 0 20px; color: #464646;">
+					<table border="0" cellspacing="0" cellpadding="0"
+						style="width: 100%; padding: 20px 0; font-size: 13px;">
+						<tr style="text-align: center">
+							<td>회원님께서 가입하신 정보는 위와 같습니다.</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="padding: 20px 0; text-align: center">
+								<a href="http://makepin.co.kr/"
+								style="display: inline-block; width: 298px; padding: 17px 18px 19px 19px; color: #fff; background-color: #4989e8; background-image: url(http://static.ssocio.net/web/images/btn_ar_t.png); text-align: center; background-repeat: no-repeat; background-position: 274px center; box-sizing: border-box; text-decoration: none; font-size: 13px;">메이크핀
+									바로가기</a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2"
+					style="padding: 30px 20px; background-color: #f0f0f0; font-size: 12px;">
+
+					<table border="0" cellspacing="0" cellpadding="0"
+						style="width: 100%; font-size: 12px;">
+						<tr>
+							<td style="border-bottom: solid 1px #ccc; padding-bottom: .7rem">본
+								메일은 정보통신망 이용촉진 및 정보보호 등에 관한 법률 제30조2(개인정보 이용내역의 통지)’에 의거하여 메일 수신
+								동의와 상관없이 발송 되었습니다. 궁금하신 사항은 언제든지 고객센터를 통해 문의하여 주시기 바랍니다.<br />본
+								메일은 2000년 00년 00일 기준 메이크핀 계정에 등록된 정보(이메일)를 기준으로 발송되었습니다.<br />Copyright
+								© All rights reserved.
+							</td>
+						</tr>
+						<tr>
+							<td style="padding-bottom: 2px; padding-top: .7rem">사업자등록번호
+								: 100-00-00000 | 통신판매업신고번호 : 제2020-서울강남-0000</td>
+						</tr>
+						<tr>
+							<td style="padding-bottom: 2px;">서울시 강남구 강남동 000000 | 서비스명”
+								대표이사 : 홍길동 | 고객센터 : help@abc.co.kr</td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+
+</html>

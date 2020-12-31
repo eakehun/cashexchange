@@ -70,6 +70,78 @@ public class AdminUsersController {
 		}
 	}
 
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/name/{name}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndUserName(@PathVariable String fromDate,
+			@PathVariable String toDate, @PathVariable String name, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndName(fromDate, toDate, name, pageable), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/name/{name}/status/{status}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndNameAndAccountStatus(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String name,
+			@PathVariable String status, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndNameAndAccountStatus(fromDate, toDate, name, status, pageable),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/tel/{tel}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndTel(@PathVariable String fromDate,
+			@PathVariable String toDate, @PathVariable String tel, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndTel(fromDate, toDate, tel, pageable), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/tel/{tel}/status/{status}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndTelAndAccountStatus(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String tel,
+			@PathVariable String status, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndTelAndAccountStatus(fromDate, toDate, tel, status, pageable),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndIdx(@PathVariable String fromDate,
+			@PathVariable String toDate, @PathVariable String idx, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndIdx(fromDate, toDate, idx, pageable), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/status/{status}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Page<Users>> findByCreateDateBetweenAndIdxAndAccountStatus(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String idx,
+			@PathVariable String status, Pageable pageable) {
+		try {
+			return new ResponseEntity<Page<Users>>(
+					service.findByCreateDateBetweenAndIdxAndAccountStatus(fromDate, toDate, idx, status, pageable),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
 	@RequestMapping(value = "/idx/{idx}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> findByIdx(@PathVariable long idx) {
 		try {

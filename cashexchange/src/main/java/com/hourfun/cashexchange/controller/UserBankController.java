@@ -24,7 +24,7 @@ public class UserBankController {
 	private BankService service;
 
 	@RequestMapping(value = "/bank/", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Map<String, String>> updateAccountPassword() {
+	public @ResponseBody ResponseEntity<Map<String, String>> bankList() {
 		try {
 			return new ResponseEntity<Map<String, String>>(service.bankList(), HttpStatus.OK);
 		} catch (Exception e) {
@@ -32,11 +32,21 @@ public class UserBankController {
 		}
 	}
 
-	@RequestMapping(value = "/bank/{code}/{account}/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bank/{code}/{account}/{name}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> bankVerify(@PathVariable String code,
 			@PathVariable String account, @PathVariable String name) {
 		try {
 			return new ResponseEntity<String>(service.ownerCheck(code, account, name), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+
+	@RequestMapping(value = "/bank/{bankCode}/{divCode}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<String> bankList(@PathVariable String bankCode, @PathVariable String divCode) {
+		try {
+			return new ResponseEntity<String>(service.maintenanceCheck(bankCode, divCode), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

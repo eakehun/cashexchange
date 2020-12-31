@@ -79,6 +79,13 @@ public class AdminOneToOneInquiryController {
         return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable), HttpStatus.OK);
     }
 	
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/status/{status}/", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndStatus(@PathVariable String fromDate, @PathVariable String toDate, 
+    		@PathVariable OneToOneInquiryType status, Pageable pageable) {
+        return new ResponseEntity<>(oneToOneInquiryService.findByCreateDateBetweenAndStatus(fromDate, toDate, status, pageable), HttpStatus.OK);
+    }
+	
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/status/{status}/", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Page<OneToOneInquiryMini>> findByCreateDateBetweenAndUserIdAndStatus(@PathVariable String fromDate, @PathVariable String toDate, 

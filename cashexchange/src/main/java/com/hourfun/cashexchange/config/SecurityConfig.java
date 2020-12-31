@@ -33,10 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterAt(customRememberMeFilter(), RememberMeAuthenticationFilter.class).cors().and().csrf().disable() // csrf
 				.rememberMe().rememberMeServices(customSecurityRememberMeService()).and().logout()				
 				.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()).and().authorizeRequests()
-				.antMatchers("/board/**").hasAnyRole("USER", "ADMIN", "MANAGER").antMatchers("/users/**")
-				.hasAnyRole("USER").antMatchers("/admin/**").hasAnyRole("ADMIN")
-				.antMatchers("/macro/**").hasAnyRole("ADMIN").antMatchers("/manager/**")
-				.hasAnyRole("MANAGER").antMatchers("/**").permitAll();
+				.antMatchers("/board/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+				.antMatchers("/users/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+				.antMatchers("/admin/**").hasAnyRole("ADMIN")
+				.antMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+				.antMatchers("/**").permitAll();
 	}
 
 	@Override
@@ -55,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/manager/signin/")
 				.antMatchers("/users/board/notice/**")
 				.antMatchers("/users/board/faq/**")
+				.antMatchers("/users//**")
 				.antMatchers("/users/fee/**")
 				.antMatchers("/users/checkEmailDuplicate/**")
 				.antMatchers("/users/mobileUserVerifyRequest/**")

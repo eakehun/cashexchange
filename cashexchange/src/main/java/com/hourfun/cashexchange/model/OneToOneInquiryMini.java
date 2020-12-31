@@ -17,5 +17,6 @@ public interface OneToOneInquiryMini {
 	String getUser_name();
 	String getTitle();
 	String getStatus();
+	String getTel();
 	
 }

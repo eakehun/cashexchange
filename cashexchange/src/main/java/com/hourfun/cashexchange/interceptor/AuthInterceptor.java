@@ -130,6 +130,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		history.setUser(users.getUserId());
 
 		history.setType(type);
+		
+		String userAgent = request.getHeader("User-Agent").toUpperCase();
+		
+	    if(userAgent.indexOf("MOBILE") > -1) {
+	        if(userAgent.indexOf("PHONE") == -1) {
+	        	history.setDevice("PHONE");
+	        } else {
+	        	history.setDevice("TABLET");
+	        }
+	    } else {
+	    	history.setDevice("PC");
+	    }
 
 		if (url.contains("/login/")) {
 			history.setService("user");
@@ -156,6 +168,16 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			} else if (type.equals("update")) {
 				sbuf.append("update OneToOne");
 			}
+		} else if (url.contains("/tradingMenu/")) {
+			history.setService("tradingMenu");
+			
+			if (type.equals("insert")) {
+				sbuf.append("insert tradingMenu");
+			} else if (type.equals("update")) {
+				sbuf.append("update tradingMenu");
+			}
+			
+			history.setContents(body.toString());
 		}
 		
 		if (response.getStatus() == HttpStatus.OK.value()

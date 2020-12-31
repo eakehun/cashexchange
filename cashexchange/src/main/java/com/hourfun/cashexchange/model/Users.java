@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -17,12 +18,13 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class Users {
+public class Users implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +54,7 @@ public class Users {
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_agreements")
+	@JsonIgnore
 	private Collection<Agreement> agreements;
 	
 	@Temporal(TemporalType.TIMESTAMP)

@@ -1,9 +1,13 @@
 package com.hourfun.cashexchange.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.common.AuthEnum;
+import com.hourfun.cashexchange.model.Agreement;
 import com.hourfun.cashexchange.model.UserMobileVerify;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.UserVerifyService;
@@ -150,11 +155,29 @@ public class UsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/account/", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<Users> updateAccount(Authentication auth, @RequestBody Users users) {
+		try {
+			return new ResponseEntity<Users>(service.updateAccount(auth.getName(), users), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
 	
 	@RequestMapping(value = "/info/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> getCurrentUsers(Authentication auth) {
 		try {
 			return new ResponseEntity<Users>(service.findByUserId(auth.getName()), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "//", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<List<Agreement>> findAgreementByUserId(Authentication auth) {
+		try {
+			return new ResponseEntity<List<Agreement>>(service.findAgreementByUserId(auth.getName()), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

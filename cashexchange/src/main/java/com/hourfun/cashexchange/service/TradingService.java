@@ -35,25 +35,35 @@ public class TradingService {
 	private TradingRepository tradingRepository;
 
 	@Autowired
-	private UsersRepository usersRepository;
+//	private UsersRepository usersRepository;
+	private UsersService UsersService; 
 
 	@Autowired
 	private PinService pinService;
-	
+
 	@Value("${trading.limit.day}")
 	private String dayLimit;
-	
+
 	@Value("${trading.limit.month}")
 	private String monthLimit;
+
+	@Value("${trading.limit.night}")
+	private String nightLimit;
 
 	public Trading save(String userId, String company, List<String> pinCodes) {
 
 		try {
-			if (pinCodes == null || pinCodes.size() < 0) {
-				throw new IllegalArgumentException("");
+			if (pinCodes == null || pinCodes.size() == 0) {
+				throw new IllegalArgumentException("pinCodes null");
 			}
 
-			Users user = usersRepository.findByUserId(userId);
+			List<PinCode> selectPinCodes = pinService.findByPinCodeIn(pinCodes);
+
+			if (selectPinCodes.size() > 0) {
+				throw new IllegalArgumentException("pinCodes duplicate");
+			}
+
+			Users user = UsersService.findByUserId(userId);
 
 			Trading trading = new Trading();
 			trading.setUserId(user.getUserId());
@@ -96,6 +106,11 @@ public class TradingService {
 		}
 	}
 
+	public Page<Trading> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
+		return tradingRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+	}
+
 	public Page<Trading> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
 			Pageable pageable) {
 
@@ -104,9 +119,48 @@ public class TradingService {
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
 	}
 
-	public Page<Trading> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
-		return tradingRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+	public Page<Trading> findByCreateDateBetweenAndStatus(String fromDate, String toDate, String status,
+			Pageable pageable) {
+
+		return tradingRepository.findByCreateDateBetweenAndStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), status, pageable);
+	}
+
+	public Page<Trading> findByCreateDateBetweenAndUserName(String fromDate, String toDate, String userName,
+			Pageable pageable) {
+
+		return tradingRepository.findByCreateDateBetweenAndUserName(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, pageable);
+	}
+
+	public Page<Trading> findByCreateDateBetweenAndIdx(String fromDate, String toDate, long idx, Pageable pageable) {
+
+		return tradingRepository.findByCreateDateBetweenAndIdx(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, pageable);
+	}
+
+	public Page<Trading> findByCreateDateBetweenAndIdxAndStatus(String fromDate, String toDate, Long idx, String status,
+			Pageable pageable) {
+		return tradingRepository.findByCreateDateBetweenAndIdxAndStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, status, pageable);
+	}
+
+	public Page<Trading> findByCreateDateBetweenAndUserIdAndStatus(String fromDate, String toDate, String userId,
+			String status, Pageable pageable) {
+		return tradingRepository.findByCreateDateBetweenAndUserIdAndStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, status, pageable);
+	}
+
+	public Page<Trading> findByCreateDateBetweenAndUserNameAndStatus(String fromDate, String toDate, String userName,
+			String status, Pageable pageable) {
+		return tradingRepository.findByCreateDateBetweenAndUserNameAndStatus(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, status, pageable);
 	}
 
 	public File excelDownload(String fromDate, String toDate) {
@@ -209,40 +263,112 @@ public class TradingService {
 		return tradingRepository.findByUserIdAndWithdrawStatusNot(userId, withdrawStatus);
 	}
 
-	public Map<String, Long> getTradingLimit(String userId) {
-		Map<String, Long> returnMap = new HashMap<String, Long>();
+	public Map<String, Integer> getTradingLimit(String userId) {
+		Map<String, Integer> returnMap = new HashMap<String, Integer>();
 
 		Date now = new Date();
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(now);		
+		calendar.setTime(now);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		Date dayStart = calendar.getTime();
-		
-		
+
+		Date nightStart = null;
+
 		calendar.set(Calendar.DAY_OF_MONTH, 0);
 		Date monthStart = calendar.getTime();
-		
+
 		calendar.setTime(now);
-	    calendar.set(Calendar.HOUR_OF_DAY, 23);
-	    calendar.set(Calendar.MINUTE, 59);
-	    calendar.set(Calendar.SECOND, 59);
-	    calendar.set(Calendar.MILLISECOND, 999);
-	    Date dayEnd = calendar.getTime();
-	    
-	    
-	    Long dayCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, dayStart, dayEnd);
-	    Long monthCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, monthStart, dayEnd);
-	    
-	    returnMap.put("dayLimit", Long.valueOf(dayLimit));
-	    returnMap.put("monthLimit", Long.valueOf(monthLimit));
-	    returnMap.put("dayCompletePrice", dayCompletePrice);
-	    returnMap.put("monthCompletePrice", monthCompletePrice);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+
+		calendar.setTime(now);
+		if (calendar.get(Calendar.HOUR_OF_DAY) > 22) {
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			nightStart = calendar.getTime();
+		}
+
+		if (calendar.get(Calendar.HOUR_OF_DAY) < 9) {
+			calendar.add(Calendar.DATE, -1);
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			nightStart = calendar.getTime();
+		}
+
+		Integer dayCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, dayStart, now);
+		Integer monthCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, monthStart, now);
+
+		returnMap.put("dayLimit", Integer.valueOf(dayLimit));
+		returnMap.put("monthLimit", Integer.valueOf(monthLimit));
+		returnMap.put("dayCompletePrice", dayCompletePrice);
+		returnMap.put("monthCompletePrice", monthCompletePrice);
+		returnMap.put("nightLimit", Integer.valueOf(nightLimit));
+
+		if (nightStart != null) {
+			Integer nightCompletePrice = tradingRepository.findCompletePriceByCreateDateBetween(userId, nightStart,
+					now);
+
+			returnMap.put("nightCompletePrice", monthCompletePrice);
+
+		}
 
 		return returnMap;
 
+	}
+
+	public List<Trading> findByCreateDateBetweenAndGroupByUserId() {
+
+		Date now = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.set(Calendar.DAY_OF_MONTH, 0);
+		Date monthStart = calendar.getTime();
+
+		return tradingRepository.findByCreateDateBetweenAndGroupByUserId(monthStart, now);
+	}
+
+	public long countByCreateDateBetween() {
+		Date now = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.set(Calendar.DAY_OF_MONTH, 0);
+		Date monthStart = calendar.getTime();
+
+		return tradingRepository.countByCreateDateBetween(monthStart, now);
+	}
+	
+	public Map<String, Object> findByCreateDateBetweenAndSumPrice() {
+		Date now = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.set(Calendar.DAY_OF_MONTH, 0);
+		Date monthStart = calendar.getTime();
+
+		return tradingRepository.findByCreateDateBetweenAndSumPrice(monthStart, now);
 	}
 
 }

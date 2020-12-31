@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.service.CaptchaService;
+import com.hourfun.cashexchange.service.ObserverService;
 import com.hourfun.cashexchange.service.PinService;
 
 @RestController
@@ -29,10 +30,13 @@ public class MacroController {
 	@Autowired
 	private CaptchaService captchaService;
 	
+	@Autowired
+	private ObserverService observerService;
+	
 	
 	
 	@RequestMapping(value = "/{company}/", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> selectPin(Authentication auth, @PathVariable String company) {
+	public ResponseEntity<List<String>> selectPin(@PathVariable String company) {
 		try {
 			return new ResponseEntity<List<String>>(service.getPinCode(company), HttpStatus.OK);
 		} catch (Exception e) {
@@ -41,7 +45,7 @@ public class MacroController {
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<List<PinCode>> updatePin(Authentication auth, @RequestBody List<PinCode> pinCodes) {
+	public ResponseEntity<List<PinCode>> updatePin(@RequestBody List<PinCode> pinCodes) {
 		try {
 			return new ResponseEntity<List<PinCode>>(service.update(pinCodes), HttpStatus.OK);
 		} catch (Exception e) {
@@ -54,6 +58,17 @@ public class MacroController {
 		
 		try {
 			return new ResponseEntity<String>(captchaService.captchaImageSave(file), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/observer/{message}", method = RequestMethod.GET)
+	public ResponseEntity<String> observerMessage(@PathVariable String message) {
+		try {
+			observerService.observerMessageLogging(message);
+			
+			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
