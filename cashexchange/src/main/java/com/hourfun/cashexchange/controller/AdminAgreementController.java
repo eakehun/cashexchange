@@ -19,21 +19,16 @@ import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.service.AgreementService;
 
 @RestController
-@RequestMapping("/users/agreement")
-public class UsersAgreementController {
+@RequestMapping("/admin/agreement")
+public class AdminAgreementController {
 
 	@Autowired
 	private AgreementService service;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<List<Agreement>> findByUsedTrue() {
-		return new ResponseEntity<List<Agreement>>(service.findByUsedTrue(), HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/info/", method = RequestMethod.GET)
-	public ResponseEntity<List<Agreement>> findAllByMemberIdx(Authentication auth) {
+	@RequestMapping(value = "/info/{idx}", method = RequestMethod.GET)
+	public ResponseEntity<List<Agreement>> findAllByMemberIdx(@PathVariable String idx) {
 		try {
-			return new ResponseEntity<List<Agreement>>(service.findAllByUserId(auth.getName()), HttpStatus.OK);
+			return new ResponseEntity<List<Agreement>>(service.findAllByMemberIdx(Long.valueOf(idx)), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());			
 		}
