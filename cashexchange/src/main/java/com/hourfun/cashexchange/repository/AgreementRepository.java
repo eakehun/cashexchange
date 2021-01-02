@@ -18,8 +18,8 @@ import com.hourfun.cashexchange.model.Agreement;
 public interface AgreementRepository extends JpaRepository<Agreement, Long> {
 
 	@Query(value="select a.* from agreement a " + 
-			"left join member_agreements ma "
-			+ "on a.idx=ma.agreements_idx where ma.member_idx=:member_idx",			
+			"left join user_agreements ua "
+			+ "on a.idx=ua.agreements_idx where ua.users_idx=:member_idx",			
 			nativeQuery = true)
 	List<Agreement> findAllByMemberIdx(@Param("member_idx")long memberIdx);
 	
