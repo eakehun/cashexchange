@@ -29,67 +29,73 @@ public class AdminTradingController {
 
 	@Autowired
 	private TradingService service;
-	
+
 	@Autowired
 	private PinService pinService;
 
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetween(@PathVariable String fromDate,
-			@PathVariable String toDate, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetween(fromDate, toDate, pageable),
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetween(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(service.findByDateBetween(dateCategory, fromDate, toDate, pageable),
 				HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndIdx(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String idx, Pageable pageable) {
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndIdx(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String idx, Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndIdx(fromDate, toDate, Long.valueOf(idx), pageable), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndUserId(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String userId, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndUserId(fromDate, toDate, userId, pageable), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userName/{userName}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndUserName(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String userName, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndUserName(fromDate, toDate, userName, pageable), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/status/{status}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndStatus(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String status, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndStatus(fromDate, toDate, status, pageable), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/status/{status}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndIdxAndStatus(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String idx, @PathVariable String status, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndIdxAndStatus(fromDate, toDate, Long.valueOf(idx), status, pageable),
+				service.findByDateBetweenAndIdx(dateCategory, fromDate, toDate, Long.valueOf(idx), pageable),
 				HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/status/{status}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndUserIdAndStatus(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String userId, @PathVariable String status, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndUserIdAndStatus(fromDate, toDate, userId, status, pageable),
-				HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userName/{userName}/status/{status}/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetweenAndUserNameAndStatus(@PathVariable String fromDate,
-			@PathVariable String toDate, @PathVariable String userName, @PathVariable String status,
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndUserId(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userId,
 			Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(
-				service.findByCreateDateBetweenAndUserNameAndStatus(fromDate, toDate, userName, status, pageable),
+				service.findByDateBetweenAndUserId(dateCategory, fromDate, toDate, userId, pageable), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userName/{userName}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndUserName(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userName,
+			Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(
+				service.findByDateBetweenAndUserName(dateCategory, fromDate, toDate, userName, pageable),
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/status/{status}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndStatus(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String status,
+			Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(
+				service.findByDateBetweenAndStatus(dateCategory, fromDate, toDate, status, pageable), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/status/{status}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndIdxAndStatus(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String idx,
+			@PathVariable String status, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(service.findByDateBetweenAndIdxAndStatus(dateCategory, fromDate,
+				toDate, Long.valueOf(idx), status, pageable), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/status/{status}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndUserIdAndStatus(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userId,
+			@PathVariable String status, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(
+				service.findByDateBetweenAndUserIdAndStatus(dateCategory, fromDate, toDate, userId, status, pageable),
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userName/{userName}/status/{status}/", method = RequestMethod.GET)
+	public ResponseEntity<Page<Trading>> findByDateBetweenAndUserNameAndStatus(@PathVariable String dateCategory,
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userName,
+			@PathVariable String status, Pageable pageable) {
+		return new ResponseEntity<Page<Trading>>(
+				service.findByDateBetweenAndUserNameAndStatus(dateCategory, fromDate, toDate, userName, status, pageable),
 				HttpStatus.OK);
 	}
 
@@ -120,14 +126,12 @@ public class AdminTradingController {
 		return new ResponseEntity<Map>(service.findByCreateDateBetweenAndSumPrice(), HttpStatus.OK);
 
 	}
-	
+
 	public ResponseEntity<Map> recentSummary() {
 
 		return new ResponseEntity<Map>(null, HttpStatus.OK);
 
 	}
-	
-	
 
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/download/", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> excelDownload(@PathVariable String fromDate,

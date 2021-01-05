@@ -39,7 +39,7 @@ public class UserTradingController {
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, @PathVariable String fromDate,
 			@PathVariable String toDate, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenAndUserId(fromDate, toDate, auth.getName(), pageable),
+		return new ResponseEntity<Page<Trading>>(service.findByDateBetweenAndUserId("createDate", fromDate, toDate, auth.getName(), pageable),
 				HttpStatus.OK);
 	}
 

@@ -65,15 +65,4 @@ public class TradingServiceTest {
 		System.out.println("!");
 	}
 	
-//	@Test
-	public void tradingSelectDate() throws ParseException {
-		String fromDateStr="2020-08-30 16:18:00";
-		String toDateStr = "2020-10-26 16:18:02";
-		
-		PageRequest pageable = PageRequest.of(0,10,Sort.by(Sort.Direction.DESC, "idx"));
-		
-		Page<Trading> tradings = service.findByCreateDateBetween(fromDateStr, toDateStr, pageable);
-		
-		System.out.println("!");
-	}
 }

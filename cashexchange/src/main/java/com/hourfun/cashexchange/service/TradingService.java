@@ -36,7 +36,7 @@ public class TradingService {
 
 	@Autowired
 //	private UsersRepository usersRepository;
-	private UsersService UsersService; 
+	private UsersService UsersService;
 
 	@Autowired
 	private PinService pinService;
@@ -64,12 +64,12 @@ public class TradingService {
 				for (String pinCode : pinCodes) {
 
 					for (PinCode selectPin : selectPinCodes) {
-						if(pinCode.equals(selectPin.getPinCode())) {
+						if (pinCode.equals(selectPin.getPinCode())) {
 							duplicatePin += pinCode + " ";
 						}
 					}
 				}
-				
+
 				throw new IllegalArgumentException(duplicatePin + "pinCodes duplicate");
 			}
 
@@ -116,61 +116,155 @@ public class TradingService {
 		}
 	}
 
-	public Page<Trading> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
-		return tradingRepository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+	public Page<Trading> findByDateBetween(String dateCategory, String fromDate, String toDate, Pageable pageable) {
+
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetween(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetween(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetween(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+		}
+
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
+	public Page<Trading> findByDateBetweenAndUserId(String dateCategory, String fromDate, String toDate, String userId,
 			Pageable pageable) {
 
-		return tradingRepository.findByCreateDateBetweenAndUserId(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndUserId(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndUserId(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndUserId(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+		}
+
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndStatus(String fromDate, String toDate, String status,
+	public Page<Trading> findByDateBetweenAndStatus(String dateCategory, String fromDate, String toDate, String status,
 			Pageable pageable) {
 
-		return tradingRepository.findByCreateDateBetweenAndStatus(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), status, pageable);
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), status, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), status, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), status, pageable);
+		}
+
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndUserName(String fromDate, String toDate, String userName,
+	public Page<Trading> findByDateBetweenAndUserName(String dateCategory, String fromDate, String toDate,
+			String userName, Pageable pageable) {
+
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndUserName(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndUserName(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndUserName(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, pageable);
+		}
+
+	}
+
+	public Page<Trading> findByDateBetweenAndIdx(String dateCategory, String fromDate, String toDate, long idx,
 			Pageable pageable) {
 
-		return tradingRepository.findByCreateDateBetweenAndUserName(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, pageable);
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndIdx(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndIdx(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndIdx(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, pageable);
+		}
+
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndIdx(String fromDate, String toDate, long idx, Pageable pageable) {
-
-		return tradingRepository.findByCreateDateBetweenAndIdx(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, pageable);
-	}
-
-	public Page<Trading> findByCreateDateBetweenAndIdxAndStatus(String fromDate, String toDate, Long idx, String status,
-			Pageable pageable) {
-		return tradingRepository.findByCreateDateBetweenAndIdxAndStatus(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, status, pageable);
-	}
-
-	public Page<Trading> findByCreateDateBetweenAndUserIdAndStatus(String fromDate, String toDate, String userId,
+	public Page<Trading> findByDateBetweenAndIdxAndStatus(String dateCategory, String fromDate, String toDate, Long idx,
 			String status, Pageable pageable) {
-		return tradingRepository.findByCreateDateBetweenAndUserIdAndStatus(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, status, pageable);
+
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndIdxAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, status, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndIdxAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, status, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndIdxAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), idx, status, pageable);
+		}
+
 	}
 
-	public Page<Trading> findByCreateDateBetweenAndUserNameAndStatus(String fromDate, String toDate, String userName,
-			String status, Pageable pageable) {
-		return tradingRepository.findByCreateDateBetweenAndUserNameAndStatus(
-				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
-				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, status, pageable);
+	public Page<Trading> findByDateBetweenAndUserIdAndStatus(String dateCategory, String fromDate, String toDate,
+			String userId, String status, Pageable pageable) {
+
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndUserIdAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, status, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByPinCompleteDateBetweenAndUserIdAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, status, pageable);
+		} else {
+			return tradingRepository.findByWithdrawCompleteDateBetweenAndUserIdAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, status, pageable);
+		}
+
+	}
+
+	public Page<Trading> findByDateBetweenAndUserNameAndStatus(String dateCategory, String fromDate, String toDate,
+			String userName, String status, Pageable pageable) {
+
+		if (dateCategory.equals("createDate")) {
+			return tradingRepository.findByCreateDateBetweenAndUserNameAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, status, pageable);
+		} else if (dateCategory.equals("pinCompleteDate")) {
+			return tradingRepository.findByCreateDateBetweenAndUserNameAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, status, pageable);
+		} else {
+			return tradingRepository.findByCreateDateBetweenAndUserNameAndStatus(
+					DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+					DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userName, status, pageable);
+		}
+
 	}
 
 	public File excelDownload(String fromDate, String toDate) {
@@ -365,7 +459,7 @@ public class TradingService {
 
 		return tradingRepository.countByCreateDateBetween(monthStart, now);
 	}
-	
+
 	public Map<String, Object> findByCreateDateBetweenAndSumPrice() {
 		Date now = new Date();
 
