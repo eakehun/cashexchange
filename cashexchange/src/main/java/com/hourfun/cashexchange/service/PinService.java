@@ -30,10 +30,10 @@ public class PinService {
 
 	@Autowired
 	private TradingService tradingService;
-	
+
 	@Autowired
 	private FeeService feeService;
-	
+
 	@Autowired
 	private BankService bankService;
 
@@ -41,14 +41,13 @@ public class PinService {
 	public void setPinCode(String company, String pinCode) {
 
 		String key = "";
-		
 
 		if (company.equals("culture")) {
 			key = "culture_pin";
-			
+
 		} else if (company.equals("happy")) {
 			key = "happy_pin";
-			
+
 		}
 
 		List<String> list = new ArrayList<String>();
@@ -67,7 +66,7 @@ public class PinService {
 
 		String key = "";
 		String backupKey = "";
-		
+
 		List<String> returnList = new ArrayList<String>();
 
 		if (company.equals("culture")) {
@@ -81,7 +80,7 @@ public class PinService {
 		if (redisTemplate.hasKey(key)) {
 			List<String> list = (List<String>) redisTemplate.opsForValue().get(key);
 			List<String> backList = (List<String>) redisTemplate.opsForValue().get(backupKey);
-			if(backList == null) {
+			if (backList == null) {
 				backList = new ArrayList<>();
 			}
 
@@ -104,7 +103,7 @@ public class PinService {
 						break;
 					}
 				}
-				
+
 				backList.addAll(returnList);
 
 				redisTemplate.opsForValue().set(key, list);
@@ -141,14 +140,22 @@ public class PinService {
 
 		for (PinCode pinCode : pinCodes) {
 			String strPin = pinCode.getPinCode();
-			String firstPin = strPin.split("-")[0];
-			String middlePin = strPin.split("-")[2];
-			PinCode selectPin = repository.findByPincodeLike(firstPin, middlePin);
+			PinCode selectPin = null;
+			
+			if(strPin.indexOf("-")>-1) {
+				String firstPin = strPin.split("-")[0];
+				String middlePin = strPin.split("-")[2];
+				selectPin = repository.findByPincodeLike(firstPin, middlePin);
+			}else {
+				selectPin = repository.findByPinCode(strPin);
+			}
 			
 			selectPin.setPrice(pinCode.getPrice());
 			
-			if (pinCode.getPrice() == 0) {
-				selectPin.setStatus(TradingStatusEnum.FAIL.getValue());
+			if (pinCode.getStatus().equals("X")) {				
+				selectPin.setStatus(TradingStatusEnum.FAIL.getValue());				
+			} else if(pinCode.getStatus().equals("D")) {
+				selectPin.setStatus(TradingStatusEnum.ALREADY_ADDED.getValue());
 			} else {
 				selectPin.setStatus(TradingStatusEnum.COMPLETE.getValue());
 			}
@@ -175,10 +182,6 @@ public class PinService {
 			
 			checkAndUpdate(selectPin);
 		}
-		
-		
-		
-		
 
 		return returnList;
 	}
@@ -207,7 +210,7 @@ public class PinService {
 			}
 			totalPrice += selectPinCode.getPrice();
 		}
-		
+
 		trading.setRequestPrice(totalPrice);
 		trading.setComepletePrice(completePrice);
 
@@ -221,24 +224,32 @@ public class PinService {
 			if (complete > 0 && fail == 0) {
 				status = TradingStatusEnum.COMPLETE.getValue();
 				String company = "";
-				if(trading.getCompany().equals("culture")) {
+				if (trading.getCompany().equals("culture")) {
 					company = "컬처랜드";
-				}else {
+				} else {
 					company = "해피머니";
 				}
-				Fee fee = feeService.findByCompany(company);				
-				
-				BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2, RoundingMode.HALF_EVEN); 
-				
+				Fee fee = feeService.findByCompany(company);
+
+				BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2,
+						RoundingMode.HALF_EVEN);
+
 				BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
 				BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
-				
-				trading.setFees(String.valueOf(decimalCalcFee));
-				
+				decimalCalcFee = decimalCalcFee.add(new BigDecimal(fee.getTransperFees()));
+
 				int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
 				
-				trading.setComepletePrice(trading.getComepletePrice() + intCalPrice);
-				
+				trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
+				trading.setFees(String.valueOf(decimalCalcFee));
+				trading.setComepletePrice(intCalPrice);
+
+				try {
+					bankService.pay(trading);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else if (complete == 0 && fail > 0) {
 				status = TradingStatusEnum.FAIL.getValue();
 			} else {
@@ -247,24 +258,17 @@ public class PinService {
 
 		}
 
-		
 		trading.setStatus(status);
-		
+
 		tradingService.update(trading);
-		
-		try {
-			bankService.pay(trading);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
+
 	}
-	
-	public List<PinCode> findByPinCodeIn(List<String> pinCodes){
+
+	public List<PinCode> findByPinCodeIn(List<String> pinCodes) {
 		return repository.findByPinCodeIn(pinCodes);
 	}
-	
+
 	public long countByCreateDateBetween() {
 		Date now = new Date();
 

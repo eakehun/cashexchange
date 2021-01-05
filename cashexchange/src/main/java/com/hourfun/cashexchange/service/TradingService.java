@@ -60,7 +60,17 @@ public class TradingService {
 			List<PinCode> selectPinCodes = pinService.findByPinCodeIn(pinCodes);
 
 			if (selectPinCodes.size() > 0) {
-				throw new IllegalArgumentException("pinCodes duplicate");
+				String duplicatePin = "";
+				for (String pinCode : pinCodes) {
+
+					for (PinCode selectPin : selectPinCodes) {
+						if(pinCode.equals(selectPin.getPinCode())) {
+							duplicatePin += pinCode + " ";
+						}
+					}
+				}
+				
+				throw new IllegalArgumentException(duplicatePin + "pinCodes duplicate");
 			}
 
 			Users user = UsersService.findByUserId(userId);

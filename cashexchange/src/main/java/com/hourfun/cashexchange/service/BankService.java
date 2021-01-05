@@ -29,11 +29,9 @@ public class BankService {
 
 	@Value("${settle.pay.url}")
 	private String payUrl;
-	
+
 	@Value("${settle.maintenance.url}")
 	private String maintenanceUrl;
-	
-	
 
 	@Value("${settle.crypto.aeskey}")
 	private String aesKey;
@@ -43,10 +41,10 @@ public class BankService {
 
 	@Value("${settle.market.id}")
 	private String mchtId;
-	
+
 	@Autowired
 	private UsersService usersService;
-	
+
 	@Autowired
 	private TradingService tradingService;
 
@@ -125,13 +123,22 @@ public class BankService {
 
 	}
 
-	public Trading pay(Trading trading) throws Exception  {
-		
+	public Trading pay(Trading trading) throws Exception {
+
+		if (trading.getWithdrawStatus().equals(TradingStatusEnum.COMPLETE.getValue())) {
+			throw new IllegalArgumentException("already complete trade");
+		}
+
+		if (trading.getStatus().equals(TradingStatusEnum.FAIL.getValue())
+				|| trading.getStatus().equals(TradingStatusEnum.PROGRESS.getValue())) {
+			throw new IllegalArgumentException("not complete trade");
+		}
+
 		Users users = usersService.findByUserId(trading.getUserId());
-		
+
 		String code = users.getAccountCode();
 		String account = users.getAccountNum();
-		
+
 		Map<String, Object> body = new HashMap<String, Object>();
 
 		Date date = new Date();
@@ -181,7 +188,8 @@ public class BankService {
 			trading.setWithdrawStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 			trading.setStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 		}
-		
+		trading.setMessage(resultMessage);
+
 		return tradingService.update(trading);
 
 	}
@@ -227,6 +235,6 @@ public class BankService {
 		} else {
 			throw new Exception(resultMessage);
 		}
-		
+
 	}
 }

@@ -16,6 +16,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 
@@ -41,6 +44,14 @@ public class Trading {
 	private String fees;
 	
 	private int comepletePrice;
+	
+	private String message;
+	
+	
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private long purchaseFeePercents;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
