@@ -117,20 +117,19 @@ public class TradingService {
 
 		Trading trading = tradingRepository.findByIdx(idx);
 
-		String company = "";
-
-		if (trading.getCompany().equals("culture")) {
-			company = "컬처랜드";
-		} else {
-			company = "해피머니";
-		}
-
-		Fee fee = feeService.findByCompany(company);
-
-		trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
-
 		if (userId.equals(trading.getUserId())) {
-			return tradingRepository.findByIdx(idx);
+			String company = "";
+			
+			if (trading.getCompany().equals("culture")) {
+				company = "컬처랜드";
+			} else {
+				company = "해피머니";
+			}
+			
+			Fee fee = feeService.findByCompany(company);
+			
+			trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
+			return trading;
 		} else {
 			throw new IllegalArgumentException("권한이 없습니다.");
 		}
