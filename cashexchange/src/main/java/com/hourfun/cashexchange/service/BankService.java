@@ -189,6 +189,7 @@ public class BankService {
 			trading.setStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 		}
 		trading.setMessage(resultMessage);
+		trading.setWithdrawCompleteDate(new Date());
 
 		return tradingService.update(trading);
 

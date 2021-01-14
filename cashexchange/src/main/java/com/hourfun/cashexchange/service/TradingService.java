@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,9 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
+import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.repository.PinCodeRepository;
 import com.hourfun.cashexchange.repository.TradingRepository;
 import com.hourfun.cashexchange.repository.UsersRepository;
 import com.hourfun.cashexchange.util.DateUtils;
@@ -35,8 +38,13 @@ public class TradingService {
 	private TradingRepository tradingRepository;
 
 	@Autowired
-//	private UsersRepository usersRepository;
+	private PinCodeRepository pinCodeRepository;
+
+	@Autowired
 	private UsersService UsersService;
+
+	@Autowired
+	private FeeService feeService;
 
 	@Autowired
 	private PinService pinService;
@@ -108,6 +116,18 @@ public class TradingService {
 	public Trading findByIdx(String userId, long idx) {
 
 		Trading trading = tradingRepository.findByIdx(idx);
+
+		String company = "";
+
+		if (trading.getCompany().equals("culture")) {
+			company = "컬처랜드";
+		} else {
+			company = "해피머니";
+		}
+
+		Fee fee = feeService.findByCompany(company);
+
+		trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
 
 		if (userId.equals(trading.getUserId())) {
 			return tradingRepository.findByIdx(idx);
@@ -473,6 +493,100 @@ public class TradingService {
 		Date monthStart = calendar.getTime();
 
 		return tradingRepository.findByCreateDateBetweenAndSumPrice(monthStart, now);
+	}
+
+	public List<Object> recentSummary() {
+
+		List<Object> returnList = new ArrayList<Object>();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		Date now = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		calendar.add(Calendar.DATE, -7);
+		Date beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		Date nextDay = calendar.getTime();
+
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		dataMap = new HashMap<String, Object>();
+
+		beforeDay = calendar.getTime();
+		calendar.add(Calendar.DATE, 1);
+		nextDay = calendar.getTime();
+		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
+		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
+		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
+		returnList.add(dataMap);
+
+		return returnList;
 	}
 
 }

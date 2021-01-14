@@ -47,8 +47,6 @@ public class Trading {
 	
 	private String message;
 	
-	
-	
 	@Transient
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private long purchaseFeePercents;

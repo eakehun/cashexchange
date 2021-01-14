@@ -240,10 +240,11 @@ public class PinService {
 
 				int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
 				
-				trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
+//				trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
 				trading.setFees(String.valueOf(decimalCalcFee));
 				trading.setComepletePrice(intCalPrice);
 
+				trading.setPinCompleteDate(new Date());
 				try {
 					bankService.pay(trading);
 				} catch (Exception e) {
@@ -259,6 +260,7 @@ public class PinService {
 		}
 
 		trading.setStatus(status);
+		
 
 		tradingService.update(trading);
 

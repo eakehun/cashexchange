@@ -3,6 +3,7 @@ package com.hourfun.cashexchange.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,10 +127,11 @@ public class AdminTradingController {
 		return new ResponseEntity<Map>(service.findByCreateDateBetweenAndSumPrice(), HttpStatus.OK);
 
 	}
+	
+	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
+	public ResponseEntity<List> recentSummary() {
 
-	public ResponseEntity<Map> recentSummary() {
-
-		return new ResponseEntity<Map>(null, HttpStatus.OK);
+		return new ResponseEntity<List>(service.recentSummary(), HttpStatus.OK);
 
 	}
 
