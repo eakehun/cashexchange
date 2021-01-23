@@ -17,6 +17,9 @@ public class PinServiceTest {
 	@Autowired
 	private PinService service;
 	
+	@Autowired
+	private PinCodeRepository repository;
+	
 //	@Test
 	public void addPin() {
 		
@@ -26,7 +29,7 @@ public class PinServiceTest {
 	}
 	
 	
-	@Test
+//	@Test
 	public void getPinList() {
 		
 		try {
@@ -35,5 +38,16 @@ public class PinServiceTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void pinLikeSelect() {
+		String likeString = "4180%8001%";
+		String firstPin = "4180";
+		String middlePin = "8001";
+		
+		
+		System.out.println(repository.findByPincodeLike(likeString));
+		
 	}
 }

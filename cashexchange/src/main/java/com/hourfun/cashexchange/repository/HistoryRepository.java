@@ -11,5 +11,7 @@ import com.hourfun.cashexchange.model.History;
 public interface HistoryRepository extends JpaRepository<History, String> {
 
     Page<History> findByTypeOrderByCreateDateDesc(Pageable pageRequest, String historyType);
+    
+    History findTopByUserAndTypeOrderByCreateDateDesc(String user, String type);
 
 }

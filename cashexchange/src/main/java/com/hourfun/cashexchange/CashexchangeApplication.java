@@ -1,5 +1,9 @@
 package com.hourfun.cashexchange;
 
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -13,5 +17,10 @@ public class CashexchangeApplication {
 		ApiContextInitializer.init();
 		SpringApplication.run(CashexchangeApplication.class, args);
 	}
+	
+	@PostConstruct
+    void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+    }
 
 }

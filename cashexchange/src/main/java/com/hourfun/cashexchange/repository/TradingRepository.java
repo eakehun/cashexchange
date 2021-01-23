@@ -18,49 +18,50 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 	Trading findByIdx(Long idx);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, "
+			+ "td.withdraw_complete_date, td.message, td.purchase_fee_percents, td.tel \r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.user_id = :userId \r\n group by td.idx ", countQuery = "select count(*) from trading where \r\n"
 					+ "user_id = :userId \r\n", nativeQuery = true)
 	Page<Trading> findByUserId(String userId, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents, td.tel \r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate \r\n", nativeQuery = true)
 	Page<Trading> findByCreateDateBetween(Date fromDate, Date toDate, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message , td.purchase_fee_percents , td.tel\r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.user_id = :userId \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and user_id = :userId \r\n", nativeQuery = true)
 	Page<Trading> findByCreateDateBetweenAndUserId(Date fromDate, Date toDate, String userId, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents , td.tel\r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.idx = :idx \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and idx = :idx \r\n", nativeQuery = true)
 	Page<Trading> findByCreateDateBetweenAndIdx(Date fromDate, Date toDate, Long idx, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message , td.purchase_fee_percents, td.tel\r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.user_name = :userNname \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and user_name = :userNname \r\n", nativeQuery = true)
 	Page<Trading> findByCreateDateBetweenAndUserName(Date fromDate, Date toDate, String userNname, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents, td.tel \r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.status = :status and td.create_date between :fromDate and :toDate \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where status = :status and create_date between :fromDate and :toDate", nativeQuery = true)
 	Page<Trading> findByCreateDateBetweenAndStatus(Date fromDate, Date toDate, String status, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents , td.tel\r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.idx = :idx and td.status = :status \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and idx = :idx and status = :status\r\n", nativeQuery = true)
@@ -68,7 +69,7 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 			Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents, td.tel \r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.user_name = :userName and td.status = :status \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and user_name = :userName and status = :status\r\n", nativeQuery = true)
@@ -76,7 +77,7 @@ public interface TradingRepository extends JpaRepository<Trading, Long> {
 			String status, Pageable pageable);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
-			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message \r\n"
+			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, td.withdraw_complete_date, td.message, td.purchase_fee_percents, td.tel \r\n"
 			+ "FROM trading as td left join pin_code as pin on td.idx = pin.trading_idx \r\n"
 			+ "where td.create_date between :fromDate and :toDate and td.user_id = :userId and td.status = :status \r\n group by td.idx", countQuery = "select count(*) from trading \r\n"
 					+ "where create_date between :fromDate and :toDate and user_id = :userId and status = :status\r\n", nativeQuery = true)

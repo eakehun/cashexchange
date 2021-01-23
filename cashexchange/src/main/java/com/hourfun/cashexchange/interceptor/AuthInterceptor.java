@@ -188,6 +188,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			}
 
 			history.setContents(body.toString());
+		} else if(url.contains("/admin/users/")) {
+			history.setService("users");
+			if(type.equals("update")) {
+				sbuf.append("update user status");
+			}
+			history.setContents(body.toString());
+		} else {
+			sbuf.append(url + " " + type);
+			history.setContents(body.toString());
 		}
 
 		if (response.getStatus() == HttpStatus.OK.value() || response.getStatus() == HttpStatus.CREATED.value()) {
@@ -198,76 +207,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 		history.setKeyword(sbuf.toString());
 
-//		if (url.contains("/user/login/")) {
-//			// 로그인 기록 저장
-//
-//		} else if (url.contains("/user_group/")) {
-//			if (type.equals("insert")) {
-//				if (response.getStatus() == HttpStatus.OK.value()
-//						|| response.getStatus() == HttpStatus.CREATED.value()) {
-//					fmt.format("<%s> " + type + " this user create data :<%s>.", users.getName(),
-//							users.getCreateDate());
-//				} else {
-//					fmt.format("<%s> failed to " + type + "  .", users.getName());
-//				}
-//				history.setType("INSERT USER");
-//				history.setKeyword(sbuf.toString());
-//			} else if (type.equals("delete")) {
-//				int index = url.indexOf("user_group");
-//				String temp = url.substring(index);
-//				String[] strArr = temp.split("[/]");
-//				if (strArr.length == 2) {
-//					String groupId = strArr[1];
-//					if (response.getStatus() == HttpStatus.OK.value()) {
-//						fmt.format("<%s> " + type + " this group Id :<%s>.", users.getName(), groupId);
-//					} else {
-//						fmt.format("<%s> failed to " + type + " group Id :<%s>.", users.getName(), groupId);
-//					}
-//				}
-//				history.setType("INSERT USER");
-//				if (sbuf.toString().length() > 200) {
-//					String tempData = sbuf.toString().substring(0, 200);
-//					history.setKeyword(tempData);
-//				} else {
-//					history.setKeyword(sbuf.toString());
-//				}
-//			}
-//		} else if (url.contains("/user")
-//				&& (!url.contains("login") || !url.contains("check") || !url.contains("logout"))
-//				&& !url.contains("role")) {
-//			String userId;
-//
-//		}
 	}
 
-//	private void crudHistory(HttpServletRequest request, HttpServletResponse response, String url, String body,
-//			History history, String type) {
-//		
-//		if (history == null) {
-//			return;
-//		}
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (authentication == null) {
-//			return;
-//		}
-//		
-//		String ip = request.getHeader("X-FORWARDED-FOR");
-//		if (ip == null) {
-//			ip = request.getRemoteAddr();
-//		}
-//		history.setIp(ip);
-//		
-//		Users users = usersService.findByUserId(authentication.getName());
-//		history.setUser(users.getUserId());
-//		
-//		if (url.contains("/user/login/")) {
-//			
-//			history.setType("LOGIN");
-//			history.setContents("");
-//		} else if () {
-//			
-//		}
-//
-//	}
 
 }

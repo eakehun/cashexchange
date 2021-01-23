@@ -47,9 +47,19 @@ public class Trading {
 	
 	private String message;
 	
+	private String tel;
+	
+	private long purchaseFeePercents;
+	
 	@Transient
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private long purchaseFeePercents;
+	private String createDateString;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String withdrawCompleteDateString;
+	
+	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)

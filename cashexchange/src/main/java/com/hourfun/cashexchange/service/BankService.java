@@ -1,5 +1,7 @@
 package com.hourfun.cashexchange.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.BankCodeEnum;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
+import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.util.StringUtil;
@@ -47,6 +50,9 @@ public class BankService {
 
 	@Autowired
 	private TradingService tradingService;
+	
+	@Autowired 
+	private FeeService feeService;
 
 	public Map<String, String> bankList() {
 		Map<String, String> map = new HashMap<String, String>();
@@ -132,6 +138,10 @@ public class BankService {
 		if (trading.getStatus().equals(TradingStatusEnum.FAIL.getValue())
 				|| trading.getStatus().equals(TradingStatusEnum.PROGRESS.getValue())) {
 			throw new IllegalArgumentException("not complete trade");
+		}
+		
+		if(trading.getFees().equals("0")) {
+			trading = tradingService.calcFee(trading);
 		}
 
 		Users users = usersService.findByUserId(trading.getUserId());

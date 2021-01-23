@@ -174,7 +174,7 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "//", method = RequestMethod.GET)
+	@RequestMapping(value = "/info/agreement/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Agreement>> findAgreementByUserId(Authentication auth) {
 		try {
 			return new ResponseEntity<List<Agreement>>(service.findAgreementByUserId(auth.getName()), HttpStatus.OK);

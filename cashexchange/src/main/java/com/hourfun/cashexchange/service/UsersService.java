@@ -1,6 +1,7 @@
 package com.hourfun.cashexchange.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -30,6 +30,7 @@ import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.common.CacheKey;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Agreement;
+import com.hourfun.cashexchange.model.History;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.AgreementRepository;
@@ -60,6 +61,9 @@ public class UsersService {
 
 	@Autowired
 	private AgreementRepository agreementRepository;
+
+	@Autowired
+	private HistoryService historyService;
 
 	@SuppressWarnings("unchecked")
 	public Users customLogin(String id, String pwd, AuthEnum common, HttpServletRequest request,
@@ -167,28 +171,55 @@ public class UsersService {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			throw new Exception("duplicate email");
+			throw new Exception("Users signIn error = " + e.getMessage());
 		}
 
 	}
 
 	public Page<Users> findByCreateDateBetween(String fromDate, String toDate, Pageable pageable) {
-		return repository.findByCreateDateBetween(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+
+		Page<Users> returnVal = repository.findByCreateDateBetween(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndAccountStatus(String fromDate, String toDate, String accountStatus,
 			Pageable pageable) {
-		return repository.findByCreateDateBetweenAndAccountStatus(
+
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), accountStatus, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndUserId(String fromDate, String toDate, String userId,
 			Pageable pageable) {
-		return repository.findByCreateDateBetweenAndUserId(
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndUserId(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndName(String fromDate, String toDate, String name, Pageable pageable) {
@@ -197,53 +228,128 @@ public class UsersService {
 	}
 
 	public Page<Users> findByCreateDateBetweenAndTel(String fromDate, String toDate, String tel, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndTel(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndTel(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), tel, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndIdx(String fromDate, String toDate, String idx, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndIdx(DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndIdx(
+				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), Long.valueOf(idx), pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndUserIdAndAccountStatus(String fromDate, String toDate, String userId,
 			String accountStatus, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndUserIdAndAccountStatus(
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndUserIdAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), userId, accountStatus, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndNameAndAccountStatus(String fromDate, String toDate, String name,
 			String accountStatus, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndNameAndAccountStatus(
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndNameAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), name, accountStatus, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndTelAndAccountStatus(String fromDate, String toDate, String tel,
 			String accountStatus, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndTelAndAccountStatus(
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndTelAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), tel, accountStatus, pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Page<Users> findByCreateDateBetweenAndIdxAndAccountStatus(String fromDate, String toDate, String idx,
 			String accountStatus, Pageable pageable) {
-		return repository.findByCreateDateBetweenAndIdxAndAccountStatus(
+		Page<Users> returnVal = repository.findByCreateDateBetweenAndIdxAndAccountStatus(
 				DateUtils.changeStringToDate(fromDate, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDate, "yyyy-MM-dd HH:mm:ss"), Long.valueOf(idx), accountStatus,
 				pageable);
+
+		List<Users> list = returnVal.getContent();
+
+		for (Users users : list) {
+			selectLoginHistory(users);
+		}
+
+		return returnVal;
 	}
 
 	public Users findByIdx(long idx) {
-		return repository.findByIdx(idx);
+		Users selectUser = repository.findByIdx(idx);
+
+//		History history = historyService.selectLastLoginHistory(selectUser.getUserId());
+//		if (history != null) {
+//			selectUser.setLastLogin(history.getCreateDate());
+//			selectUser.setLastDevice(history.getDevice());
+//		}
+
+		selectLoginHistory(selectUser);
+
+		return selectUser;
 	}
 
 	@CachePut(value = "users", key = "#p0")
 	public Users updateAccountStatus(Users users) {
 		Users selectUser = repository.findByIdx(users.getIdx());
 
-		selectUser.setAccountStatus(users.getAccountStatus());
+		String accountStatus = users.getAccountStatus();
+
+		Date now = new Date();
+
+		if (accountStatus.equals(AccountStatusEnum.NORMAL)) {
+			selectUser.setWithdrawDate(null);
+			selectUser.setSuspendedDate(null);
+		} else if (accountStatus.equals(AccountStatusEnum.SUSPENDED.getValue())) {
+			selectUser.setWithdrawDate(null);
+			selectUser.setSuspendedDate(now);
+		} else if (accountStatus.equals(AccountStatusEnum.WITHDRAW.getValue())) {
+			selectUser.setWithdrawDate(now);
+			selectUser.setSuspendedDate(null);
+		}
+
+		selectUser.setAccountStatus(accountStatus);
 
 		return repository.save(selectUser);
 	}
@@ -320,15 +426,22 @@ public class UsersService {
 	}
 
 	@Cacheable(value = CacheKey.USER, cacheManager = "cacheManager")
-	
+
 	public Users findByUserId(String userId) {
 		return repository.findByUserId(userId);
 	}
-	
-	public List<Agreement> findAgreementByUserId(String userId){
+
+	public List<Agreement> findAgreementByUserId(String userId) {
 		Users selectUser = findByUserId(userId);
 		return agreementRepository.findAllByMemberIdx(selectUser.getIdx());
-//		return null;
+	}
+
+	public void selectLoginHistory(Users users) {
+		History history = historyService.selectLastLoginHistory(users.getUserId());
+		if (history != null) {
+			users.setLastLogin(history.getCreateDate());
+			users.setLastDevice(history.getDevice());
+		}
 	}
 
 }

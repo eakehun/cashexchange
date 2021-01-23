@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,6 @@ import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
-import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
 
 @Service
@@ -40,16 +41,9 @@ public class PinService {
 	@SuppressWarnings("unchecked")
 	public void setPinCode(String company, String pinCode) {
 
-		String key = "";
+		String key = getRedisKey(company);
 
-		if (company.equals("culture")) {
-			key = "culture_pin";
-
-		} else if (company.equals("happy")) {
-			key = "happy_pin";
-
-		}
-
+		
 		List<String> list = new ArrayList<String>();
 
 		if (redisTemplate.hasKey(key)) {
@@ -64,18 +58,10 @@ public class PinService {
 	@SuppressWarnings("unchecked")
 	public List<String> getPinCode(String company) throws Exception {
 
-		String key = "";
-		String backupKey = "";
+		String key = getRedisKey(company);
+		String backupKey = getRedisUsedKey(company);
 
 		List<String> returnList = new ArrayList<String>();
-
-		if (company.equals("culture")) {
-			key = "culture_pin";
-			backupKey = "culture_pin_used";
-		} else {
-			key = "happy_pin";
-			backupKey = "happy_pin_used";
-		}
 
 		if (redisTemplate.hasKey(key)) {
 			List<String> list = (List<String>) redisTemplate.opsForValue().get(key);
@@ -141,45 +127,40 @@ public class PinService {
 		for (PinCode pinCode : pinCodes) {
 			String strPin = pinCode.getPinCode();
 			PinCode selectPin = null;
-			
-			if(strPin.indexOf("-")>-1) {
+
+			if (strPin.indexOf("-") > -1) {
 				String firstPin = strPin.split("-")[0];
 				String middlePin = strPin.split("-")[2];
-				selectPin = repository.findByPincodeLike(firstPin, middlePin);
-			}else {
+
+				String likeString = firstPin + "%" + middlePin + "%";
+				selectPin = repository.findByPincodeLike(likeString);
+			} else {
 				selectPin = repository.findByPinCode(strPin);
 			}
-			
+
 			selectPin.setPrice(pinCode.getPrice());
-			
-			if (pinCode.getStatus().equals("X")) {				
-				selectPin.setStatus(TradingStatusEnum.FAIL.getValue());				
-			} else if(pinCode.getStatus().equals("D")) {
+
+			if (pinCode.getStatus().equals("X")) {
+				selectPin.setStatus(TradingStatusEnum.FAIL.getValue());
+			} else if (pinCode.getStatus().equals("D")) {
 				selectPin.setStatus(TradingStatusEnum.ALREADY_ADDED.getValue());
 			} else {
 				selectPin.setStatus(TradingStatusEnum.COMPLETE.getValue());
 			}
-			
+
 			selectPin.setMessage(pinCode.getStatus() + " - " + pinCode.getMessage());
-			
+
 			returnList.add(repository.save(selectPin));
-			
-			
-			String backupKey = "";
+
 			String company = selectPin.getCompany();
-			
-			if (company.equals("culture")) {
-				backupKey = "culture_pin_used";
-			} else {
-				backupKey = "happy_pin_used";
-			}
+			String backupKey = getRedisUsedKey(company);
 
 			if (redisTemplate.hasKey(backupKey)) {
 				List<String> list = (List<String>) redisTemplate.opsForValue().get(backupKey);
 				list.remove(selectPin.getPinCode());
 				redisTemplate.opsForValue().set(backupKey, list);
 			}
-			
+
 			checkAndUpdate(selectPin);
 		}
 
@@ -223,52 +204,36 @@ public class PinService {
 		} else {
 			if (complete > 0 && fail == 0) {
 				status = TradingStatusEnum.COMPLETE.getValue();
-				String company = "";
-				if (trading.getCompany().equals("culture")) {
-					company = "컬처랜드";
-				} else {
-					company = "해피머니";
-				}
-				Fee fee = feeService.findByCompany(company);
-
-				BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2,
-						RoundingMode.HALF_EVEN);
-
-				BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
-				BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
-				decimalCalcFee = decimalCalcFee.add(new BigDecimal(fee.getTransperFees()));
-
-				int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
-				
-//				trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
-				trading.setFees(String.valueOf(decimalCalcFee));
-				trading.setComepletePrice(intCalPrice);
-
-				trading.setPinCompleteDate(new Date());
-				try {
-					bankService.pay(trading);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			} else if (complete == 0 && fail > 0) {
 				status = TradingStatusEnum.FAIL.getValue();
 			} else {
 				status = TradingStatusEnum.PARTIAL_COMPLETE.getValue();
 			}
 
+			trading = tradingService.calcFee(trading);
+
+			trading.setPinCompleteDate(new Date());
+			try {
+				bankService.pay(trading);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
 		trading.setStatus(status);
-		
 
 		tradingService.update(trading);
-
 
 	}
 
 	public List<PinCode> findByPinCodeIn(List<String> pinCodes) {
 		return repository.findByPinCodeIn(pinCodes);
+	}
+
+	public Page<PinCode> findByPinCodeIn(List<String> pinCodes, Pageable pageable) {
+		return repository.findByPinCodeIn(pinCodes, pageable);
 	}
 
 	public long countByCreateDateBetween() {
@@ -286,4 +251,74 @@ public class PinService {
 		return repository.countByCreateDateBetween(monthStart, now);
 	}
 
+	public List<String> recyclePin(String company) throws Exception {
+		String key = getRedisKey(company);
+		String backupKey = getRedisUsedKey(company);
+
+		List<String> returnList = new ArrayList<String>();
+
+		if (redisTemplate.hasKey(key)) {
+			List<String> list = (List<String>) redisTemplate.opsForValue().get(key);
+			List<String> backList = (List<String>) redisTemplate.opsForValue().get(backupKey);
+			
+
+			if (list == null) {
+				list = new ArrayList<>();
+			}
+			
+			if (backList == null) {
+				backList = new ArrayList<>();
+			}else {
+				backList = recyclePinCodeStatusCheck(backList);
+			}
+			
+			if (backList.size() > 0) {
+				Iterator<String> iter = backList.iterator();
+				while (iter.hasNext()) {
+					String pincode = iter.next();
+					iter.remove();
+					returnList.add(pincode);
+				}
+				list.addAll(returnList);
+				redisTemplate.opsForValue().set(key, list);
+				redisTemplate.opsForValue().set(backupKey, backList);
+			}
+			return returnList;
+		} else {
+			throw new Exception("redis key 없음");
+		}
+	}
+
+	public List<String> recyclePinCodeStatusCheck(List<String> backList) {
+		List<PinCode> pinList = repository.findByPinCodeIn(backList);
+		List<String> returnList = new ArrayList<String>();
+
+		for (PinCode pinCode : pinList) {
+			String status = pinCode.getStatus();
+
+			if (status.equals(TradingStatusEnum.PROGRESS.getValue())) {
+				returnList.add(pinCode.getPinCode());
+			}
+
+		}
+
+		return returnList;
+	}
+	
+	public String getRedisKey(String company) {
+		if (company.equals("culture")) {
+			return "culture_pin";
+		} else {
+			return "happy_pin";
+		}
+	}
+	
+	public String getRedisUsedKey(String company) {
+		if (company.equals("culture")) {
+			return "culture_pin_used";
+		} else {
+			return "happy_pin_used";
+		}
+	}
+	
 }

@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.controller;
 
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class AdminBankController {
 	private TradingService tradingService;
 
 	@RequestMapping(value = "/bank/pay/{tradingIdx}/", method = RequestMethod.PUT)
-	public @ResponseBody ResponseEntity<Trading> bankList(@PathVariable String tradingIdx) {
+	public @ResponseBody ResponseEntity<Trading> pay(@PathVariable String tradingIdx) {
 		try {
 			return new ResponseEntity<Trading>(service.pay(tradingService.findByIdx(Long.valueOf(tradingIdx))), HttpStatus.OK);
 		} catch (Exception e) {

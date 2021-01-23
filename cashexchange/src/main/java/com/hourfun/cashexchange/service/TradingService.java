@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -91,6 +94,21 @@ public class TradingService {
 			trading.setWithdrawStatus(TradingStatusEnum.PROGRESS.getValue());
 			trading.setRequestPrice(0);
 			trading.setComepletePrice(0);
+			trading.setTel(user.getTel());
+			
+			String companyRealName = "";
+			
+			if (trading.getCompany().equals("culture")) {
+				companyRealName = "컬처랜드";
+			} else {
+				companyRealName = "해피머니";
+			}
+			
+			Fee fee = feeService.findByCompany(companyRealName);
+			trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
+			
+			
+			
 			Trading savedTrading = tradingRepository.save(trading);
 			pinService.save(savedTrading, pinCodes);
 			for (String pinCode : pinCodes) {
@@ -118,17 +136,6 @@ public class TradingService {
 		Trading trading = tradingRepository.findByIdx(idx);
 
 		if (userId.equals(trading.getUserId())) {
-			String company = "";
-			
-			if (trading.getCompany().equals("culture")) {
-				company = "컬처랜드";
-			} else {
-				company = "해피머니";
-			}
-			
-			Fee fee = feeService.findByCompany(company);
-			
-			trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
 			return trading;
 		} else {
 			throw new IllegalArgumentException("권한이 없습니다.");
@@ -336,7 +343,7 @@ public class TradingService {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
-		cal.add(Calendar.MONTH, -3);
+		cal.add(Calendar.DATE, -7);
 
 		Date tomorrow = cal.getTime();
 
@@ -377,6 +384,21 @@ public class TradingService {
 
 				}
 			}
+			
+			SimpleDateFormat creteDateFormat = new SimpleDateFormat("MM-dd");
+			SimpleDateFormat withdrawCompleteDateFormat = new SimpleDateFormat("HH:mm");
+			
+			trading.setCreateDateString(creteDateFormat.format(trading.getCreateDate()));
+			
+			if(trading.getWithdrawCompleteDate() != null) {
+				trading.setWithdrawCompleteDateString(withdrawCompleteDateFormat.format(trading.getWithdrawCompleteDate()));
+			}else {
+				trading.setWithdrawCompleteDateString("");
+			}
+			
+			
+			
+			
 			trading.setUserName(replaceString);
 		}
 
@@ -586,6 +608,30 @@ public class TradingService {
 		returnList.add(dataMap);
 
 		return returnList;
+	}
+	
+	public Trading calcFee(Trading trading) {
+		String company = "";
+		if (trading.getCompany().equals("culture")) {
+			company = "컬처랜드";
+		} else {
+			company = "해피머니";
+		}
+		Fee fee = feeService.findByCompany(company);
+
+		BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2,
+				RoundingMode.HALF_EVEN);
+
+		BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
+		BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
+		decimalCalcFee = decimalCalcFee.add(new BigDecimal(fee.getTransperFees()));
+
+		int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
+
+		trading.setFees(String.valueOf(decimalCalcFee));
+		trading.setComepletePrice(intCalPrice);
+		
+		return trading;
 	}
 
 }

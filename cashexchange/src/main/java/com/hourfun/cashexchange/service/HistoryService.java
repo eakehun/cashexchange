@@ -41,5 +41,9 @@ public class HistoryService {
         type = type.toUpperCase();
         return historyRepository.findByTypeOrderByCreateDateDesc(pageRequest, type);
     }
+    
+    public History selectLastLoginHistory(String userId) {
+    	return historyRepository.findTopByUserAndTypeOrderByCreateDateDesc(userId, "login");
+    }
 }
 

@@ -53,7 +53,7 @@ public class UserTradingController {
 	}
 
 	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
-	public ResponseEntity<Page<Trading>> findByCreateDateBetween(Pageable pageable) {
+	public ResponseEntity<Page<Trading>> findByCreateDateBetweenMasking(Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable), HttpStatus.OK);
 	}
 	

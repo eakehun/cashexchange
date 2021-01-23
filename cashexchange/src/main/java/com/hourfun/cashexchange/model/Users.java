@@ -17,6 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -51,6 +52,18 @@ public class Users implements Serializable{
 	private String name;
 	
 	private String ci;
+	
+	
+	@Transient
+	private Date lastLogin;
+	
+	@Transient
+	private String lastDevice;
+	
+	private Date suspendedDate;
+	
+	private Date withdrawDate;
+	
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_agreements")
