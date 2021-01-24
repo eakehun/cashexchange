@@ -132,7 +132,7 @@ public class PinService {
 				String firstPin = strPin.split("-")[0];
 				String middlePin = strPin.split("-")[2];
 
-				String likeString = firstPin + "%" + middlePin + "%";
+				String likeString = firstPin + "____" + middlePin + "%";
 				selectPin = repository.findByPincodeLike(likeString);
 			} else {
 				selectPin = repository.findByPinCode(strPin);
