@@ -95,20 +95,18 @@ public class TradingService {
 			trading.setRequestPrice(0);
 			trading.setComepletePrice(0);
 			trading.setTel(user.getTel());
-			
+
 			String companyRealName = "";
-			
+
 			if (trading.getCompany().equals("culture")) {
 				companyRealName = "컬처랜드";
 			} else {
 				companyRealName = "해피머니";
 			}
-			
+
 			Fee fee = feeService.findByCompany(companyRealName);
 			trading.setPurchaseFeePercents(fee.getPurchaseFeePercents());
-			
-			
-			
+
 			Trading savedTrading = tradingRepository.save(trading);
 			pinService.save(savedTrading, pinCodes);
 			for (String pinCode : pinCodes) {
@@ -384,21 +382,19 @@ public class TradingService {
 
 				}
 			}
-			
+
 			SimpleDateFormat creteDateFormat = new SimpleDateFormat("MM-dd");
 			SimpleDateFormat withdrawCompleteDateFormat = new SimpleDateFormat("HH:mm");
-			
+
 			trading.setCreateDateString(creteDateFormat.format(trading.getCreateDate()));
-			
-			if(trading.getWithdrawCompleteDate() != null) {
-				trading.setWithdrawCompleteDateString(withdrawCompleteDateFormat.format(trading.getWithdrawCompleteDate()));
-			}else {
+
+			if (trading.getWithdrawCompleteDate() != null) {
+				trading.setWithdrawCompleteDateString(
+						withdrawCompleteDateFormat.format(trading.getWithdrawCompleteDate()));
+			} else {
 				trading.setWithdrawCompleteDateString("");
 			}
-			
-			
-			
-			
+
 			trading.setUserName(replaceString);
 		}
 
@@ -536,7 +532,8 @@ public class TradingService {
 		Date nextDay = calendar.getTime();
 
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -547,7 +544,8 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -558,7 +556,8 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -569,7 +568,8 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -580,7 +580,8 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -591,7 +592,8 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
@@ -602,14 +604,15 @@ public class TradingService {
 		calendar.add(Calendar.DATE, 1);
 		nextDay = calendar.getTime();
 		dataMap.put("date", DateUtils.changeDateToString(beforeDay, "yyyy-MM-dd"));
-		dataMap.put("tradingCount", tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
+		dataMap.put("tradingCount",
+				tradingRepository.findByCreateDateBetweenAndGroupByUserId(beforeDay, nextDay).size());
 		dataMap.put("pinCodeCount", pinCodeRepository.countByCreateDateBetween(beforeDay, nextDay));
 		dataMap.putAll(tradingRepository.findByCreateDateBetweenAndSumPrice(beforeDay, nextDay));
 		returnList.add(dataMap);
 
 		return returnList;
 	}
-	
+
 	public Trading calcFee(Trading trading) {
 		String company = "";
 		if (trading.getCompany().equals("culture")) {
@@ -619,18 +622,21 @@ public class TradingService {
 		}
 		Fee fee = feeService.findByCompany(company);
 
-		BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2,
-				RoundingMode.HALF_EVEN);
+		BigDecimal decimalFee = new BigDecimal(fee.getPurchaseFeePercents() * 0.01).setScale(2, RoundingMode.HALF_EVEN);
 
-		BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
-		BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
-		decimalCalcFee = decimalCalcFee.add(new BigDecimal(fee.getTransperFees()));
+		if (trading.getComepletePrice() > 0) {
+			BigDecimal decimalPrice = new BigDecimal(trading.getComepletePrice());
+			BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
+			decimalCalcFee = decimalCalcFee.add(new BigDecimal(fee.getTransperFees()));
 
-		int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
+			int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
+			trading.setFees(String.valueOf(decimalCalcFee));
+			trading.setComepletePrice(intCalPrice);
+		} else {
+			trading.setFees("0");
+			trading.setComepletePrice(0);
+		}
 
-		trading.setFees(String.valueOf(decimalCalcFee));
-		trading.setComepletePrice(intCalPrice);
-		
 		return trading;
 	}
 
