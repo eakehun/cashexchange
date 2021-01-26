@@ -16,6 +16,8 @@ import com.hourfun.cashexchange.model.TradingMini;
 @Repository
 public interface TradingRepository extends JpaRepository<Trading, Long> {
 	Trading findByIdx(Long idx);
+	
+	List<Trading> findByStatus(String status);
 
 	@Query(value = "SELECT td.idx, td.comeplete_price, td.company, td.create_date, td.fees, td.pin_complete_date"
 			+ ",(select sum(price) from pin_code where trading_idx = td.idx)as request_price, td.status, td.withdraw_status, td.update_date, td.user_id, td.user_name, "

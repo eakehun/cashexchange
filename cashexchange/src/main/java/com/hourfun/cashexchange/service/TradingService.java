@@ -1,7 +1,6 @@
 package com.hourfun.cashexchange.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -19,7 +18,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,6 @@ import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
 import com.hourfun.cashexchange.repository.TradingRepository;
-import com.hourfun.cashexchange.repository.UsersRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
 @Service
@@ -60,6 +57,10 @@ public class TradingService {
 
 	@Value("${trading.limit.night}")
 	private String nightLimit;
+	
+	
+	@Autowired
+	private BankService bankService;
 
 	public Trading save(String userId, String company, List<String> pinCodes) {
 
@@ -638,6 +639,21 @@ public class TradingService {
 		}
 
 		return trading;
+	}
+	
+	public List<Trading> transferAllWithdrawFailTrading() throws Exception{
+		
+		Date now = new Date();
+		
+		List<Trading> tradingList = tradingRepository.findByStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
+		
+		List<Trading> returnList = new ArrayList<Trading>();
+		
+		for(Trading trading : tradingList) {
+			trading = bankService.pay(trading);			
+		}
+		
+		return tradingList;
 	}
 
 }
