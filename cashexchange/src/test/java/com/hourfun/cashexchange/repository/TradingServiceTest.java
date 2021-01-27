@@ -37,14 +37,11 @@ public class TradingServiceTest {
 	public void tradingSave() {
 		String userId = "gnogun@naver.com";
 		
-		String company = "컬쳐랜드";
+		String company = "culture";
 		
 		List<String> pinList = new ArrayList<String>();
 		
-		pinList.add("pinQWE");
-		pinList.add("pinASD");
-		pinList.add("pinZXC");
-		pinList.add("pinGGG");
+		pinList.add("207264859562365788");
 		
 		Trading saveTrading = service.save(userId, company, pinList);
 		
@@ -55,7 +52,7 @@ public class TradingServiceTest {
 		
 	}
 	
-	@Test
+//	@Test
 	public void tradingSelect() {
 		String userId = "gnogun@naver.com";
 		PageRequest pageable = PageRequest.of(0,10,Sort.by(Sort.Direction.DESC, "idx"));
@@ -64,5 +61,16 @@ public class TradingServiceTest {
 		
 		System.out.println("!");
 	}
+	
+	@Test
+	public void tradingBackup() {
+		
+//		service.insertIntoHistoryTradingCreateDateBetween();
+
+		service.deleteTradingCreateDateBetween();
+		
+	}
+	
+	
 	
 }

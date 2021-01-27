@@ -24,10 +24,13 @@ import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Fee;
+import com.hourfun.cashexchange.model.HistoryPinCode;
 import com.hourfun.cashexchange.model.PinCode;
+import com.hourfun.cashexchange.model.HistoryTrading;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
+import com.hourfun.cashexchange.repository.HistoryTradingRepository;
 import com.hourfun.cashexchange.repository.TradingRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
@@ -57,6 +60,9 @@ public class TradingService {
 
 	@Value("${trading.limit.night}")
 	private String nightLimit;
+	
+	@Autowired
+	private HistoryTradingRepository historyTradingRepository;
 	
 	
 	@Autowired
@@ -339,14 +345,17 @@ public class TradingService {
 	public Page<Trading> findByCreateDateBetweenMasking(Pageable pageable) {
 
 		Date now = new Date();
-
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 		cal.add(Calendar.DATE, -7);
 
-		Date tomorrow = cal.getTime();
+		Date week = cal.getTime();
 
-		Page<Trading> tradings = tradingRepository.findByCreateDateBetween(tomorrow, now, pageable);
+		Page<Trading> tradings = tradingRepository.findByCreateDateBetween(week, now, pageable);
 
 		tradingMasking(tradings.getContent());
 
@@ -655,5 +664,97 @@ public class TradingService {
 		
 		return tradingList;
 	}
+	
+	
+	public void insertIntoHistoryTradingCreateDateBetween(){
+		
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		Date dayStart = cal.getTime();
+		cal.add(Calendar.DATE, -1);
+
+		Date week = cal.getTime();
+		
+		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(week, dayStart);
+		List<HistoryTrading> historyTradingList = new ArrayList<HistoryTrading>();
+		List<HistoryPinCode> historyPinCodeList = new ArrayList<HistoryPinCode>();
+		
+		for(Trading trading : tradingList) {
+			HistoryTrading historyTrading = new HistoryTrading();
+			
+			historyTrading.setIdx(trading.getIdx());
+			historyTrading.setComepletePrice(trading.getComepletePrice());
+			historyTrading.setCompany(trading.getCompany());
+			historyTrading.setCreateDate(trading.getCreateDate());
+			historyTrading.setFees(trading.getFees());
+			historyTrading.setMessage(trading.getMessage());
+			historyTrading.setPinCompleteDate(trading.getPinCompleteDate());
+			historyTrading.setPurchaseFeePercents(trading.getPurchaseFeePercents());
+			historyTrading.setRequestPrice(trading.getRequestPrice());
+			historyTrading.setStatus(trading.getStatus());
+			historyTrading.setTel(trading.getTel());
+			historyTrading.setUpdateDate(trading.getUpdateDate());
+			historyTrading.setUserId(trading.getUserId());
+			historyTrading.setUserName(trading.getUserName());
+			historyTrading.setWithdrawCompleteDate(trading.getWithdrawCompleteDate());
+			historyTrading.setWithdrawStatus(trading.getWithdrawStatus());
+			
+			historyTradingList.add(historyTrading);
+			
+			List<PinCode> pinCodeList = pinService.findByTradingIdx(trading.getIdx());
+			
+			for(PinCode pinCode : pinCodeList) {
+				HistoryPinCode historyPinCode = new HistoryPinCode();
+				historyPinCode.setCompany(pinCode.getCompany());
+				historyPinCode.setCreateDate(pinCode.getCreateDate());
+				historyPinCode.setIdx(pinCode.getIdx());
+				historyPinCode.setMessage(pinCode.getMessage());
+				historyPinCode.setPinCode(pinCode.getPinCode());
+				historyPinCode.setPrice(pinCode.getPrice());
+				historyPinCode.setStatus(pinCode.getStatus());
+				historyPinCode.setTradingIdx(pinCode.getTradingIdx());
+				historyPinCode.setUpdateDate(pinCode.getUpdateDate());
+				
+				
+				
+				historyPinCodeList.add(historyPinCode);
+			}
+		}
+		
+		historyTradingRepository.saveAll(historyTradingList);
+		pinService.saveList(historyPinCodeList);
+	}
+	
+	public void deleteTradingCreateDateBetween() {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		Date dayStart = cal.getTime();
+		cal.add(Calendar.DATE, -1);
+		Date week = cal.getTime();
+		
+		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(week, dayStart);
+		
+		for(Trading trading : tradingList) {
+			
+			List<PinCode> pinCodeList = pinService.findByTradingIdx(trading.getIdx());
+			
+			pinCodeRepository.deleteInBatch(pinCodeList);
+			
+		}
+		
+		tradingRepository.deleteInBatch(tradingList);
+	}
+	
+	
 
 }

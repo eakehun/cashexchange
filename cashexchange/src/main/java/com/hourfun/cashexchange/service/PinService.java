@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Fee;
+import com.hourfun.cashexchange.model.HistoryPinCode;
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
+import com.hourfun.cashexchange.repository.HistoryPinCodeRepository;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
 
 @Service
@@ -37,13 +39,15 @@ public class PinService {
 
 	@Autowired
 	private BankService bankService;
+	
+	@Autowired
+	private HistoryPinCodeRepository historyPinCodeRepository;
 
 	@SuppressWarnings("unchecked")
 	public void setPinCode(String company, String pinCode) {
 
 		String key = getRedisKey(company);
 
-		
 		List<String> list = new ArrayList<String>();
 
 		if (redisTemplate.hasKey(key)) {
@@ -260,18 +264,17 @@ public class PinService {
 		if (redisTemplate.hasKey(key)) {
 			List<String> list = (List<String>) redisTemplate.opsForValue().get(key);
 			List<String> backList = (List<String>) redisTemplate.opsForValue().get(backupKey);
-			
 
 			if (list == null) {
 				list = new ArrayList<>();
 			}
-			
+
 			if (backList == null) {
 				backList = new ArrayList<>();
-			}else {
+			} else {
 				backList = recyclePinCodeStatusCheck(backList);
 			}
-			
+
 			if (backList.size() > 0) {
 				Iterator<String> iter = backList.iterator();
 				while (iter.hasNext()) {
@@ -304,7 +307,7 @@ public class PinService {
 
 		return returnList;
 	}
-	
+
 	public String getRedisKey(String company) {
 		if (company.equals("culture")) {
 			return "culture_pin";
@@ -312,7 +315,7 @@ public class PinService {
 			return "happy_pin";
 		}
 	}
-	
+
 	public String getRedisUsedKey(String company) {
 		if (company.equals("culture")) {
 			return "culture_pin_used";
@@ -320,5 +323,14 @@ public class PinService {
 			return "happy_pin_used";
 		}
 	}
+
+	public List<HistoryPinCode> saveList(List<HistoryPinCode> pinCodes) {
+		
+		return historyPinCodeRepository.saveAll(pinCodes);
+	}
 	
+	public List<PinCode> findByTradingIdx(long tradingIdx){
+		return repository.findByTradingIdx(tradingIdx);
+	}
+
 }

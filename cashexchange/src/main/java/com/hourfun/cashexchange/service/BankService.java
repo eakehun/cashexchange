@@ -50,9 +50,12 @@ public class BankService {
 
 	@Autowired
 	private TradingService tradingService;
-	
-	@Autowired 
+
+	@Autowired
 	private FeeService feeService;
+	
+	@Autowired
+	private TelegramSender sender;
 
 	public Map<String, String> bankList() {
 		Map<String, String> map = new HashMap<String, String>();
@@ -139,8 +142,8 @@ public class BankService {
 				|| trading.getStatus().equals(TradingStatusEnum.PROGRESS.getValue())) {
 			throw new IllegalArgumentException("not complete trade");
 		}
-		
-		if(trading.getFees().equals("0")) {
+
+		if (trading.getFees().equals("0")) {
 			trading = tradingService.calcFee(trading);
 		}
 
@@ -194,6 +197,10 @@ public class BankService {
 		if (resultCode.equals("0021")) {
 			trading.setWithdrawStatus(TradingStatusEnum.COMPLETE.getValue());
 			trading.setStatus(TradingStatusEnum.COMPLETE.getValue());
+		} else if (resultCode.equals("ST12")) {
+			trading.setStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
+			trading.setWithdrawStatus(TradingStatusEnum.NO_BALANCE.getValue());
+			sender.sendTelegram(resultMessage);
 		} else {
 			trading.setWithdrawStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 			trading.setStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
