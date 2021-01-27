@@ -173,4 +173,15 @@ public class AdminUsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/userId/{userId}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findByUserId(@PathVariable String userId) {
+		try {
+			return new ResponseEntity<Users>(
+					service.findByUserId(userId), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	
 }
