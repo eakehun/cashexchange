@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,19 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.hourfun.cashexchange.model.Mail;
 import com.hourfun.cashexchange.model.Users;
+import com.hourfun.cashexchange.util.DateUtils;
 
 @Service
 public class MailService {
 	@Autowired
     private JavaMailSender mailSender;
 	
+	@Value("${cashexchange.service.name}")
+	private String serviceName;
+	
 	@Autowired
     private SpringTemplateEngine templateEngine;
-    private static final String FROM_ADDRESS = "cs<cs@makepin.co.kr>";
+    private static final String FROM_ADDRESS = "<cs@makepin.co.kr>";
 
     
     public void ontToOneInquirySend(String sendAddress,Date registDate) throws MessagingException {
@@ -34,7 +39,7 @@ public class MailService {
     	MimeMessageHelper helper = new MimeMessageHelper(message,true);
     	
     	helper.setSubject(mail.getTitle());
-    	helper.setFrom(FROM_ADDRESS);
+    	helper.setFrom(serviceName + FROM_ADDRESS);
     	helper.setTo(mail.getAddress());
     	
     	Context context = new Context();
@@ -72,19 +77,22 @@ public class MailService {
     }
     
     public void welcomeMailSend(Users users) throws MessagingException {
-    	String title = "회원가입 환영";
+    	String title = serviceName + " 회원가입을 축하합니다!";
     	
     	MimeMessage message = mailSender.createMimeMessage();
     	MimeMessageHelper helper = new MimeMessageHelper(message,true);
     	
     	helper.setSubject(title);
-    	helper.setFrom(FROM_ADDRESS);
+    	helper.setFrom(serviceName + FROM_ADDRESS);
     	helper.setTo(users.getUserId());
     	
     	Context context = new Context();
     	context.setVariable("email", users.getUserId());
     	context.setVariable("name", users.getName());
-    	context.setVariable("createDate", users.getCreateDate());
+    	
+    	String createDateString = DateUtils.changeDateToString(users.getCreateDate(), DateUtils.YYYYMMDD_DASH);
+    	
+    	context.setVariable("createDate", createDateString);
     	
     	
     	String html = templateEngine.process("makepin_welcome", context);

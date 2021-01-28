@@ -76,13 +76,4 @@ public class MacroController {
 		}
 	}
 	
-	@RequestMapping(value = "/trading/retransfer/", method = RequestMethod.GET)
-	public ResponseEntity<List<Trading>> transferAllWithdrawFailTrading(){
-		try {
-			return new ResponseEntity<List<Trading>>(tradingService.transferAllWithdrawFailTrading(), HttpStatus.OK);
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
-	
 }

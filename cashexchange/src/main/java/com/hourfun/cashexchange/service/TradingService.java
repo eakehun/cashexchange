@@ -675,12 +675,13 @@ public class TradingService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		Date dayStart = cal.getTime();
+		cal.add(Calendar.DATE, -7);
+		Date sevenDayAgo = cal.getTime();
 		cal.add(Calendar.DATE, -1);
 
-		Date week = cal.getTime();
+		Date eightDayAgo = cal.getTime();
 		
-		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(week, dayStart);
+		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(eightDayAgo, sevenDayAgo);
 		List<HistoryTrading> historyTradingList = new ArrayList<HistoryTrading>();
 		List<HistoryPinCode> historyPinCodeList = new ArrayList<HistoryPinCode>();
 		
@@ -738,11 +739,13 @@ public class TradingService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		Date dayStart = cal.getTime();
+		cal.add(Calendar.DATE, -7);
+		Date sevenDayAgo = cal.getTime();
 		cal.add(Calendar.DATE, -1);
-		Date week = cal.getTime();
+
+		Date eightDayAgo = cal.getTime();
 		
-		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(week, dayStart);
+		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(eightDayAgo, sevenDayAgo);
 		
 		for(Trading trading : tradingList) {
 			
