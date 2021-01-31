@@ -84,7 +84,7 @@ public class UsersService {
 
 				customSecurityRememberMeService.loginSuccess(request, response, authentication);
 
-				return repository.findByUserId(id);
+				return findByUserId(id);
 			} else {
 				throw new IllegalArgumentException("login authority not correct. Please check authority");
 			}
@@ -111,11 +111,6 @@ public class UsersService {
 		}
 
 	}
-
-//	@Cacheable(value = "users", key="#p0")
-//	public Users findByUserIdWithoutAgreement(String id) {
-//		return repository.findByUserIdWithoutAgreement(id);
-//	}
 
 	public String checkEmailDuplicate(String id) {
 		Users user = findByUserId(id);
@@ -330,7 +325,7 @@ public class UsersService {
 		return selectUser;
 	}
 
-	@CachePut(value = "users", key = "#p0")
+	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users updateAccountStatus(Users users) {
 		Users selectUser = repository.findByIdx(users.getIdx());
 
@@ -354,7 +349,7 @@ public class UsersService {
 		return repository.save(selectUser);
 	}
 
-	@CachePut(value = "users", key = "#p0")
+	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users updateAccountPassword(Authentication auth, Users users) {
 		Users selectUser = null;
 		if (auth != null) {
@@ -371,7 +366,7 @@ public class UsersService {
 		return repository.save(selectUser);
 	}
 
-	@CachePut(value = "users", key = "#p0")
+	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users secede(String userId) {
 
 		Users selectUser = findByUserId(userId);
@@ -389,7 +384,7 @@ public class UsersService {
 
 	}
 
-	@CachePut(value = "users", key = "#p0")
+	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users updatePhone(String userId, Users users) {
 		Users selectUser = findByUserId(userId);
 
@@ -404,7 +399,7 @@ public class UsersService {
 
 	}
 
-	@CachePut(value = "users", key = "#p0")
+	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users updateAccount(String userId, Users users) {
 		Users selectUser = findByUserId(userId);
 
@@ -426,7 +421,6 @@ public class UsersService {
 	}
 
 	@Cacheable(value = CacheKey.USER, cacheManager = "cacheManager")
-
 	public Users findByUserId(String userId) {
 		return repository.findByUserId(userId);
 	}

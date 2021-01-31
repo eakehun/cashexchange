@@ -60,11 +60,10 @@ public class TradingService {
 
 	@Value("${trading.limit.night}")
 	private String nightLimit;
-	
+
 	@Autowired
 	private HistoryTradingRepository historyTradingRepository;
-	
-	
+
 	@Autowired
 	private BankService bankService;
 
@@ -73,6 +72,24 @@ public class TradingService {
 		try {
 			if (pinCodes == null || pinCodes.size() == 0) {
 				throw new IllegalArgumentException("pinCodes null");
+			}
+
+			if (company.equals("culture")) {
+				for (String pinCode : pinCodes) {
+					if(pinCode.length() == 16 || pinCode.length() == 18) {
+						continue;
+					}else {
+						throw new IllegalArgumentException("pinCodes size not available (16 or 18)");
+					}
+				}
+			} else {
+				for (String pinCode : pinCodes) {					
+					if(pinCode.length() != 24) {
+						throw new IllegalArgumentException("pinCodes size not available (16 + 8)");
+					}else {
+						continue;
+					}
+				}
 			}
 
 			List<PinCode> selectPinCodes = pinService.findByPinCodeIn(pinCodes);
@@ -649,25 +666,24 @@ public class TradingService {
 
 		return trading;
 	}
-	
-	public List<Trading> transferAllWithdrawFailTrading() throws Exception{
-		
+
+	public List<Trading> transferAllWithdrawFailTrading() throws Exception {
+
 		Date now = new Date();
-		
+
 		List<Trading> tradingList = tradingRepository.findByStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
-		
+
 		List<Trading> returnList = new ArrayList<Trading>();
-		
-		for(Trading trading : tradingList) {
-			trading = bankService.pay(trading);			
+
+		for (Trading trading : tradingList) {
+			trading = bankService.pay(trading);
 		}
-		
+
 		return tradingList;
 	}
-	
-	
-	public void insertIntoHistoryTradingCreateDateBetween(){
-		
+
+	public void insertIntoHistoryTradingCreateDateBetween() {
+
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -680,14 +696,14 @@ public class TradingService {
 		cal.add(Calendar.DATE, -1);
 
 		Date eightDayAgo = cal.getTime();
-		
+
 		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(eightDayAgo, sevenDayAgo);
 		List<HistoryTrading> historyTradingList = new ArrayList<HistoryTrading>();
 		List<HistoryPinCode> historyPinCodeList = new ArrayList<HistoryPinCode>();
-		
-		for(Trading trading : tradingList) {
+
+		for (Trading trading : tradingList) {
 			HistoryTrading historyTrading = new HistoryTrading();
-			
+
 			historyTrading.setIdx(trading.getIdx());
 			historyTrading.setComepletePrice(trading.getComepletePrice());
 			historyTrading.setCompany(trading.getCompany());
@@ -704,12 +720,12 @@ public class TradingService {
 			historyTrading.setUserName(trading.getUserName());
 			historyTrading.setWithdrawCompleteDate(trading.getWithdrawCompleteDate());
 			historyTrading.setWithdrawStatus(trading.getWithdrawStatus());
-			
+
 			historyTradingList.add(historyTrading);
-			
+
 			List<PinCode> pinCodeList = pinService.findByTradingIdx(trading.getIdx());
-			
-			for(PinCode pinCode : pinCodeList) {
+
+			for (PinCode pinCode : pinCodeList) {
 				HistoryPinCode historyPinCode = new HistoryPinCode();
 				historyPinCode.setCompany(pinCode.getCompany());
 				historyPinCode.setCreateDate(pinCode.getCreateDate());
@@ -720,17 +736,15 @@ public class TradingService {
 				historyPinCode.setStatus(pinCode.getStatus());
 				historyPinCode.setTradingIdx(pinCode.getTradingIdx());
 				historyPinCode.setUpdateDate(pinCode.getUpdateDate());
-				
-				
-				
+
 				historyPinCodeList.add(historyPinCode);
 			}
 		}
-		
+
 		historyTradingRepository.saveAll(historyTradingList);
 		pinService.saveList(historyPinCodeList);
 	}
-	
+
 	public void deleteTradingCreateDateBetween() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -744,20 +758,18 @@ public class TradingService {
 		cal.add(Calendar.DATE, -1);
 
 		Date eightDayAgo = cal.getTime();
-		
+
 		List<Trading> tradingList = tradingRepository.findByCreateDateBetween(eightDayAgo, sevenDayAgo);
-		
-		for(Trading trading : tradingList) {
-			
+
+		for (Trading trading : tradingList) {
+
 			List<PinCode> pinCodeList = pinService.findByTradingIdx(trading.getIdx());
-			
+
 			pinCodeRepository.deleteInBatch(pinCodeList);
-			
+
 		}
-		
+
 		tradingRepository.deleteInBatch(tradingList);
 	}
-	
-	
 
 }
