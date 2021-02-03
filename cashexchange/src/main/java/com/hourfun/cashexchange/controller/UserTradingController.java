@@ -3,6 +3,10 @@ package com.hourfun.cashexchange.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +43,8 @@ public class UserTradingController {
 	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
 	public ResponseEntity<Page<Trading>> findByUserId(Authentication auth, @PathVariable String fromDate,
 			@PathVariable String toDate, Pageable pageable) {
-		return new ResponseEntity<Page<Trading>>(service.findByDateBetweenAndUserId("createDate", fromDate, toDate, auth.getName(), pageable),
+		return new ResponseEntity<Page<Trading>>(
+				service.findByDateBetweenAndUserId("createDate", fromDate, toDate, auth.getName(), pageable),
 				HttpStatus.OK);
 	}
 
@@ -56,10 +61,9 @@ public class UserTradingController {
 	public ResponseEntity<Page<Trading>> findByCreateDateBetweenMasking(Pageable pageable) {
 		return new ResponseEntity<Page<Trading>>(service.findByCreateDateBetweenMasking(pageable), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/limit/", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Integer>> getTradingLimit(Authentication auth) {
-		return new ResponseEntity<Map<String, Integer>>(service.getTradingLimit(auth.getName()),
-				HttpStatus.OK);
+		return new ResponseEntity<Map<String, Integer>>(service.getTradingLimit(auth.getName()), HttpStatus.OK);
 	}
 }

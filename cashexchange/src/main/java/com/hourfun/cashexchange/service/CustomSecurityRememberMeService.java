@@ -25,9 +25,9 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 	public CustomSecurityRememberMeService(String key, UserDetailsService userDetailsService) {
 		super(key, userDetailsService);
 		setAlwaysRemember(true);
-		setCookieName("qwer");
+//		setCookieName("qwer");
 		setTokenValiditySeconds(60 * 60 * 24 * 7);
-//		setTokenValiditySeconds(60 * 30);
+//		setTokenValiditySeconds(60);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -51,6 +51,14 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 				return;
 			}
 		}
+		
+		String userAgent = request.getHeader("User-Agent").toUpperCase();
+
+//		if (userAgent.indexOf("MOBILE") > -1) {
+//			setTokenValiditySeconds(60 * 60 * 24 * 30);
+//		} else {
+//			setTokenValiditySeconds(60 * 60 * 24 * 7);
+//		}
 
 		int tokenLifetime = calculateLoginLifetime(request, successfulAuthentication);
 		long expiryTime = System.currentTimeMillis();

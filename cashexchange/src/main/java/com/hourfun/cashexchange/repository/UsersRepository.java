@@ -45,6 +45,8 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 	Users findByUserIdWithoutAgreement(String userId);
 	
 	Users findByUserId(String userId);
+	
+	Users findByCi(String ci);
 
 	Users findByTel(String tel);
 

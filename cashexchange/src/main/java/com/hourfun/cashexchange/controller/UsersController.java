@@ -55,6 +55,24 @@ public class UsersController {
 					"Bad credentials. Please check username, password");
 		}
 	}
+	
+	@RequestMapping(value = "/login/", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Users> login(@RequestBody Users users,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			return new ResponseEntity<Users>(service.customLogin(users.getUserId(), users.getPwd(), AuthEnum.ROLE_USER, request, response),
+					HttpStatus.OK);
+		} catch (BadCredentialsException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"Bad credentials. Please check username, password");
+		} catch (IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (UsernameNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"Bad credentials. Please check username, password");
+		}
+	}
 
 	@RequestMapping(value = "/findId/{tel}/", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Users> findId(@PathVariable String tel) {

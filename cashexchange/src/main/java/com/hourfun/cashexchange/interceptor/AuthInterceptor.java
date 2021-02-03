@@ -6,8 +6,9 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,12 @@ import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.History;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.HistoryService;
+import com.hourfun.cashexchange.service.UserVerifyService;
 import com.hourfun.cashexchange.service.UsersService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	@Value("${session.cookie.key}")
 	private String cookieKey;
@@ -63,16 +67,25 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 					}
 				}
 
-				HttpSession session = request.getSession();
-				if (session != null) {
-					Cookie cookie = new Cookie(cookieKey, session.getId());
-					cookie.setPath("/");
-//					cookie.setMaxAge(60 * 60 * 24 * 7);
-					cookie.setMaxAge(60 * 30);
-					response.addCookie(cookie);
-				}
+//				HttpSession session = request.getSession();
+//				if (session != null) {
+//					Cookie cookie = new Cookie(cookieKey, session.getId());
+//					cookie.setPath("/");
+////					cookie.setMaxAge(60 * 60 * 24 * 7);
+//					cookie.setMaxAge(60 * 30);
+//					response.addCookie(cookie);
+//				}
 			}
 		}
+		logger.debug(request.getRequestURI() + " intherceptor cookie list start");
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				logger.debug(cookie.getName());
+			}
+		}
+		logger.debug(request.getRequestURI() + " intherceptor cookie list end");
+		
 
 		return true;
 	}
@@ -81,6 +94,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 //		super.postHandle(request, response, handler, modelAndView);
+
+		
+		Cookie[] cookies = request.getCookies();
 
 		String url = request.getRequestURL().toString();
 		String body = null;

@@ -137,6 +137,10 @@ public class UsersService {
 	public Users signIn(Users users, AuthEnum common) throws Exception {
 
 		String auth = common.name().split("_")[1];
+		
+		if(repository.findByCi(users.getCi()) != null) {
+			throw new Exception("Users signIn error = ci duplicate");
+		}
 
 		users.setAuth(auth);
 		users.setTelChkValue("T");
@@ -144,10 +148,8 @@ public class UsersService {
 		users.setAccountStatus(AccountStatusEnum.NORMAL.getValue());
 
 		try {
-
 			List<Agreement> agreementList = new ArrayList<Agreement>();
-			;
-
+			
 			for (Agreement agreement : users.getAgreements()) {
 				agreementList.add(agreementRepository.getOne(agreement.getIdx()));
 			}
@@ -164,7 +166,6 @@ public class UsersService {
 			return savedUser;
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			throw new Exception("Users signIn error = " + e.getMessage());
 		}
