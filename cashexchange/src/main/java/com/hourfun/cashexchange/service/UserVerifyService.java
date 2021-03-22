@@ -25,7 +25,13 @@ public class UserVerifyService {
 
 	@Value("${okcert.target}")
 	private String target;
-
+	
+	@Value("${okcert.siteurl}")
+	private String siteurl;
+	
+	@Value("${okcert.returnurl}")
+	private String returnurl;
+	
 //	@Value("${okcert.license}")
 //	private String license;
 
@@ -47,9 +53,9 @@ public class UserVerifyService {
 
 		JSONObject requestJson = new JSONObject();
 
-		requestJson.put("RETURN_URL", "http://dev.makepin.co.kr/popup.html");
+		requestJson.put("RETURN_URL", returnurl);
 		requestJson.put("SITE_NAME", siteName);
-		requestJson.put("SITE_URL", "http://dev.makepin.co.kr/");
+		requestJson.put("SITE_URL", siteurl);
 		requestJson.put("RQST_CAUS_CD", "00");
 
 		String param = requestJson.toString();

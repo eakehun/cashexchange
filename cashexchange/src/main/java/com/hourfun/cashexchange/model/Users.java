@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 
@@ -55,14 +56,40 @@ public class Users implements Serializable{
 	
 	
 	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Date lastLogin;
 	
 	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String lastDevice;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Collection<Agreement> agreementList;
+	
+	@Transient
+	private Boolean limitOver;
 	
 	private Date suspendedDate;
 	
 	private Date withdrawDate;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private long totalTradingCount;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String totalCompletePrice;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private long monthTradingCount;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String monthCompletePrice;
+	
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_agreements")

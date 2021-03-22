@@ -37,6 +37,26 @@ public class BatchController {
 		}
 	}
 	
+	@RequestMapping(value = "/trading/backup/", method = RequestMethod.GET)
+	public ResponseEntity<String> backupTradingHistory(){
+		try {
+			tradingService.insertIntoHistoryTradingCreateDateBetween();
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/trading/delete/", method = RequestMethod.GET)
+	public ResponseEntity<String> deleteOldTrading(){
+		try {
+			tradingService.deleteTradingCreateDateBefore();
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
 	
 	
 }

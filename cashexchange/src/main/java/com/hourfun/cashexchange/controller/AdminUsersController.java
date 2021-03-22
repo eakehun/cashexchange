@@ -1,11 +1,17 @@
 package com.hourfun.cashexchange.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.Agreement;
+import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.UsersService;
 
@@ -163,25 +170,234 @@ public class AdminUsersController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/info/agreement/{idx}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Agreement>> findAgreementByUserId(@PathVariable long idx) {
 		try {
-			return new ResponseEntity<List<Agreement>>(service.findAgreementByUserId(service.findByIdx(idx).getUserId()), HttpStatus.OK);
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/userId/{userId}/", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Users> findByUserId(@PathVariable String userId) {
-		try {
-			return new ResponseEntity<Users>(
-					service.findByUserId(userId), HttpStatus.OK);
+			return new ResponseEntity<List<Agreement>>(
+					service.findAgreementByUserId(service.findByIdx(idx).getUserId()), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	
+	@RequestMapping(value = "/userId/{userId}/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Users> findByUserId(@PathVariable String userId) {
+		try {
+			return new ResponseEntity<Users>(service.findByUserId(userId), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenDownload(@PathVariable String fromDate,
+			@PathVariable String toDate) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetween(fromDate, toDate);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/status/{status}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndAccountStatusDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String status) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndAccountStatus(fromDate, toDate, status);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndUserIdDownload(@PathVariable String fromDate,
+			@PathVariable String toDate, @PathVariable String userId) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndUserId(fromDate, toDate, userId);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/status/{status}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndUserIdAndAccountStatusDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userId,
+			@PathVariable String status) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndUserIdAndAccountStatus(fromDate, toDate, userId,
+					status);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/name/{name}/download/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<InputStreamResource> findByCreateDateBetweenAndUserNameDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String name) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndName(fromDate, toDate, name);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/name/{name}/status/{status}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndNameAndAccountStatusDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String name,
+			@PathVariable String status) {
+
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndNameAndAccountStatus(fromDate, toDate, name,
+					status);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/tel/{tel}/download/", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<InputStreamResource> findByCreateDateBetweenAndTelDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String tel) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndTel(fromDate, toDate, tel);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/tel/{tel}/status/{status}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndTelAndAccountStatusDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String tel,
+			@PathVariable String status) {
+
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndTelAndAccountStatus(fromDate, toDate, tel,
+					status);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndIdxDownload(@PathVariable String fromDate,
+			@PathVariable String toDate, @PathVariable String idx) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndIdx(fromDate, toDate, idx);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/status/{status}/download/", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> findByCreateDateBetweenAndIdxAndAccountStatusDownload(
+			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String idx,
+			@PathVariable String status) {
+		try {
+
+			List<Users> selectList = service.findByCreateDateBetweenAndIdxAndAccountStatus(fromDate, toDate, idx,
+					status);
+			File file = service.excelDownload(selectList, fromDate, toDate);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			long contentLength = file.length();
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/csv; charset=MS949");
+			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			responseHeaders.add("Content-Length", String.valueOf(contentLength));
+			return new ResponseEntity<InputStreamResource>(resource, responseHeaders, HttpStatus.OK);
+		} catch (FileNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.hourfun.cashexchange.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class OneToOneInquiryService {
 
 	@Autowired
 	private OneToOneInquiryRepository oneToOneInquiryRepository;
+	
+	@Autowired
+	private OneToOneInquiryReponseService oneToOneInquiryResponseService;
 
 	@Autowired
 	private UsersService usersService;
@@ -66,10 +70,24 @@ public class OneToOneInquiryService {
 
 	public Page<OneToOneInquiry> findByCreateDateBetweenAndUserId(String fromDateStr, String toDateStr, String userId,
 			Pageable pageable) {
-
-		return oneToOneInquiryRepository.findByCreateDateBetweenAndUserId(
+		
+		
+		Page<OneToOneInquiry> oneToOneInquiryPage = oneToOneInquiryRepository.findByCreateDateBetweenAndUserId(
 				DateUtils.changeStringToDate(fromDateStr, "yyyy-MM-dd HH:mm:ss"),
 				DateUtils.changeStringToDate(toDateStr, "yyyy-MM-dd HH:mm:ss"), userId, pageable);
+		
+		
+		List<OneToOneInquiry> list = oneToOneInquiryPage.getContent();
+		
+		for(OneToOneInquiry oneToOneInquiry : list) {
+			if(oneToOneInquiry.getStatus().equals(OneToOneInquiryType.Response_Complate)) {				
+				oneToOneInquiry.setOneInquiryResponseList(oneToOneInquiryResponseService.findByParentIdx(oneToOneInquiry.getIdx()));
+			}
+			
+		}
+		
+
+		return oneToOneInquiryPage;
 	}
 
 	public Page<OneToOneInquiryMini> adminFindByDateBetweenAndUserId(String dateCategory, String fromDateStr,

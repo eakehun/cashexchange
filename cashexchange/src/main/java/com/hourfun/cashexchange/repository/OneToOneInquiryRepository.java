@@ -87,11 +87,11 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and status = :status and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",
-			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
+			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and status = :status and user_id=:userId \r\n" + 
 					"and title like %:title% or content like %:content%  ",
@@ -100,11 +100,11 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	(@Param("fromDate")String fromDate, @Param("toDate")String toDate,@Param("status") String status, 
 			@Param("userId")String userId,@Param("title") String title, @Param("content")String content, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"create_date between :fromDate and :toDate \r\n" + 
 			"and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",
-			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
+			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"create_date between :fromDate and :toDate \r\n" + 
 					"and user_id=:userId \r\n" + 
 					"and title like %:title% or content like %:content%  ",
@@ -176,11 +176,11 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	
 	
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"response_date between :fromDate and :toDate \r\n" + 
 			"and status = :status and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",
-			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
+			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"response_date between :fromDate and :toDate \r\n" + 
 					"and status = :status and user_id=:userId \r\n" + 
 					"and title like %:title% or content like %:content%  ",
@@ -189,11 +189,11 @@ public interface OneToOneInquiryRepository extends JpaRepository<OneToOneInquiry
 	(@Param("fromDate")String fromDate, @Param("toDate")String toDate,@Param("status") String status, 
 			@Param("userId")String userId,@Param("title") String title, @Param("content")String content, Pageable pageable);
 	
-	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from cashExchange.one_to_one_inquiry where \r\n" + 
+	@Query(value="select idx,user_id, user_name, title,status,create_date,response_date, tel from one_to_one_inquiry where \r\n" + 
 			"response_date between :fromDate and :toDate \r\n" + 
 			"and user_id=:userId \r\n" + 
 			"and title like %:title% or content like %:content% ",
-			countQuery = "select count(*) from cashExchange.one_to_one_inquiry where \r\n" + 
+			countQuery = "select count(*) from one_to_one_inquiry where \r\n" + 
 					"response_date between :fromDate and :toDate \r\n" + 
 					"and user_id=:userId \r\n" + 
 					"and title like %:title% or content like %:content%  ",

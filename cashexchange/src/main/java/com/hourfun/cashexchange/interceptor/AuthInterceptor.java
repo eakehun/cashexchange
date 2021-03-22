@@ -19,16 +19,20 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.AuthEnum;
 import com.hourfun.cashexchange.model.History;
+import com.hourfun.cashexchange.model.TradingMenu;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.HistoryService;
 import com.hourfun.cashexchange.service.UserVerifyService;
 import com.hourfun.cashexchange.service.UsersService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	@Value("${session.cookie.key}")
@@ -79,13 +83,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
 		logger.debug(request.getRequestURI() + " intherceptor cookie list start");
 		Cookie[] cookies = request.getCookies();
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
 				logger.debug(cookie.getName());
 			}
 		}
 		logger.debug(request.getRequestURI() + " intherceptor cookie list end");
-		
 
 		return true;
 	}
@@ -95,7 +98,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 //		super.postHandle(request, response, handler, modelAndView);
 
-		
 		Cookie[] cookies = request.getCookies();
 
 		String url = request.getRequestURL().toString();
@@ -127,7 +129,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	private void crudHistory(HttpServletRequest request, HttpServletResponse response, String url, String body,
-			History history, String type) {
+			History history, String type) throws JsonMappingException, JsonProcessingException {
+
+		ObjectMapper mapper = new ObjectMapper();
+
 		if (history == null) {
 			return;
 		}
@@ -186,27 +191,20 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			}
 		} else if (url.contains("/tradingMenu/")) {
 			history.setService("tradingMenu");
+			
+//			sbuf.append(type + " tradingMenu");
+			
+			TradingMenu tradingMenu = mapper.readValue(body.toString(), TradingMenu.class);
 
-			if (type.equals("insert")) {
-				sbuf.append("insert tradingMenu");
-			} else if (type.equals("update")) {
-				sbuf.append("update tradingMenu");
+			history.setContents(tradingMenu.getContent());
+			if(tradingMenu.isUsed()) {
+				sbuf.append(tradingMenu.getMenuName() + " on");
+			}else {
+				sbuf.append(tradingMenu.getMenuName() + " off");
 			}
-
-			history.setContents(body.toString());
-		} else if (url.contains("/tradingMenu/")) {
-			history.setService("tradingMenu");
-
-			if (type.equals("insert")) {
-				sbuf.append("insert tradingMenu");
-			} else if (type.equals("update")) {
-				sbuf.append("update tradingMenu");
-			}
-
-			history.setContents(body.toString());
-		} else if(url.contains("/admin/users/")) {
+		} else if (url.contains("/admin/users/")) {
 			history.setService("users");
-			if(type.equals("update")) {
+			if (type.equals("update")) {
 				sbuf.append("update user status");
 			}
 			history.setContents(body.toString());
@@ -224,6 +222,5 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		history.setKeyword(sbuf.toString());
 
 	}
-
 
 }

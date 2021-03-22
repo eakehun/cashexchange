@@ -2,6 +2,7 @@ package com.hourfun.cashexchange.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,16 +10,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.hourfun.cashexchange.common.TradingStatusEnum;
-import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.HistoryPinCode;
 import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
+import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.HistoryPinCodeRepository;
 import com.hourfun.cashexchange.repository.PinCodeRepository;
 
@@ -35,13 +37,16 @@ public class PinService {
 	private TradingService tradingService;
 
 	@Autowired
-	private FeeService feeService;
+	private BankService bankService;
 
 	@Autowired
-	private BankService bankService;
+	private HistoryPinCodeRepository historyPinCodeRepository;
 	
 	@Autowired
-	private HistoryPinCodeRepository historyPinCodeRepository;
+	private UsersService usersService;
+	
+	@Value("${cashexchange.service.name}")
+	private String serviceName;
 
 	@SuppressWarnings("unchecked")
 	public void setPinCode(String company, String pinCode) {
@@ -76,7 +81,7 @@ public class PinService {
 
 			if (list.size() != 0) {
 
-				int maxSize = 9;
+				int maxSize = 10;
 				if (list.size() < 10) {
 					maxSize = list.size();
 				}
@@ -188,7 +193,8 @@ public class PinService {
 			if (selectPinCode.getStatus().equals(TradingStatusEnum.COMPLETE.getValue())) {
 				completePrice += selectPinCode.getPrice();
 				complete++;
-			} else if (selectPinCode.getStatus().equals(TradingStatusEnum.FAIL.getValue())) {
+			} else if (selectPinCode.getStatus().equals(TradingStatusEnum.FAIL.getValue()) ||
+					selectPinCode.getStatus().equals(TradingStatusEnum.ALREADY_ADDED.getValue())) {
 				fail++;
 			} else if (selectPinCode.getStatus().equals(TradingStatusEnum.PROGRESS.getValue())) {
 				progress++;
@@ -199,36 +205,32 @@ public class PinService {
 		trading.setRequestPrice(totalPrice);
 		trading.setComepletePrice(completePrice);
 
-		if (progress > 0) {
-			if (complete > 0) {
-				status = TradingStatusEnum.PARTIAL_COMPLETE.getValue();
-			} else if (fail > 0) {
-				status = TradingStatusEnum.PROGRESS.getValue();
-			}
-		} else {
+		if (progress < 1) {
 			if (complete > 0 && fail == 0) {
 				status = TradingStatusEnum.COMPLETE.getValue();
 			} else if (complete == 0 && fail > 0) {
 				status = TradingStatusEnum.FAIL.getValue();
+				trading.setWithdrawStatus(TradingStatusEnum.FAIL.getValue());
 			} else {
 				status = TradingStatusEnum.PARTIAL_COMPLETE.getValue();
 			}
-
+			
 			trading = tradingService.calcFee(trading);
-
+			
 			trading.setPinCompleteDate(new Date());
-			try {
-				bankService.pay(trading);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			
 		}
 
 		trading.setStatus(status);
 
-		tradingService.update(trading);
+		Trading endUpdateTrading = tradingService.update(trading);
+		
+		try {
+			bankService.pay(endUpdateTrading);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -237,7 +239,36 @@ public class PinService {
 	}
 
 	public Page<PinCode> findByPinCodeIn(List<String> pinCodes, Pageable pageable) {
-		return repository.findByPinCodeIn(pinCodes, pageable);
+
+		Page<PinCode> selectPincode = repository.findByPinCodeIn(pinCodes, pageable);
+		List<PinCode> pinCodeList = selectPincode.getContent();
+		SimpleDateFormat withdrawCompleteDateFormat = new SimpleDateFormat("HH:mm");
+
+		for (PinCode pinCode : pinCodeList) {
+			Trading trading = tradingService.findByIdx(pinCode.getTradingIdx());
+
+			Users user = usersService.findByUserId(trading.getUserId());
+			pinCode.setAccountName(user.getAccountName());
+			pinCode.setAccountNum(user.getAccountNum());
+			pinCode.setWithdrawCompleteDate(trading.getWithdrawCompleteDate());
+			
+			
+			BigDecimal decimalFee = new BigDecimal(trading.getPurchaseFeePercents() * 0.01).setScale(2, RoundingMode.HALF_EVEN);
+
+			if (pinCode.getPrice() > 0) {
+				BigDecimal decimalPrice = new BigDecimal(pinCode.getPrice());
+				BigDecimal decimalCalcFee = decimalPrice.multiply(decimalFee).setScale(0, RoundingMode.HALF_EVEN);
+
+				int intCalPrice = decimalPrice.subtract(decimalCalcFee).intValue();
+				pinCode.setFees(String.valueOf(decimalCalcFee));
+				pinCode.setCompletePrice(intCalPrice);
+			} else {
+				pinCode.setFees("0");
+				pinCode.setCompletePrice(0);
+			}
+		}
+
+		return selectPincode;
 	}
 
 	public long countByCreateDateBetween() {
@@ -310,26 +341,26 @@ public class PinService {
 
 	public String getRedisKey(String company) {
 		if (company.equals("culture")) {
-			return "culture_pin";
+			return serviceName + "_culture_pin";
 		} else {
-			return "happy_pin";
+			return serviceName + "_happy_pin";
 		}
 	}
 
 	public String getRedisUsedKey(String company) {
 		if (company.equals("culture")) {
-			return "culture_pin_used";
+			return serviceName + "_culture_pin_used";
 		} else {
-			return "happy_pin_used";
+			return serviceName + "_happy_pin_used";
 		}
 	}
 
-	public List<HistoryPinCode> saveList(List<HistoryPinCode> pinCodes) {
-		
+	public List<HistoryPinCode> saveHistoryList(List<HistoryPinCode> pinCodes) {
+
 		return historyPinCodeRepository.saveAll(pinCodes);
 	}
-	
-	public List<PinCode> findByTradingIdx(long tradingIdx){
+
+	public List<PinCode> findByTradingIdx(long tradingIdx) {
 		return repository.findByTradingIdx(tradingIdx);
 	}
 

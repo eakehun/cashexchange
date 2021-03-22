@@ -23,35 +23,41 @@ public class UserServiceTest {
 
 	@Autowired
 	private UsersService service;
-	
+
 //	@Test
 	public void userList() {
-		
-		String fromDate="2020-08-20 00:00:00";
+
+		String fromDate = "2020-08-20 00:00:00";
 		String toDate = "2020-09-15 23:59:59";
 		String accountStatus = AccountStatusEnum.NORMAL.getValue();
-		String userId="gnogun@naver.com";
+		String userId = "gnogun@naver.com";
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+		PageRequest page = PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "createDate"));
 
-		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "createDate"));
-		
-		Page<Users> list = service.findByCreateDateBetweenAndUserIdAndAccountStatus(fromDate, toDate, userId, accountStatus, page);
-		
+		Page<Users> list = service.findByCreateDateBetweenAndUserIdAndAccountStatus(fromDate, toDate, userId,
+				accountStatus, page);
+
 		System.out.println("!");
-		
+
 	}
-	
-	@Test
+
+//	@Test
 	public void updateUserStatus() {
 		long idx = 1;
 		String status = AccountStatusEnum.NORMAL.getValue();
-		
+
 		Users users = new Users();
 		users.setIdx(idx);
 		users.setAccountStatus(status);
-		
+
 		Users returnUsers = service.updateAccountStatus(users);
 		System.out.println(returnUsers.getAccountStatus());
+	}
+
+	@Test
+	public void secede() {
+		String id = "eake@naver.com";
+		service.secede(id);
 	}
 }

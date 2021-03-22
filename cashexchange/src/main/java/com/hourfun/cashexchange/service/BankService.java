@@ -53,7 +53,7 @@ public class BankService {
 
 	@Autowired
 	private FeeService feeService;
-	
+
 	@Autowired
 	private TelegramSender sender;
 
@@ -126,6 +126,8 @@ public class BankService {
 			}
 
 			return resultMessage;
+		} else if (resultCode.equals("ST24")) {
+			throw new Exception("휴대폰 인증한 본인명의 계좌만 등록 가능합니다");
 		} else {
 			throw new Exception(resultMessage);
 		}
@@ -205,7 +207,7 @@ public class BankService {
 			trading.setWithdrawStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 			trading.setStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 		}
-		trading.setMessage(resultMessage);
+		trading.setMessage(resultCode + " - " + resultMessage);
 		trading.setWithdrawCompleteDate(new Date());
 
 		return tradingService.update(trading);

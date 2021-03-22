@@ -59,11 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users//**")
 				.antMatchers("/users/fee/**")
 				.antMatchers("/users/checkEmailDuplicate/**")
+				.antMatchers("/users/checkUserDuplicate/**")
 				.antMatchers("/users/mobileUserVerifyRequest/**")
 				.antMatchers("/users/mobileUserVerifyCheck/**")
 				.antMatchers("/users/agreement/")				
 				.antMatchers("/users/trading/recent/")
-				.antMatchers("/users/bank/**")
+				.antMatchers("/users/bank/**")				
 //				.antMatchers("/users/password/")
 				;
 	}

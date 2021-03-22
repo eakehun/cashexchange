@@ -43,6 +43,10 @@ public class Trading {
 	
 	private String fees;
 	
+	private String transferFee;
+	private String purchaseFee;
+	
+	
 	private int comepletePrice;
 	
 	private String message;
@@ -50,6 +54,8 @@ public class Trading {
 	private String tel;
 	
 	private long purchaseFeePercents;
+	
+	private String device;
 	
 	@Transient
 	@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -59,7 +65,13 @@ public class Trading {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String withdrawCompleteDateString;
 	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String accountNum;
 	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String accountName;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)

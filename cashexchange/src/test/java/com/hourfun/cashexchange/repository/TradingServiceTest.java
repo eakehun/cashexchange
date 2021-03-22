@@ -67,7 +67,11 @@ public class TradingServiceTest {
 		
 //		service.insertIntoHistoryTradingCreateDateBetween();
 
-		service.deleteTradingCreateDateBetween();
+//		service.deleteTradingCreateDateBetween();
+		
+		List<Trading> list = service.findByCreateDateBefore(new Date());
+		
+		System.out.println("!");
 		
 	}
 	

@@ -25,7 +25,13 @@ public class AdminPinController {
 	@Autowired
 	private PinService service;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
+//	public ResponseEntity<Page<PinCode>> selectPin(@RequestBody List<String> pinCodes, Pageable pageable) {
+//		return new ResponseEntity<Page<PinCode>>(service.findByPinCodeIn(pinCodes, pageable),
+//				HttpStatus.OK);
+//	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Page<PinCode>> selectPin(@RequestBody List<String> pinCodes, Pageable pageable) {
 		return new ResponseEntity<Page<PinCode>>(service.findByPinCodeIn(pinCodes, pageable),
 				HttpStatus.OK);

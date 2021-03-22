@@ -11,6 +11,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 
@@ -34,6 +37,31 @@ public class PinCode {
 	private String status;
 
 	private int price;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String tel;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String fees;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private int completePrice;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Date withdrawCompleteDate;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String accountNum;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String accountName;
+	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)

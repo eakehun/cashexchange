@@ -14,4 +14,5 @@ public interface NoticeMini {
 	String getUser_id();
 	String getTitle();
     Boolean getDisplay();
+    Boolean getFixed();
 }

@@ -32,7 +32,7 @@ public class Fee {
 	private String company;
 	private long transperFees;
 	private long purchaseFeePercents;
-	
+	private long waiverAmount;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

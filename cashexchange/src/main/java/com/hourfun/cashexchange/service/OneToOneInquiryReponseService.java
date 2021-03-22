@@ -47,7 +47,9 @@ public class OneToOneInquiryReponseService {
 				Date date = new Date();
 				//mail 보내기 기능 추가
 				if(users.getEmail() != null && !users.getEmail().equals("")) {
-					mailService.ontToOneInquirySend(oneToOneInquiry.getUserId(), date);
+					Users clinetUser = usersService.findByUserId(oneToOneInquiry.getUserId());
+					
+					mailService.ontToOneInquirySend(clinetUser, date);
 				}
 				
 				

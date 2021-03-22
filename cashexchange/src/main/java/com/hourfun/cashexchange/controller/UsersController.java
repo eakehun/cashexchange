@@ -201,4 +201,13 @@ public class UsersController {
 		}
 	}
 	
+	@RequestMapping(value = "/checkUserDuplicate/", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> checkUserDuplicate(@RequestBody Users users) {
+		try {
+			return new ResponseEntity<String>(service.findByCi(users.getCi()), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
 }
