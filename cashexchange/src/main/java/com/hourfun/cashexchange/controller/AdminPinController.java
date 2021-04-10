@@ -37,13 +37,5 @@ public class AdminPinController {
 				HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/recycle/{company}", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> recyclePin(@PathVariable String company) {
-		try {
-			return new ResponseEntity<List<String>>(service.recyclePin(company),
-					HttpStatus.OK);
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
+	
 }

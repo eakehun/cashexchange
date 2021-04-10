@@ -33,8 +33,11 @@ public class Users implements Serializable{
 	private long idx;
 	@Column(unique=true,nullable = false)
 	private String userId;
+	
 	@Column(nullable = false)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String pwd;
+	
 	@Column(nullable = false)
 	private String auth;
 	private String tel;

@@ -24,19 +24,19 @@ import com.hourfun.cashexchange.service.TradingService;
 @RestController
 @RequestMapping("/macro")
 public class MacroController {
-	
+
 	@Autowired
 	private PinService service;
-	
+
 	@Autowired
 	private CaptchaService captchaService;
-	
+
 	@Autowired
 	private ObserverService observerService;
-	
+
 	@Autowired
 	private TradingService tradingService;
-	
+
 	@RequestMapping(value = "/{company}/", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> selectPin(@PathVariable String company) {
 		try {
@@ -45,7 +45,7 @@ public class MacroController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<List<PinCode>> updatePin(@RequestBody List<PinCode> pinCodes) {
 		try {
@@ -54,26 +54,35 @@ public class MacroController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/captcha/", method = RequestMethod.POST)
 	public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-		
+
 		try {
 			return new ResponseEntity<String>(captchaService.captchaImageSave(file), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/observer/{message}", method = RequestMethod.GET)
 	public ResponseEntity<String> observerMessage(@PathVariable String message) {
 		try {
 			observerService.observerMessageLogging(message);
-			
+
 			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
+	@RequestMapping(value = "/pinCode/recycle/{company}", method = RequestMethod.GET)
+	public ResponseEntity<List<String>> recyclePin(@PathVariable String company) {
+		try {
+			return new ResponseEntity<List<String>>(service.recyclePin(company), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
 }
