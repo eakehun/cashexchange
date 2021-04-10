@@ -12,9 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -122,16 +120,16 @@ public class AdminTradingController {
 	}
 
 	@RequestMapping(value = "/price/month/", method = RequestMethod.GET)
-	public ResponseEntity<Map> pricePerMonth() {
+	public ResponseEntity<Map<String, Object>> pricePerMonth() {
 
-		return new ResponseEntity<Map>(service.findByCreateDateBetweenAndSumPrice(), HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(service.findByCreateDateBetweenAndSumPrice(), HttpStatus.OK);
 
 	}
 
 	@RequestMapping(value = "/recent/", method = RequestMethod.GET)
-	public ResponseEntity<List> recentSummary() {
+	public ResponseEntity<List<Object>> recentSummary() {
 
-		return new ResponseEntity<List>(service.recentSummary(), HttpStatus.OK);
+		return new ResponseEntity<List<Object>>(service.recentSummary(), HttpStatus.OK);
 
 	}
 

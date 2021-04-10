@@ -15,11 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.PinCode;
-import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.service.CaptchaService;
 import com.hourfun.cashexchange.service.ObserverService;
 import com.hourfun.cashexchange.service.PinService;
-import com.hourfun.cashexchange.service.TradingService;
 
 @RestController
 @RequestMapping("/macro")
@@ -34,8 +32,6 @@ public class MacroController {
 	@Autowired
 	private ObserverService observerService;
 
-	@Autowired
-	private TradingService tradingService;
 
 	@RequestMapping(value = "/{company}/", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> selectPin(@PathVariable String company) {

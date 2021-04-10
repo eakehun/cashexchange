@@ -1,22 +1,14 @@
 package com.hourfun.cashexchange.service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.hourfun.cashexchange.model.History;
-import com.hourfun.cashexchange.model.TradingMenu;
 import com.hourfun.cashexchange.repository.HistoryRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class HistoryService {

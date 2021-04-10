@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.component;
 
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -19,6 +17,7 @@ import com.hourfun.cashexchange.service.CaptchaService;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
 	private final String BOT_NAME = "makepin_test_bot"; // Bot Name
@@ -41,6 +40,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 //	@Value("${notification.telegram.chat.id}")
 //	private String chatId;
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onUpdateReceived(Update update) {
 		String content = update.getMessage().getText();

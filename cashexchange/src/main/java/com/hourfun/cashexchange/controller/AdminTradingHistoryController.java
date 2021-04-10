@@ -4,17 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hourfun.cashexchange.model.HistoryTrading;
-import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.service.HistoryTradingService;
-import com.hourfun.cashexchange.service.PinService;
-import com.hourfun.cashexchange.service.TradingService;
 
 @RestController
 @RequestMapping("/admin/trading/history")
@@ -34,8 +28,8 @@ public class AdminTradingHistoryController {
 	@Autowired
 	private HistoryTradingService service;
 
-	@Autowired
-	private PinService pinService;
+//	@Autowired
+//	private PinService pinService;
 
 	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/", method = RequestMethod.GET)
 	public ResponseEntity<Page<HistoryTrading>> findByDateBetween(@PathVariable String dateCategory,
@@ -106,7 +100,6 @@ public class AdminTradingHistoryController {
 	public ResponseEntity<InputStreamResource> findByDateBetweenDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate) {
 
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -127,8 +120,6 @@ public class AdminTradingHistoryController {
 	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/idx/{idx}/download/", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndIdxDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String idx) {
-		HttpHeaders httpHeaders = new HttpHeaders();
-
 		InputStreamResource resource;
 
 		try {
@@ -149,7 +140,6 @@ public class AdminTradingHistoryController {
 	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userId/{userId}/download/", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndUserIdDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userId) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -170,7 +160,6 @@ public class AdminTradingHistoryController {
 	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/userName/{userName}/download/", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndUserNameDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userName) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -191,7 +180,6 @@ public class AdminTradingHistoryController {
 	@RequestMapping(value = "/{dateCategory}/fromDate/{fromDate}/toDate/{toDate}/status/{status}/download/", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndStatusDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String status) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -213,7 +201,6 @@ public class AdminTradingHistoryController {
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndIdxAndStatusDownload(
 			@PathVariable String dateCategory, @PathVariable String fromDate, @PathVariable String toDate,
 			@PathVariable String idx, @PathVariable String status) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -236,7 +223,6 @@ public class AdminTradingHistoryController {
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndUserIdAndStatusDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userId,
 			@PathVariable String status) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 
@@ -259,7 +245,6 @@ public class AdminTradingHistoryController {
 	public ResponseEntity<InputStreamResource> findByDateBetweenAndUserNameAndStatusDownload(@PathVariable String dateCategory,
 			@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String userName,
 			@PathVariable String status) {
-		HttpHeaders httpHeaders = new HttpHeaders();
 
 		InputStreamResource resource;
 

@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -26,7 +25,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Users implements Serializable{
+public class Users {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

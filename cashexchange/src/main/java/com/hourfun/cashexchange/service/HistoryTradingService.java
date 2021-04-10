@@ -3,39 +3,18 @@ package com.hourfun.cashexchange.service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.hourfun.cashexchange.common.TradingStatusEnum;
-import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.HistoryPinCode;
-import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.HistoryTrading;
-import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
-import com.hourfun.cashexchange.repository.PinCodeRepository;
 import com.hourfun.cashexchange.repository.HistoryTradingRepository;
-import com.hourfun.cashexchange.repository.TradingRepository;
 import com.hourfun.cashexchange.util.DateUtils;
 
 @Service

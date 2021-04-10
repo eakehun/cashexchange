@@ -19,6 +19,7 @@ import com.hourfun.cashexchange.common.AuthEnum;
 
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(CustomLogoutSuccessHandler.class);
 
 	@Value("${session.cookie.key}")

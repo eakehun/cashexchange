@@ -79,12 +79,14 @@ public final class JsonUtils {
         }
     }
 
-    public static <T> T mapToClass(Map map, Class<T> cls) {
+    @SuppressWarnings("rawtypes")
+	public static <T> T mapToClass(Map map, Class<T> cls) {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.convertValue(map, cls);
     }
 
-    public static <T extends Collection> T fromJson(String jsonStr, CollectionType collectionType) {
+    @SuppressWarnings("rawtypes")
+	public static <T extends Collection> T fromJson(String jsonStr, CollectionType collectionType) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(jsonStr, collectionType);

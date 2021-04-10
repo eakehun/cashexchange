@@ -1,16 +1,13 @@
 package com.hourfun.cashexchange.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import com.hourfun.cashexchange.model.UserMobileVerify;
 import com.hourfun.cashexchange.model.Users;
@@ -21,6 +18,7 @@ import kcb.org.json.JSONObject;
 
 @Service
 public class UserVerifyService {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(UserVerifyService.class);
 
 	@Value("${okcert.target}")
@@ -89,7 +87,7 @@ public class UserVerifyService {
 
 		String cpCd = "V47630000000";
 		String svcName = "IDS_HS_POPUP_RESULT";
-		String siteName = "makepin";
+//		String siteName = "makepin";
 		String license = "";
 		
 		JSONObject requestJson = new JSONObject();

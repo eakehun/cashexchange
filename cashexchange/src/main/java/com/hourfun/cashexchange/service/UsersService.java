@@ -43,7 +43,6 @@ import com.hourfun.cashexchange.common.CacheKey;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
 import com.hourfun.cashexchange.model.Agreement;
 import com.hourfun.cashexchange.model.History;
-import com.hourfun.cashexchange.model.PinCode;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.repository.AgreementRepository;

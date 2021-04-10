@@ -1,6 +1,5 @@
 package com.hourfun.cashexchange.interceptor;
 
-import java.util.Formatter;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -28,7 +27,6 @@ import com.hourfun.cashexchange.model.History;
 import com.hourfun.cashexchange.model.TradingMenu;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.service.HistoryService;
-import com.hourfun.cashexchange.service.UserVerifyService;
 import com.hourfun.cashexchange.service.UsersService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -96,9 +94,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-//		super.postHandle(request, response, handler, modelAndView);
-
-		Cookie[] cookies = request.getCookies();
 
 		String url = request.getRequestURL().toString();
 		String body = null;
@@ -141,7 +136,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			return;
 		}
 		StringBuilder sbuf = new StringBuilder();
-		Formatter fmt = new Formatter(sbuf);
 		String ip = request.getHeader("X-FORWARDED-FOR");
 		if (ip == null) {
 			ip = request.getRemoteAddr();

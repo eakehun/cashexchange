@@ -1,7 +1,5 @@
 package com.hourfun.cashexchange.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,10 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.hourfun.cashexchange.common.AccountStatusEnum;
 import com.hourfun.cashexchange.common.BankCodeEnum;
 import com.hourfun.cashexchange.common.TradingStatusEnum;
-import com.hourfun.cashexchange.model.Fee;
 import com.hourfun.cashexchange.model.Trading;
 import com.hourfun.cashexchange.model.Users;
 import com.hourfun.cashexchange.util.StringUtil;
@@ -51,8 +47,6 @@ public class BankService {
 	@Autowired
 	private TradingService tradingService;
 
-	@Autowired
-	private FeeService feeService;
 
 	@Autowired
 	private TelegramSender sender;
@@ -68,6 +62,7 @@ public class BankService {
 
 	}
 
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public String ownerCheck(String code, String account, String name) throws Exception {
 
 		Map<String, Object> body = new HashMap<String, Object>();
@@ -134,6 +129,7 @@ public class BankService {
 
 	}
 
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public Trading pay(Trading trading) throws Exception {
 
 		if (trading.getWithdrawStatus().equals(TradingStatusEnum.COMPLETE.getValue())) {
@@ -214,6 +210,7 @@ public class BankService {
 
 	}
 
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public String maintenanceCheck(String bankCode, String divCode) throws Exception {
 		Map<String, Object> body = new HashMap<String, Object>();
 

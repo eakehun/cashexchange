@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -715,6 +714,7 @@ public class TradingService {
 		return tradingRepository.findByUserIdAndWithdrawStatus(userId, withdrawStatus);
 	}
 
+	@SuppressWarnings("unused")
 	public Map<String, Integer> getTradingLimit(String userId) {
 		Map<String, Integer> returnMap = new HashMap<String, Integer>();
 
@@ -961,11 +961,9 @@ public class TradingService {
 
 	public List<Trading> transferAllWithdrawFailTrading() throws Exception {
 
-		Date now = new Date();
 
 		List<Trading> tradingList = tradingRepository.findByStatus(TradingStatusEnum.WITHDRAWFAIL.getValue());
 
-		List<Trading> returnList = new ArrayList<Trading>();
 
 		for (Trading trading : tradingList) {
 			trading = bankService.pay(trading);

@@ -2,7 +2,6 @@ package com.hourfun.cashexchange.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -129,6 +128,7 @@ public class PinService {
 		return saveList;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<PinCode> update(List<PinCode> pinCodes) {
 
 		List<PinCode> returnList = new ArrayList<PinCode>();
@@ -165,7 +165,7 @@ public class PinService {
 			String backupKey = getRedisUsedKey(company);
 
 			if (redisTemplate.hasKey(backupKey)) {
-				List<String> list = (List<String>) redisTemplate.opsForValue().get(backupKey);
+				List<String> list =  (List<String>) redisTemplate.opsForValue().get(backupKey);
 				list.remove(selectPin.getPinCode());
 				redisTemplate.opsForValue().set(backupKey, list);
 			}
@@ -242,7 +242,6 @@ public class PinService {
 
 		Page<PinCode> selectPincode = repository.findByPinCodeIn(pinCodes, pageable);
 		List<PinCode> pinCodeList = selectPincode.getContent();
-		SimpleDateFormat withdrawCompleteDateFormat = new SimpleDateFormat("HH:mm");
 
 		for (PinCode pinCode : pinCodeList) {
 			Trading trading = tradingService.findByIdx(pinCode.getTradingIdx());
@@ -286,6 +285,7 @@ public class PinService {
 		return repository.countByCreateDateBetween(monthStart, now);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> recyclePin(String company) throws Exception {
 		String key = getRedisKey(company);
 		String backupKey = getRedisUsedKey(company);

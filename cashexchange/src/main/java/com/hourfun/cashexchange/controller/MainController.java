@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@GetMapping("/")

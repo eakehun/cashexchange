@@ -24,12 +24,12 @@ class MailServiceTest {
 	
 	@Test
 	void test() {
-		try {
-			mailService.mailSend();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			mailService.mailSend();
+//		} catch (MessagingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }
