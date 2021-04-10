@@ -88,6 +88,8 @@ public class UserVerifyService {
 		String cpCd = "V47630000000";
 		String svcName = "IDS_HS_POPUP_RESULT";
 //		String siteName = "makepin";
+		
+		
 		String license = "";
 		
 		JSONObject requestJson = new JSONObject();
