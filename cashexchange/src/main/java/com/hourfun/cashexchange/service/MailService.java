@@ -10,13 +10,14 @@ import java.util.regex.Pattern;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -25,6 +26,9 @@ import com.hourfun.cashexchange.util.DateUtils;
 
 @Service
 public class MailService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MailService.class);
+	
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -36,13 +40,14 @@ public class MailService {
 
 	@Autowired
 	private SpringTemplateEngine templateEngine;
+	
 	private static final String FROM_ADDRESS = "<cs@makepin.co.kr>";
 	
 	public static int threadPoolCount = 20;
 
 	private ScheduledExecutorService excutorService = Executors.newScheduledThreadPool(threadPoolCount); 
 
-	
+//	@Async
 	public void ontToOneInquirySend(Users clinetUser, Date registDate) throws MessagingException {
 		String title = "1:1문의 답변안내";
 
@@ -51,7 +56,7 @@ public class MailService {
 
 		helper.setSubject(title);
 		helper.setFrom(serviceName + FROM_ADDRESS);
-		helper.setTo(clinetUser.getEmail());
+		helper.setTo(clinetUser.getUserId());
 
 		Context context = new Context();
 
@@ -93,6 +98,8 @@ public class MailService {
 
 		String html = templateEngine.process("admin_makepin_mail", context);
 		helper.setText(html, true);
+		
+//		mailSender.send(message);
 
 		excutorService.submit(new Runnable() {
 			@Override
@@ -100,12 +107,13 @@ public class MailService {
 				try {
 					mailSender.send(message);
 				} catch (Exception e) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Exception occur while send a mail");
+					logger.error(clinetUser.getEmail() + ": One to one inquiry Email send fail", e);
 				}
 			}
 		});
 	}
 
+//	@Async
 	public void welcomeMailSend(Users users) throws MessagingException {
 		String title = serviceName + " 회원가입을 축하합니다!";
 
@@ -126,17 +134,19 @@ public class MailService {
 
 		String html = templateEngine.process("makepin_welcome", context);
 		helper.setText(html, true);
+		
+		mailSender.send(message);
 
-		excutorService.submit(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					mailSender.send(message);
-				} catch (Exception e) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Exception occur while send a mail");
-				}
-			}
-		});
+//		excutorService.submit(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					mailSender.send(message);					
+//				} catch (Exception e) {
+//					logger.error(users.getUserId() + ": Welcome Email send fail", e);
+//				}
+//			}
+//		});
 		
 
 	}

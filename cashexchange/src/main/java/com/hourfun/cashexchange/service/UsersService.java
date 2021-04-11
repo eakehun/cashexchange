@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -543,7 +544,7 @@ public class UsersService {
 		return repository.save(selectUser);
 	}
 
-	@CachePut(value = CacheKey.USER, cacheManager = "cacheManager")
+	@CacheEvict(value = CacheKey.USER, cacheManager = "cacheManager")
 	public Users secede(String userId) {
 
 		Users selectUser = findByUserId(userId);
@@ -562,8 +563,7 @@ public class UsersService {
 		selectUser.setAccountStatus(AccountStatusEnum.WITHDRAW.getValue());
 		selectUser.setWithdrawDate(new Date());
 
-//		return repository.save(selectUser);
-		return null;
+		return repository.save(selectUser);
 
 	}
 
@@ -591,15 +591,6 @@ public class UsersService {
 		selectUser.setAccountNum(users.getAccountNum());
 
 		return repository.save(selectUser);
-
-//		if(selectUser.getCi().equals(users.getCi())) {
-//			selectUser.setMobileOperator(users.getMobileOperator());
-//			selectUser.setTel(users.getTel());
-//			
-//			return repository.save(selectUser);
-//		}else {
-//			throw new IllegalArgumentException("CI not match");
-//		}
 
 	}
 

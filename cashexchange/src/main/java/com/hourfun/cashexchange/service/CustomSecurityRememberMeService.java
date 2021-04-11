@@ -52,14 +52,6 @@ public class CustomSecurityRememberMeService extends TokenBasedRememberMeService
 			}
 		}
 		
-		String userAgent = request.getHeader("User-Agent").toUpperCase();
-
-//		if (userAgent.indexOf("MOBILE") > -1) {
-//			setTokenValiditySeconds(60 * 60 * 24 * 30);
-//		} else {
-//			setTokenValiditySeconds(60 * 60 * 24 * 7);
-//		}
-
 		int tokenLifetime = calculateLoginLifetime(request, successfulAuthentication);
 		long expiryTime = System.currentTimeMillis();
 		// SEC-949

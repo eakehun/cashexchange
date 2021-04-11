@@ -2,12 +2,9 @@ package com.hourfun.cashexchange.interceptor;
 
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -30,8 +27,6 @@ import com.hourfun.cashexchange.service.HistoryService;
 import com.hourfun.cashexchange.service.UsersService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-
-	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	@Value("${session.cookie.key}")
 	private String cookieKey;
@@ -68,25 +63,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 						throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "withdraw user");
 					}
 				}
-
-//				HttpSession session = request.getSession();
-//				if (session != null) {
-//					Cookie cookie = new Cookie(cookieKey, session.getId());
-//					cookie.setPath("/");
-////					cookie.setMaxAge(60 * 60 * 24 * 7);
-//					cookie.setMaxAge(60 * 30);
-//					response.addCookie(cookie);
-//				}
 			}
 		}
-		logger.debug(request.getRequestURI() + " intherceptor cookie list start");
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				logger.debug(cookie.getName());
-			}
-		}
-		logger.debug(request.getRequestURI() + " intherceptor cookie list end");
 
 		return true;
 	}
@@ -185,8 +163,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			}
 		} else if (url.contains("/tradingMenu/")) {
 			history.setService("tradingMenu");
-			
-//			sbuf.append(type + " tradingMenu");
 			
 			TradingMenu tradingMenu = mapper.readValue(body.toString(), TradingMenu.class);
 
