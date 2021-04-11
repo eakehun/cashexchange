@@ -62,7 +62,6 @@ public class BankService {
 
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public String ownerCheck(String code, String account, String name) throws Exception {
 
 		Map<String, Object> body = new HashMap<String, Object>();
@@ -104,7 +103,7 @@ public class BankService {
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE); // send the post request
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 		ResponseEntity<HashMap> response = restTemplate.postForEntity(ownerCheckUrl, entity, HashMap.class);
 
@@ -129,7 +128,6 @@ public class BankService {
 
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public Trading pay(Trading trading) throws Exception {
 
 		if (trading.getWithdrawStatus().equals(TradingStatusEnum.COMPLETE.getValue())) {
@@ -185,7 +183,7 @@ public class BankService {
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE); // send the post request
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 		ResponseEntity<HashMap> response = restTemplate.postForEntity(payUrl, entity, HashMap.class);
 
@@ -210,7 +208,6 @@ public class BankService {
 
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public String maintenanceCheck(String bankCode, String divCode) throws Exception {
 		Map<String, Object> body = new HashMap<String, Object>();
 
@@ -240,7 +237,7 @@ public class BankService {
 
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE); // send the post request
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE); // send the post request
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 		ResponseEntity<HashMap> response = restTemplate.postForEntity(maintenanceUrl, entity, HashMap.class);
 
