@@ -69,7 +69,7 @@ public class UserVerifyService {
 					.getInputStream();
 			String responseString = cert.callOkCert(target, cpCd, svcName, license, param, resource);
 			JSONObject responseJson = new JSONObject(responseString);
-			if (responseJson.has("MDL_TKN")) {
+			if (!responseJson.getString("MDL_TKN").equals("")) {
 				userMobileVerify.setMdl_tkn(responseJson.getString("MDL_TKN"));
 				return userMobileVerify;
 			} else {
@@ -105,7 +105,7 @@ public class UserVerifyService {
 			String responseString = cert.callOkCert(target, cpCd, svcName, license, param, resource);
 			
 			JSONObject responseJson = new JSONObject(responseString);
-			if (responseJson.has("RSLT_NAME")) {
+			if (!responseJson.getString("RSLT_NAME").equals("")) {
 				users.setName(responseJson.getString("RSLT_NAME"));
 				users.setBirth(responseJson.getString("RSLT_BIRTHDAY"));
 				users.setGender(responseJson.getString("RSLT_SEX_CD"));

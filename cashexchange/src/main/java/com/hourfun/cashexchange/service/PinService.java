@@ -228,7 +228,6 @@ public class PinService {
 		try {
 			bankService.pay(endUpdateTrading);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

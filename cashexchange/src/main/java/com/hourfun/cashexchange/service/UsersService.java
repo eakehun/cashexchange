@@ -594,7 +594,7 @@ public class UsersService {
 
 	}
 
-	@Cacheable(value = CacheKey.USER, cacheManager = "cacheManager")
+	@Cacheable(value = CacheKey.USER, cacheManager = "cacheManager", unless = "#result == null")
 	public Users findByUserId(String userId) {
 		return repository.findByUserId(userId);
 	}

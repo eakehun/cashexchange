@@ -31,7 +31,7 @@ public interface PinCodeRepository extends JpaRepository<PinCode, Long> {
 //			nativeQuery = true)
 //	PinCode findByPincodeLike(String firstPin, String middlePin);
 	
-	@Query(value="SELECT * FROM pin_code where pin_code like :likeString",
+	@Query(value="SELECT * FROM pin_code where pin_code like :likeString  and status = '처리중'",
 			nativeQuery = true)
 	PinCode findByPincodeLike(String likeString);
 	

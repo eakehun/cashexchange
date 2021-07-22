@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/checkEmailDuplicate/**")
 				.antMatchers("/users/checkUserDuplicate/**")
 				.antMatchers("/users/mobileUserVerifyRequest/**")
+				.antMatchers("/users/page/mobileUserVerifyCheck/**")
 				.antMatchers("/users/mobileUserVerifyCheck/**")
 				.antMatchers("/users/agreement/")				
 				.antMatchers("/users/trading/recent/")
