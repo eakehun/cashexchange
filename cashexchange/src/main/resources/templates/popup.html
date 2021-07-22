@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MAKEPIN</title>
+
+
+</head>
+<body onload="call_parent()">	
+	<input id="token" type="hidden" th:value="${token}" />
+	<script>
+		document.domain = "makepin.co.kr";
+		function call_parent() {
+			try {
+				var token = document.getElementById("token").value;
+				if (token != "" && token != null && token != undefined) {
+					opener.lastMdlTkn_function(token); // 부모창 함수 호출
+					self.close();
+				}
+				self.close();
+			} catch (e) {
+				alert(e);
+			}
+		}
+		opener.popup = this;
+	</script>
+</body>
+
+</html>

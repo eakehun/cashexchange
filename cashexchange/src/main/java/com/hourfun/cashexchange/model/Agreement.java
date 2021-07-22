@@ -18,14 +18,17 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Agreement {
+public class Agreement{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idx;
 	@Column(columnDefinition = "BOOLEAN default false")
 	private boolean  chkNecessary;
+	private String title;
 	private String contents;
+	@Column(columnDefinition = "BOOLEAN default false")
+	private boolean used;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

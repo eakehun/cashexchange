@@ -2,7 +2,6 @@ package com.hourfun.cashexchange.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,10 +28,12 @@ public class OneToOneInquiryResponse {
 	private long idx;
 	
 	@ManyToOne(targetEntity = OneToOneInquiry.class, fetch = FetchType.LAZY, 
-			optional = false,cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "parentIdx", referencedColumnName = "idx")
+			optional = false)
+    @JoinColumn(name = "parentIdx", referencedColumnName = "idx",nullable=false)
     @JsonBackReference
 	private OneToOneInquiry oneToOneInquiry;
+	
+	@Column(columnDefinition = "TEXT")
 	private String content;
 	
 	//admin 계정 

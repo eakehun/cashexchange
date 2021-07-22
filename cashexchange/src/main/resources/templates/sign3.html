@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="agate.css" charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style type="text/css">
+        *{box-sizing: border-box;}
+        .mt-4, .my-4 {margin-top: 1.5rem!important;}
+        .mb_cont_tit > h4{margin-bottom:10px;}
+        .mt-2, .my-2 {margin-top: .5rem!important;}
+        .h1, h1 {
+            font-size: 2.5rem;
+        }
+        .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+            margin-bottom: .5rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        #successShowCont h1, #successShowCont h4 {
+            text-align: center;
+            font-weight: 100;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .signFromCont{padding:10px;border: none;}
+        }
+
+        @media only screen and (min-width: 768px) {
+            .mt-md-5, .my-md-5 {
+                margin-top: 3rem!important;
+            }
+        }
+
+    </style>
+
+
+    <div class="signup_container col-md-5">
+        <div class="bv-example-row mt-md-5 mt-4 mb-md-5 mb-4">
+            <div class="signup_logo"><img alt="Vue logo" src="logo.png"></div>
+            <h4 class="hideCont">회원가입</h4>
+            <div class="signFromCont activated">
+                <div id="successShowCont" class="signFromCont not_border activated">
+                    <h1>환영합니다.</h1>
+                    <h4>회원가입을 진심으로 축하합니다.</h4>
+                </div>
+                <div data-v-49ff4c48="">
+                    <button data-v-49ff4c48="" id="nextDeptnBtn" class="btnn grd bTcont">로그인 하러가기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

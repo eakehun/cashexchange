@@ -1,10 +1,5 @@
 package com.hourfun.cashexchange.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.awt.print.Pageable;
-import java.util.List;
-
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -28,19 +23,21 @@ class AgeementRepositoryTest {
 	@Autowired
 	private AgreementRepository repository;
 	
-//	@Test
+	@Test
 	void save() {
 		Agreement agreement = new Agreement();
 		agreement.setChkNecessary(true);
-		agreement.setContents("test 약관 동의 . ");
+		agreement.setUsed(true);
+		agreement.setTitle("마케팅 정보 수신");
+		agreement.setContents("");
 		repository.save(agreement);
 	}
 
 	
-	@Test
+//	@Test
 	void findAllByMemberIdx() {
-		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "idx"));
-		Page<Agreement> agreements =repository.findAllByMemberIdx(1l,page);
-		System.out.println(agreements);
+//		PageRequest page = PageRequest.of(0,1000,Sort.by(Sort.Direction.DESC, "idx"));
+//		Page<Agreement> agreements =repository.findAllByMemberIdx(1l,page);
+//		System.out.println(agreements);
 	}
 }
